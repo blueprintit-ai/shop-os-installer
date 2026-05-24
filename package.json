@@ -1,0 +1,31 @@
+{
+  "name": "@blueprintit/shop-os-install",
+  "version": "0.1.0",
+  "description": "One-command installer for Shop OS — Blueprint IT's AI Operating System for small businesses.",
+  "type": "module",
+  "bin": {
+    "shop-os-install": "./bin/shop-os-install.js"
+  },
+  "files": [
+    "bin",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "shop-os",
+    "blueprint-it",
+    "claude-code",
+    "obsidian",
+    "ai-os",
+    "cabinet-shop"
+  ],
+  "author": "Blueprint IT <info@blueprintit.ai>",
+  "license": "UNLICENSED",
+  "homepage": "https://blueprintit.ai/shop-os",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blueprintit-ai/shop-os-installer.git"
+  }
+}
