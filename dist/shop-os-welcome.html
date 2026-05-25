@@ -320,7 +320,17 @@ pre.ascii-diagram {
 </code></pre>
 <p>This kicks off a 10-minute onboarding interview that asks about your shop name, owner, key staff, services, and daily routines. As you answer, Obsidian's file list on the left side will fill up with the notes Claude is creating for you. You can watch your vault populate in real time.</p>
 <p>By the end of the interview, you have a configured Shop OS vault ready to use. We send a follow-up document called "Your First Week with Shop OS" that walks you through what to do next.</p>
-<h2 data-anchor="§ 06">Need help?</h2>
+<h2 data-anchor="§ 06">Letting your team use Shop OS Chat</h2>
+<p>Inside your vault folder, alongside <code>CLAUDE.md</code> and <code>Raw/</code>, the installer also dropped a file called <code>Shop OS Chat.command</code> (Mac) or <code>Shop OS Chat.bat</code> (Windows). This is the read-only chat your team can use to ask questions about anything in the vault. Suppliers, past jobs, customer history, contract terms, all searchable from a simple chat window.</p>
+<h3>How it works</h3>
+<p>Anyone in your shop double-clicks the file. A small terminal window opens (this is normal, it is the chat server running). The default browser opens to <code>localhost</code> with the chat page.</p>
+<p>The first time the person uses it on this computer, the page asks for their name. From then on, the browser remembers and goes straight to the chat. When they end a conversation (either by clicking "End conversation" or closing the tab), the full transcript saves into a <code>Chats/</code> folder inside your vault. You can read those later from Obsidian or ask Claude Code "what did Marco ask about the Smith job last week?"</p>
+<h3>What it can and cannot do</h3>
+<p>The chat is <strong>read-only</strong>. It can answer questions, search the vault, summarize anything stored there. It cannot create, edit, or delete files. If someone asks it to "add a note about today's call," it will politely say it cannot, and direct them to ask you or to use Claude Code.</p>
+<p>This is on purpose. Your team gets fast answers without any risk of accidentally changing customer records, supplier lists, or contracts. You stay the one with write access via Claude Code.</p>
+<h3>First launch is slower</h3>
+<p>The very first launch takes about 20 to 30 seconds while the chat downloads from GitHub. Every launch after that is instant.</p>
+<h2 data-anchor="§ 07">Need help?</h2>
 <p>Reply to your welcome email. A real human (Glenn) reads every message and responds within one business hour.</p>
 <p>Common first-time issues, already documented:</p>
 <ul>

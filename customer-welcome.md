@@ -129,6 +129,26 @@ This kicks off a 10-minute onboarding interview that asks about your shop name, 
 
 By the end of the interview, you have a configured Shop OS vault ready to use. We send a follow-up document called "Your First Week with Shop OS" that walks you through what to do next.
 
+## Letting your team use Shop OS Chat
+
+Inside your vault folder, alongside `CLAUDE.md` and `Raw/`, the installer also dropped a file called `Shop OS Chat.command` (Mac) or `Shop OS Chat.bat` (Windows). This is the read-only chat your team can use to ask questions about anything in the vault. Suppliers, past jobs, customer history, contract terms, all searchable from a simple chat window.
+
+### How it works
+
+Anyone in your shop double-clicks the file. A small terminal window opens (this is normal, it is the chat server running). The default browser opens to `localhost` with the chat page.
+
+The first time the person uses it on this computer, the page asks for their name. From then on, the browser remembers and goes straight to the chat. When they end a conversation (either by clicking "End conversation" or closing the tab), the full transcript saves into a `Chats/` folder inside your vault. You can read those later from Obsidian or ask Claude Code "what did Marco ask about the Smith job last week?"
+
+### What it can and cannot do
+
+The chat is **read-only**. It can answer questions, search the vault, summarize anything stored there. It cannot create, edit, or delete files. If someone asks it to "add a note about today's call," it will politely say it cannot, and direct them to ask you or to use Claude Code.
+
+This is on purpose. Your team gets fast answers without any risk of accidentally changing customer records, supplier lists, or contracts. You stay the one with write access via Claude Code.
+
+### First launch is slower
+
+The very first launch takes about 20 to 30 seconds while the chat downloads from GitHub. Every launch after that is instant.
+
 ## Need help?
 
 Reply to your welcome email. A real human (Glenn) reads every message and responds within one business hour.

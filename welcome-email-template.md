@@ -191,6 +191,26 @@ ready to use. We'll send a follow-up email with a "first week" guide
 that walks you through what to do next.
 
 
+SHOP OS CHAT, FOR YOUR TEAM
+────────────────────────────────────────────────────────────
+
+Inside your vault folder, the installer dropped a file called
+"Shop OS Chat.command" (Mac) or "Shop OS Chat.bat" (Windows).
+Anyone in your shop can double-click it to open a simple chat
+window where they can ask questions about your vault.
+
+The chat is READ-ONLY. It can answer anything, search across
+notes, pull customer history, supplier prices, past job records.
+It cannot create, edit, or delete anything. Your team gets fast
+answers, you keep write access via Claude Code.
+
+Every conversation saves to your vault as a transcript in a new
+"Chats/" folder, so you can review later what was asked.
+
+First launch takes about 20 seconds to download. After that,
+it's instant.
+
+
 NEED HELP?
 ────────────────────────────────────────────────────────────
 
