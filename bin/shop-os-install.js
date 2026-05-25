@@ -313,6 +313,40 @@ The more you drop, the more your vault knows about your shop.
   return { created: true, alreadyExisted: existed };
 }
 
+function writeChatLauncher(vaultPath) {
+  const isWindows = process.platform === "win32";
+  const filename = isWindows ? "Shop OS Chat.bat" : "Shop OS Chat.command";
+  const filePath = join(vaultPath, filename);
+
+  let body;
+  if (isWindows) {
+    body = `@echo off
+setlocal
+set "VAULT_PATH=%~dp0"
+:: Strip trailing backslash
+if "%VAULT_PATH:~-1%"=="\\" set "VAULT_PATH=%VAULT_PATH:~0,-1%"
+echo Starting Shop OS Chat for "%VAULT_PATH%" ...
+npx -y --package=github:blueprintit-ai/shop-os-chat shop-os-chat "%VAULT_PATH%"
+pause
+`;
+  } else {
+    body = `#!/bin/bash
+# Shop OS Chat launcher — double-click to start.
+VAULT_PATH="$(cd "$(dirname "$0")" && pwd)"
+echo "Starting Shop OS Chat for: $VAULT_PATH"
+npx -y --package=github:blueprintit-ai/shop-os-chat shop-os-chat "$VAULT_PATH"
+echo ""
+echo "Shop OS Chat stopped. You can close this window."
+read -n 1 -s -r -p ""
+`;
+  }
+  writeFileSync(filePath, body, "utf8");
+  if (!isWindows) {
+    try { chmodSync(filePath, 0o755); } catch { /* ignore */ }
+  }
+  return filePath;
+}
+
 function expandTilde(p) {
   if (!p) return p;
   if (p === "~") return homedir();
@@ -521,7 +555,7 @@ async function main() {
   // Step-by-step install
   print(bold("Installing Shop OS"));
 
-  print(dim("  [1/5] Registering plugin marketplaces"));
+  print(dim("  [1/6] Registering plugin marketplaces"));
   const mpResult = ensureMarketplaces(claudeRoot);
   if (mpResult.added.length === 0) {
     info(`All ${mpResult.total} marketplaces already registered`);
@@ -529,7 +563,7 @@ async function main() {
     for (const name of mpResult.added) ok(`Added marketplace: ${name}`);
   }
 
-  print(dim("  [2/5] Enabling plugins for installation"));
+  print(dim("  [2/6] Enabling plugins for installation"));
   const pluginsChanged = ensurePluginsInstalled(claudeRoot);
   if (pluginsChanged) {
     for (const id of PLUGINS_TO_ENABLE) ok(`Queued plugin: ${id}`);
@@ -538,7 +572,7 @@ async function main() {
     info("All required plugins already queued");
   }
 
-  print(dim(`  [3/5] Creating vault at ${vaultPath}`));
+  print(dim(`  [3/6] Creating vault at ${vaultPath}`));
   if (!existsSync(vaultPath)) {
     mkdirSync(vaultPath, { recursive: true });
     ok("Vault directory created");
@@ -553,13 +587,17 @@ async function main() {
   if (rawResult.created) ok("Raw/ inbox + Raw/processed/ created (drop materials in Raw/ to seed the vault)");
   else info("Raw/ inbox already present (left untouched)");
 
-  print(dim("  [4/5] Enabling plugins for this vault"));
+  print(dim("  [4/6] Enabling plugins for this vault"));
   const settingsPath = enableForVault(vaultPath);
   ok(`Wrote ${settingsPath.replace(homedir(), "~")}`);
 
-  print(dim("  [5/5] Saving license"));
+  print(dim("  [5/6] Saving license"));
   const licensePath = saveLicenseFile(license);
   ok(`License saved to ${licensePath.replace(homedir(), "~")} (chmod 600)`);
+
+  print(dim("  [6/6] Installing Shop OS Chat launcher"));
+  const launcherPath = writeChatLauncher(vaultPath);
+  ok(`Wrote ${launcherPath.replace(homedir(), "~")}`);
 
   print("");
   print(green(bold("✓ Shop OS installation complete!")));
@@ -570,6 +608,10 @@ async function main() {
   print(`     ${cyan(vaultPath)}`);
   print(`  3. In the Claude prompt, run ${cyan("/obsidian:os-setup")} to personalize your vault`);
   print(`  4. Walk through the onboarding interview`);
+  print("");
+  print(`  5. To let your team chat with the vault (read-only),`);
+  print(`     double-click ${cyan("Shop OS Chat.command")} (Mac) or ${cyan("Shop OS Chat.bat")} (Windows)`);
+  print(`     in your vault folder. First launch downloads the chat (~20 seconds).`);
   print("");
   print(dim(`Support: ${SUPPORT_URL}`));
   print("");
