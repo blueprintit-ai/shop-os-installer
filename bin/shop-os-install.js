@@ -279,7 +279,7 @@ tags: [shop-os, inbox, raw]
 # Raw / Inbox
 
 Drop any raw materials here that you want Shop OS to read and route into your vault.
-PDFs, photos, transcripts, contracts, price lists, spreadsheets, scans — anything.
+PDFs, photos, transcripts, contracts, price lists, spreadsheets, scans, anything.
 
 You do NOT need to organize them into subfolders. Just drop them flat. Claude Code
 reads each file, decides where it belongs in the vault, writes a summary into the
@@ -287,14 +287,15 @@ appropriate folder, and moves the original to \`Raw/processed/\` so the inbox st
 
 ## How to trigger a digest
 
-Open Claude Code in this vault and type:
+Open Claude Code in this vault and type the slash command:
 
 \`\`\`
-Process everything in Raw/. For each file, decide where it belongs, write a summary
-in the right place, and move the original to Raw/processed/. Report back what you did.
+/os-digest
 \`\`\`
 
-Claude does the rest. You review the report and the inbox is empty again.
+One command, easy to remember. Claude does the rest: reads each file, classifies it,
+files the note in the right vault folder, archives the original, and reports back.
+You review the report and the inbox is empty again.
 
 ## Examples of what to drop here
 

@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Your First Week with Shop OS</title>
+<style>
+@page {
+  size: letter;
+  margin: 0.85in 0.75in 1.0in 0.75in;
+  background: #F4EFE3;
+  @bottom-left {
+    content: "Blueprint IT  ·  Shop OS Foundation";
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 7.5pt;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #5C544A;
+    border-top: 0.5pt solid #C4BBA7;
+    padding-top: 6pt;
+    vertical-align: top;
+  }
+  @bottom-right {
+    content: "blueprintit.ai  ·  page " counter(page);
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 7.5pt;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #5C544A;
+    border-top: 0.5pt solid #C4BBA7;
+    padding-top: 6pt;
+    vertical-align: top;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  background: #F4EFE3;
+  color: #020309;
+  font-family: Georgia, "Iowan Old Style", "Apple Garamond", serif;
+  font-size: 11pt;
+  line-height: 1.55;
+  margin: 0;
+  padding: 0;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ---- Cover header ---- */
+
+.cover {
+  border-bottom: 1px solid #020309;
+  padding-bottom: 18pt;
+  margin-bottom: 24pt;
+}
+.cover .wordmark {
+  font-family: "SF Mono", "JetBrains Mono", "Iosevka", "Menlo", Consolas, monospace;
+  font-size: 9pt;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #020309;
+}
+.cover .doc-no {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 9pt;
+  color: #5C544A;
+  float: right;
+  letter-spacing: 0.08em;
+}
+.cover .title {
+  font-family: Georgia, serif;
+  font-size: 28pt;
+  font-weight: 600;
+  margin-top: 14pt;
+  letter-spacing: -0.01em;
+}
+.cover .tagline {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 8.5pt;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #5C544A;
+  margin-top: 6pt;
+}
+
+/* ---- Section structure ---- */
+
+h2 {
+  font-family: Georgia, serif;
+  font-size: 16pt;
+  font-weight: 600;
+  margin: 28pt 0 6pt 0;
+  page-break-after: avoid;
+  break-after: avoid;
+  page-break-inside: avoid;
+  break-inside: avoid;
+  border-top: 1px solid #C4BBA7;
+  padding-top: 14pt;
+}
+h2::before {
+  content: attr(data-anchor) "\A";
+  display: block;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 8pt;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #5C544A;
+  font-weight: 400;
+  margin-bottom: 4pt;
+  white-space: pre;
+}
+h3 {
+  font-family: Georgia, serif;
+  font-size: 12.5pt;
+  font-weight: 600;
+  margin: 18pt 0 4pt 0;
+  page-break-after: avoid;
+  break-after: avoid;
+}
+h4 {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 9pt;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 14pt 0 4pt 0;
+  color: #5C544A;
+}
+
+p { margin: 0 0 9pt 0; }
+strong { font-weight: 600; }
+em { font-style: italic; color: #2A2820; }
+
+a { color: #020309; text-decoration: underline; text-underline-offset: 2px; }
+
+ul, ol { margin: 0 0 10pt 18pt; padding: 0; }
+li { margin: 0 0 4pt 0; }
+
+/* ---- Code / monospace ---- */
+
+code {
+  font-family: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 9.5pt;
+  background: #E9E0CB;
+  padding: 1pt 4pt;
+  border-radius: 2pt;
+}
+
+pre {
+  background: #E9E0CB;
+  border-left: 2pt solid #020309;
+  padding: 10pt 12pt;
+  margin: 10pt 0;
+  overflow: hidden;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+pre code {
+  background: transparent;
+  padding: 0;
+  font-size: 9pt;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* ---- Tables ---- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10pt 0;
+  font-size: 9.5pt;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+th {
+  text-align: left;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 8.5pt;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  padding: 6pt 8pt;
+  border-bottom: 1.5pt solid #020309;
+  background: transparent;
+}
+td {
+  padding: 6pt 8pt;
+  border-bottom: 0.5pt solid #C4BBA7;
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+
+/* ---- Callouts (rendered from blockquotes) ---- */
+
+blockquote {
+  border-left: 3pt solid #020309;
+  background: #ECE3CE;
+  margin: 12pt 0;
+  padding: 10pt 14pt;
+  font-family: Georgia, serif;
+  font-size: 10.5pt;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+blockquote p:last-child { margin-bottom: 0; }
+
+/* ---- Horizontal rule = section divider ---- */
+
+hr {
+  border: none;
+  border-top: 1px solid #C4BBA7;
+  margin: 24pt 0;
+}
+
+/* ---- Image / ASCII diagram boxes ---- */
+
+pre.ascii-diagram {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  background: #ECE3CE;
+  font-size: 8.5pt;
+  line-height: 1.35;
+}
+
+/* Footer is now rendered via @page @bottom-* margin boxes (above),
+   so it lives inside the page margin and never overlaps body content. */
+
+/* ---- Signature block ---- */
+
+.signature {
+  margin-top: 10pt;
+  line-height: 1.5;
+  font-family: Georgia, serif;
+}
+
+/* ---- Page break helpers ---- */
+
+.page-break { page-break-before: always; break-before: page; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <span class="wordmark">Blueprint IT § Schematics for the AI-native business</span>
+  <span class="doc-no">DOC § SOS-GUIDE-01</span>
+  <div style="clear:both;"></div>
+  <div class="title">Your First Week with Shop OS</div>
+  <div class="tagline">Obsidian basics, seeding, the operator, the optimizer</div>
+</div>
+
+<p>You finished the install and the onboarding interview. The vault is in Obsidian. Now what?</p>
+<p>This guide covers the four things you need to know to start running your shop on Shop OS:</p>
+<ol>
+<li><strong>How to use Obsidian to browse your vault.</strong> 10 minutes. Read this first.</li>
+<li><strong>How to feed your shop's existing materials into the vault.</strong> Seeding. About an hour the first week.</li>
+<li><strong>How to set up your daily morning briefing.</strong> The <code>/os-operator</code> skill. 5-10 minute setup, then automatic.</li>
+<li><strong>How to keep the vault healthy over time.</strong> The <code>/os-optimizer</code> skill. 15 minutes once a month.</li>
+</ol>
+<p>You can skip around, but section 1 is worth reading first if you've never used Obsidian.</p>
+<hr>
+<h2 data-anchor="§ 01">1. How to use Obsidian to browse your vault</h2>
+<p>Obsidian is the app you use to <strong>read, browse, and edit</strong> your Shop OS vault. Think of it like Finder + Notes + a wiki rolled into one window. Claude Code does the AI work; Obsidian is where you actually look at the results.</p>
+<p>You don't need to learn most of Obsidian's features. The basics get you 95% of the way there.</p>
+<h3>The window layout</h3>
+<p>When you first open your Shop OS vault in Obsidian, you'll see three areas:</p>
+<pre><code>┌─────────────────────────────────────────────────────────┐
+│  Left sidebar          │  Main pane                     │
+│  (file explorer)       │  (whatever note you're reading)│
+│                        │                                │
+│  ├ CLAUDE.md           │  # Shop OS Vault               │
+│  ├ Context/            │                                │
+│  │  └ organization.md  │  Welcome to your Shop OS       │
+│  ├ Projects/           │  vault. This is the operating  │
+│  │  ├ Acme Cabinets/   │  system Blueprint IT installed │
+│  │  └ Henderson/       │  for [your shop]...            │
+│  ├ Raw/                │                                │
+│  └ Team/               │                                │
+└─────────────────────────────────────────────────────────┘
+</code></pre>
+<ul>
+<li><strong>Left sidebar</strong>: a tree of every folder and file in your vault. Click any file to open it in the main pane.</li>
+<li><strong>Main pane</strong>: the note you're currently reading. By default it's read-only; double-click anywhere to edit.</li>
+<li><strong>Right sidebar</strong> (might be hidden): shows backlinks, outline, and other contextual info. Toggle with <code>Cmd+Shift+B</code> (Mac) or <code>Ctrl+Shift+B</code> (Windows). You can ignore this for now.</li>
+</ul>
+<h3>The 4 keyboard shortcuts you'll actually use</h3>
+<table>
+<thead>
+<tr>
+<th>Shortcut (Mac / Windows)</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Cmd+O</code> / <code>Ctrl+O</code></td>
+<td>Quick-open any file. Type a few letters of the filename, hit Enter.</td>
+</tr>
+<tr>
+<td><code>Cmd+Shift+F</code> / <code>Ctrl+Shift+F</code></td>
+<td>Search across every note in the vault.</td>
+</tr>
+<tr>
+<td><code>Cmd+,</code> / <code>Ctrl+,</code></td>
+<td>Settings (you rarely need this).</td>
+</tr>
+<tr>
+<td><code>Cmd+G</code> / <code>Ctrl+G</code></td>
+<td>Open the graph view. Visualizes your vault as a network of connected notes. Fun to look at; not essential.</td>
+</tr>
+</tbody>
+</table>
+<h3>Wikilinks: the magic of Obsidian</h3>
+<p>Throughout your vault, you'll see text in <code>[[double brackets]]</code>. These are <strong>wikilinks</strong>. Click any wikilink to jump to that note. If the note doesn't exist yet, clicking creates it.</p>
+<p>Example: if a note about a customer mentions <code>[[Hooker Furnishings]]</code>, clicking that link takes you to the Hooker Furnishings supplier note. From there, you can navigate to all the jobs that used Hooker products, or to the latest Hooker price list. Everything is connected.</p>
+<p>You don't need to type wikilinks yourself. Claude Code does that for you when it writes notes.</p>
+<h3>How to add a new note manually (if you ever want to)</h3>
+<p>Three ways:</p>
+<ol>
+<li><strong>Right-click</strong> any folder in the left sidebar → "New note" → type the name → start typing</li>
+<li><strong>Cmd+N / Ctrl+N</strong> creates a new note in the current folder</li>
+<li><strong>Type a wikilink</strong> like <code>[[New customer name]]</code> in any existing note, click it, and Obsidian creates the note for you</li>
+</ol>
+<p>But honestly, the better workflow is: tell Claude Code what you want to add, and Claude writes the note. Example: "Add a note in Projects/Acme/ that the customer called today to push delivery to next Friday." Claude creates and saves it. You see it appear in the Obsidian sidebar in real time.</p>
+<h3>What to do if Obsidian feels overwhelming</h3>
+<p>Two things:</p>
+<ol>
+<li><strong>Don't install any community plugins.</strong> Shop OS doesn't need them and they can complicate things. The default Obsidian install has everything you need.</li>
+<li><strong>Don't sign up for Obsidian Sync.</strong> Your vault lives on your computer (and in Dropbox if you put it there). Obsidian Sync is a paid subscription you don't need.</li>
+</ol>
+<p>Obsidian is just a viewer. You can always edit the same files in TextEdit, Notepad, VSCode, or any other text editor if Obsidian ever feels like too much. The vault is just a folder of plain markdown files.</p>
+<h3>Pro move: keep Obsidian open while you work</h3>
+<p>Open Obsidian to the vault first thing each morning. Read your operator's morning briefing (we'll set that up in section 3). Throughout the day, glance at it whenever you need to look something up: a supplier price, a customer's past job, your own notes from last week.</p>
+<p>When you need to ADD or CHANGE something, that's when you switch over to Claude Code (also in the vault folder) and tell it what you want. Claude writes the note, Obsidian shows you the result.</p>
+<hr>
+<h2 data-anchor="§ 02">2. Seed your vault with what you already have</h2>
+<p>Right now your vault knows what you told it during the onboarding interview. That's a great start, but the real power kicks in once it knows the things your shop has been collecting for years: supplier price lists, contract templates, customer history, job photos, phone-call notes.</p>
+<p>You don't need to manually copy and paste any of this. You drop the source files into the vault, ask Claude Code to read them, and it writes structured notes for you.</p>
+<h3>Where to put materials: one folder, flat, no decisions</h3>
+<p>Open Finder (Mac) or File Explorer (Windows) and navigate to your Shop OS Vault folder. You'll see a folder called <code>Raw/</code> that the installer created for you. <strong>That's your inbox.</strong> Drop any file there. Claude Code reads it, decides where it belongs, files it correctly, and moves the original to <code>Raw/processed/</code> so the inbox stays clean.</p>
+<pre><code>Shop OS Vault/
+├── Raw/                  ← drop everything here, flat. No subfolders to make.
+│   ├── README.md
+│   └── processed/        ← Claude moves digested originals here automatically
+├── Context/              (your shop info, created by onboarding)
+├── Projects/             (one folder per job)
+├── Team/                 (your staff)
+├── Resources/            (reusable templates and references)
+└── CLAUDE.md             (do not edit; Claude Code uses this)
+</code></pre>
+<p><strong>Do not create subfolders inside <code>Raw/</code>.</strong> That's the LLM's job. Pre-sorting defeats the whole point of having Claude Code do classification. Just drop and go.</p>
+<h3>What kinds of files work</h3>
+<p>Anything readable. Claude Code handles:</p>
+<ul>
+<li><strong>PDFs</strong> (contracts, price lists, invoices, scans of paper records)</li>
+<li><strong>Word docs and spreadsheets</strong> (Excel, .docx)</li>
+<li><strong>Images</strong> (photos, sketches, screenshots)</li>
+<li><strong>Audio recordings</strong> (phone calls, voice memos; gets transcribed first via the <code>audio-transcriber</code> skill)</li>
+<li><strong>Plain text and Markdown</strong></li>
+<li><strong>Web pages saved as PDF</strong> (right-click → "Save as PDF" works in most browsers)</li>
+</ul>
+<h3>What Claude does with each type</h3>
+<table>
+<thead>
+<tr>
+<th>You drop</th>
+<th>Claude figures out it's a...</th>
+<th>And files it as</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>acme-vanity-contract.pdf</code></td>
+<td>Customer contract</td>
+<td>New <code>Projects/Acme Vanity/</code> folder with contract terms, milestones, dates</td>
+</tr>
+<tr>
+<td><code>hooker-march-pricing.pdf</code></td>
+<td>Supplier price list</td>
+<td><code>Resources/pricing/hooker-2026-03.md</code></td>
+</tr>
+<tr>
+<td><code>henderson-kitchen-finished.jpg</code></td>
+<td>Job photo</td>
+<td><code>Projects/Henderson Kitchen/photos/</code> with style + material tags</td>
+</tr>
+<tr>
+<td><code>2026-05-23-smith-call.m4a</code></td>
+<td>Customer phone call</td>
+<td>Transcribed, summarized into <code>Projects/Smith/calls/2026-05-23.md</code></td>
+</tr>
+<tr>
+<td><code>cabinet-finishing-sop.docx</code></td>
+<td>Internal SOP</td>
+<td><code>Resources/sops/cabinet-finishing.md</code></td>
+</tr>
+</tbody>
+</table>
+<p>You don't need to memorize this table. Just drop files in <code>Raw/</code> and let Claude decide.</p>
+<h3>How to actually trigger the digest</h3>
+<p>After you have dropped some files in <code>Raw/</code>, open Claude Code in your vault folder. Type the slash command:</p>
+<pre><code>/os-digest
+</code></pre>
+<p>That's it. One command, easy to remember. It runs the full workflow: reads every file in <code>Raw/</code>, classifies each one, writes a structured note in the right vault folder, moves the original to <code>Raw/processed/</code>, and gives you a report like:</p>
+<pre><code>Processed 4 files:
+  - acme-vanity-contract.pdf       -&gt; Projects/Acme Vanity/contract.md
+  - hooker-march-pricing.pdf       -&gt; Resources/pricing/hooker-2026-03.md
+  - henderson-kitchen-finished.jpg -&gt; Projects/Henderson Kitchen/photos/
+  - unknown.txt                    -&gt; could not classify, left in Raw/
+</code></pre>
+<p>You skim the report, approve. If something landed in the wrong spot, tell Claude "move the [filename] note into [correct folder]". It learns the pattern for next time.</p>
+<h3>How much should I seed?</h3>
+<p>Start with the things you reference weekly:</p>
+<ul>
+<li>Your 3-5 most-used supplier price lists</li>
+<li>Your current open jobs (contract + scope + photos)</li>
+<li>The last 3 months of completed jobs (photos + final price)</li>
+<li>Your shop's standard contract template</li>
+<li>Any SOPs or training docs you have</li>
+</ul>
+<p>That gives Claude Code enough context to be useful for daily questions. You can always add more later.</p>
+<hr>
+<h2 data-anchor="§ 03">3. Set up your daily morning briefing with <code>/os-operator</code></h2>
+<p>The operator is the autonomous part of Shop OS. You set it up once. After that, it runs on a schedule and writes a fresh briefing to your <code>Daily/</code> folder every morning before you walk into the shop.</p>
+<p>A typical morning briefing for a cabinet shop:</p>
+<blockquote>
+<p><strong>Monday 2026-05-25</strong></p>
+<p><strong>Today on the floor:</strong> Aviemore kitchen install (Greg + Pete), Henderson vanity finish (Marco)</p>
+<p><strong>Shipping today:</strong> Patel sectional pickup at 2pm</p>
+<p><strong>Open follow-ups:</strong> Smith needs quote revision by Wednesday, Sherwood has not responded since Friday</p>
+<p><strong>Material orders arriving:</strong> Hooker shipment expected Tuesday AM</p>
+<p><strong>This week's deadlines:</strong> Bevel cabinet drawer-front prototype (due Thursday)</p>
+</blockquote>
+<p>You read this with your coffee and know what your day looks like before you set foot in the shop.</p>
+<h3>Setup</h3>
+<p>In Claude Code, type:</p>
+<pre><code>/os-operator
+</code></pre>
+<p>The skill asks you a few questions:</p>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Recommended answer for a cabinet shop</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>What cadence?</td>
+<td><strong>Daily, 7:00am</strong> (so it's ready when you arrive)</td>
+</tr>
+<tr>
+<td>Where should the briefing land?</td>
+<td><strong><code>Daily/YYYY-MM-DD.md</code></strong> (default)</td>
+</tr>
+<tr>
+<td>Who should the briefing address?</td>
+<td><strong>You</strong> (your name from onboarding)</td>
+</tr>
+<tr>
+<td>What sections to include?</td>
+<td><strong>Today on the floor, Shipping, Open follow-ups, Material orders, This week's deadlines</strong></td>
+</tr>
+<tr>
+<td>Do you want a Telegram/email notification when it runs?</td>
+<td><strong>Yes if you check those at 7am</strong>, otherwise no (it lands in the vault either way)</td>
+</tr>
+</tbody>
+</table>
+<p>The operator wires itself up automatically. From now on, every morning at 7am, it reads your vault state, writes the briefing, and (if you opted in) pings you on Telegram.</p>
+<h3>When to NOT run the operator</h3>
+<p>It costs Claude Max subscription tokens each run. If you take a vacation or close the shop for a week, you can pause it. In Claude Code, type:</p>
+<pre><code>Pause the operator until [date]
+</code></pre>
+<p>When you come back:</p>
+<pre><code>Resume the operator
+</code></pre>
+<h3>How to change what's in the briefing</h3>
+<p>Just edit <code>Context/operator.md</code> in your vault and tell Claude Code what you want different. Example:</p>
+<pre><code>In Context/operator.md, add &quot;Cash position&quot; as a section to the morning briefing, and remove &quot;Material orders arriving.&quot;
+</code></pre>
+<p>The next morning's briefing reflects the change.</p>
+<hr>
+<h2 data-anchor="§ 04">4. Keep the vault healthy with <code>/os-optimizer</code></h2>
+<p>Over time your vault accumulates clutter: stale notes from finished jobs, dead links to files you moved, half-written drafts you never finished. The optimizer cleans this up.</p>
+<p>It is not a daily tool. Run it <strong>once a month</strong>, usually on a slow day. Takes about 15 minutes of your time.</p>
+<h3>What it does</h3>
+<p>In Claude Code, type:</p>
+<pre><code>/os-optimizer
+</code></pre>
+<p>The optimizer scans every note in your vault against seven quality frameworks:</p>
+<table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>What it catches</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Karpathy LLM Wiki</td>
+<td>Broken links, orphaned notes, missing cross-references</td>
+<td>A note that mentions "Henderson" but doesn't link to the customer's project</td>
+</tr>
+<tr>
+<td>Anthropic CLAUDE.md</td>
+<td>Schema doc completeness</td>
+<td>Your CLAUDE.md is missing a section that confuses Claude</td>
+</tr>
+<tr>
+<td>Caveman compression</td>
+<td>Bloated instruction docs</td>
+<td>Your operator prompt is 4000 words when it could be 800</td>
+</tr>
+<tr>
+<td>Chroma context rot</td>
+<td>Stale content that contradicts newer notes</td>
+<td>An old supplier note that conflicts with this month's price list</td>
+</tr>
+<tr>
+<td>Memory hygiene</td>
+<td>Notes that should be archived</td>
+<td>Job from 2024 still cluttering active project list</td>
+</tr>
+<tr>
+<td>Progressive disclosure</td>
+<td>Skills that load too much at once</td>
+<td>(mostly relevant for the OS itself)</td>
+</tr>
+<tr>
+<td>General hygiene</td>
+<td>Inconsistent naming, missing frontmatter</td>
+<td>Files named with mixed case conventions</td>
+</tr>
+</tbody>
+</table>
+<p>When it finishes, you get an HTML dashboard in your browser showing every finding grouped by framework. Each finding has:
+- What it found
+- Why it matters
+- A suggested fix
+- A button to approve the fix (it edits the file for you)</p>
+<h3>How to use the dashboard</h3>
+<p>Don't try to fix everything. The optimizer surfaces dozens of findings; most are minor. Focus on:</p>
+<ol>
+<li><strong>Anything in the "critical" or "high" severity</strong> at the top. These are real problems.</li>
+<li><strong>Broken wikilinks.</strong> These break navigation.</li>
+<li><strong>Orphaned customer projects.</strong> These mean you have a customer file that is not connected to anything.</li>
+</ol>
+<p>Approve the fixes for those. Ignore the rest unless you have time.</p>
+<h3>When to run it</h3>
+<table>
+<thead>
+<tr>
+<th>Cadence</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>First month</td>
+<td>Run it 2-3 weeks in, after you've seeded the vault and used it daily</td>
+</tr>
+<tr>
+<td>Steady state</td>
+<td>Once a month on a slow day (the 1st of each month works as a habit)</td>
+</tr>
+<tr>
+<td>After big imports</td>
+<td>Any time you batch-add a lot of materials (new supplier list, year-end records, etc.)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 data-anchor="§ 05">What you now have</h2>
+<p>After the first week, your Shop OS vault should have:</p>
+<ul>
+<li>✅ Your shop's foundational info (Context/, set up by onboarding)</li>
+<li>✅ A pile of seeded materials in their proper folders (Resources/, Projects/, Team/)</li>
+<li>✅ A daily briefing arriving at 7am each morning (operator scheduled)</li>
+<li>✅ A clean monthly cadence for vault health (optimizer reminder set)</li>
+</ul>
+<p>From here, the more you use it, the smarter it gets. Drop your customer call notes into the vault as they happen. Drop new supplier docs in <code>Raw/</code> as they arrive. Ask Claude Code questions about your shop's history and it will have real answers.</p>
+<h2 data-anchor="§ 06">What's next (when you want more)</h2>
+<p>When you're ready to go further, ask about these add-ons:</p>
+<table>
+<thead>
+<tr>
+<th>Add-on</th>
+<th>What it does</th>
+<th>When to ask about it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Shop OS Pro</strong></td>
+<td>Adds <code>os-evolver</code> (the vault gets smarter automatically) and <code>team-os</code> (multi-user vault)</td>
+<td>When your shop has 3+ people sharing the vault</td>
+</tr>
+<tr>
+<td><strong>Marketing Pack</strong></td>
+<td>LinkedIn post writer, newsletter, case studies, infographics</td>
+<td>When you want to grow your shop's online presence</td>
+</tr>
+<tr>
+<td><strong>SEO Pack</strong></td>
+<td>Get your shop ranking for "custom cabinets [your city]"</td>
+<td>When you want more inbound leads</td>
+</tr>
+<tr>
+<td><strong>Sales Pack</strong></td>
+<td>CRM prospect mining, cold email, lead qualification</td>
+<td>When you're doing commercial / B2B work</td>
+</tr>
+</tbody>
+</table>
+<p>Reply to the welcome email to ask about pricing for any of these.</p>
+<h2 data-anchor="§ 07">Need help?</h2>
+<p>Reply to your welcome email. Glenn responds within one business hour.</p>
+<p>Blueprint IT</p>
+
+</body>
+</html>

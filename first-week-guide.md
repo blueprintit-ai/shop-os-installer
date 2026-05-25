@@ -12,10 +12,10 @@ You finished the install and the onboarding interview. The vault is in Obsidian.
 
 This guide covers the four things you need to know to start running your shop on Shop OS:
 
-1. **How to use Obsidian to browse your vault** (10 minutes — read this first)
-2. **How to feed your shop's existing materials into the vault** (seeding — about an hour the first week)
-3. **How to set up your daily morning briefing** (the `/obsidian:os-operator` skill — 5-10 min setup, then automatic)
-4. **How to keep the vault healthy over time** (the `/obsidian:os-optimizer` skill — 15 min once a month)
+1. **How to use Obsidian to browse your vault.** 10 minutes. Read this first.
+2. **How to feed your shop's existing materials into the vault.** Seeding. About an hour the first week.
+3. **How to set up your daily morning briefing.** The `/os-operator` skill. 5-10 minute setup, then automatic.
+4. **How to keep the vault healthy over time.** The `/os-optimizer` skill. 15 minutes once a month.
 
 You can skip around, but section 1 is worth reading first if you've never used Obsidian.
 
@@ -58,13 +58,13 @@ When you first open your Shop OS vault in Obsidian, you'll see three areas:
 | `Cmd+O` / `Ctrl+O` | Quick-open any file. Type a few letters of the filename, hit Enter. |
 | `Cmd+Shift+F` / `Ctrl+Shift+F` | Search across every note in the vault. |
 | `Cmd+,` / `Ctrl+,` | Settings (you rarely need this). |
-| `Cmd+G` / `Ctrl+G` | Open the graph view — visualizes your vault as a network of connected notes. Fun to look at; not essential. |
+| `Cmd+G` / `Ctrl+G` | Open the graph view. Visualizes your vault as a network of connected notes. Fun to look at; not essential. |
 
-### Wikilinks — the magic of Obsidian
+### Wikilinks: the magic of Obsidian
 
 Throughout your vault, you'll see text in `[[double brackets]]`. These are **wikilinks**. Click any wikilink to jump to that note. If the note doesn't exist yet, clicking creates it.
 
-Example: if a note about a customer mentions `[[Hooker Furnishings]]`, clicking that link takes you to the Hooker Furnishings supplier note. From there, you can navigate to all the jobs that used Hooker products, or to the latest Hooker price list — everything is connected.
+Example: if a note about a customer mentions `[[Hooker Furnishings]]`, clicking that link takes you to the Hooker Furnishings supplier note. From there, you can navigate to all the jobs that used Hooker products, or to the latest Hooker price list. Everything is connected.
 
 You don't need to type wikilinks yourself. Claude Code does that for you when it writes notes.
 
@@ -89,7 +89,7 @@ Obsidian is just a viewer. You can always edit the same files in TextEdit, Notep
 
 ### Pro move: keep Obsidian open while you work
 
-Open Obsidian to the vault first thing each morning. Read your operator's morning briefing (we'll set that up in section 3). Throughout the day, glance at it whenever you need to look something up — a supplier price, a customer's past job, your own notes from last week.
+Open Obsidian to the vault first thing each morning. Read your operator's morning briefing (we'll set that up in section 3). Throughout the day, glance at it whenever you need to look something up: a supplier price, a customer's past job, your own notes from last week.
 
 When you need to ADD or CHANGE something, that's when you switch over to Claude Code (also in the vault folder) and tell it what you want. Claude writes the note, Obsidian shows you the result.
 
@@ -97,24 +97,24 @@ When you need to ADD or CHANGE something, that's when you switch over to Claude 
 
 ## 2. Seed your vault with what you already have
 
-Right now your vault knows what you told it during the onboarding interview. That's a great start, but the real power kicks in once it knows the things your shop has been collecting for years — supplier price lists, contract templates, customer history, job photos, phone-call notes.
+Right now your vault knows what you told it during the onboarding interview. That's a great start, but the real power kicks in once it knows the things your shop has been collecting for years: supplier price lists, contract templates, customer history, job photos, phone-call notes.
 
 You don't need to manually copy and paste any of this. You drop the source files into the vault, ask Claude Code to read them, and it writes structured notes for you.
 
-### Where to put materials — one folder, flat, no decisions
+### Where to put materials: one folder, flat, no decisions
 
-Open Finder (Mac) or File Explorer (Windows) and navigate to your Shop OS Vault folder. You'll see a folder called `Raw/` that the installer created for you. **That's your inbox.** Drop any file there — Claude Code reads it, decides where it belongs, files it correctly, and moves the original to `Raw/processed/` so the inbox stays clean.
+Open Finder (Mac) or File Explorer (Windows) and navigate to your Shop OS Vault folder. You'll see a folder called `Raw/` that the installer created for you. **That's your inbox.** Drop any file there. Claude Code reads it, decides where it belongs, files it correctly, and moves the original to `Raw/processed/` so the inbox stays clean.
 
 ```
 Shop OS Vault/
 ├── Raw/                  ← drop everything here, flat. No subfolders to make.
 │   ├── README.md
 │   └── processed/        ← Claude moves digested originals here automatically
-├── Context/              (your shop info — created by onboarding)
+├── Context/              (your shop info, created by onboarding)
 ├── Projects/             (one folder per job)
 ├── Team/                 (your staff)
 ├── Resources/            (reusable templates and references)
-└── CLAUDE.md             (don't edit — Claude Code uses this)
+└── CLAUDE.md             (do not edit; Claude Code uses this)
 ```
 
 **Do not create subfolders inside `Raw/`.** That's the LLM's job. Pre-sorting defeats the whole point of having Claude Code do classification. Just drop and go.
@@ -126,7 +126,7 @@ Anything readable. Claude Code handles:
 - **PDFs** (contracts, price lists, invoices, scans of paper records)
 - **Word docs and spreadsheets** (Excel, .docx)
 - **Images** (photos, sketches, screenshots)
-- **Audio recordings** (phone calls, voice memos — gets transcribed first via the `audio-transcriber` skill)
+- **Audio recordings** (phone calls, voice memos; gets transcribed first via the `audio-transcriber` skill)
 - **Plain text and Markdown**
 - **Web pages saved as PDF** (right-click → "Save as PDF" works in most browsers)
 
@@ -144,26 +144,28 @@ You don't need to memorize this table. Just drop files in `Raw/` and let Claude 
 
 ### How to actually trigger the digest
 
-After you have dropped some files in `Raw/`, open Claude Code in your vault folder. Type:
+After you have dropped some files in `Raw/`, open Claude Code in your vault folder. Type the slash command:
 
 ```
-Process everything in Raw/. For each file, decide where it belongs, write a summary
-in the right place, and move the original to Raw/processed/. Report back what you did.
+/os-digest
 ```
 
-Claude reads each file, classifies it, writes the new note to the correct folder, moves the original to `Raw/processed/`, and gives you a report like:
+That's it. One command, easy to remember. It runs the full workflow: reads every file in `Raw/`, classifies each one, writes a structured note in the right vault folder, moves the original to `Raw/processed/`, and gives you a report like:
 
-> Processed 4 files:
-> - `acme-vanity-contract.pdf` → created `Projects/Acme Vanity/contract.md` and moved to processed/
-> - `hooker-march-pricing.pdf` → created `Resources/pricing/hooker-2026-03.md` and moved to processed/
-> - `henderson-kitchen-finished.jpg` → added to `Projects/Henderson Kitchen/photos/` and moved to processed/
-> - `unknown.txt` → couldn't classify, left in Raw/ for you to look at
+```
+Processed 4 files:
+  - acme-vanity-contract.pdf       -> Projects/Acme Vanity/contract.md
+  - hooker-march-pricing.pdf       -> Resources/pricing/hooker-2026-03.md
+  - henderson-kitchen-finished.jpg -> Projects/Henderson Kitchen/photos/
+  - unknown.txt                    -> could not classify, left in Raw/
+```
 
-You skim the report, approve. If something landed in the wrong spot, tell Claude "move the [filename] note into [correct folder]" — it learns the pattern for next time.
+You skim the report, approve. If something landed in the wrong spot, tell Claude "move the [filename] note into [correct folder]". It learns the pattern for next time.
 
 ### How much should I seed?
 
 Start with the things you reference weekly:
+
 - Your 3-5 most-used supplier price lists
 - Your current open jobs (contract + scope + photos)
 - The last 3 months of completed jobs (photos + final price)
@@ -174,7 +176,7 @@ That gives Claude Code enough context to be useful for daily questions. You can 
 
 ---
 
-## 3. Set up your daily morning briefing — `/obsidian:os-operator`
+## 3. Set up your daily morning briefing with `/os-operator`
 
 The operator is the autonomous part of Shop OS. You set it up once. After that, it runs on a schedule and writes a fresh briefing to your `Daily/` folder every morning before you walk into the shop.
 
@@ -183,9 +185,13 @@ A typical morning briefing for a cabinet shop:
 > **Monday 2026-05-25**
 >
 > **Today on the floor:** Aviemore kitchen install (Greg + Pete), Henderson vanity finish (Marco)
+>
 > **Shipping today:** Patel sectional pickup at 2pm
+>
 > **Open follow-ups:** Smith needs quote revision by Wednesday, Sherwood has not responded since Friday
+>
 > **Material orders arriving:** Hooker shipment expected Tuesday AM
+>
 > **This week's deadlines:** Bevel cabinet drawer-front prototype (due Thursday)
 
 You read this with your coffee and know what your day looks like before you set foot in the shop.
@@ -195,7 +201,7 @@ You read this with your coffee and know what your day looks like before you set 
 In Claude Code, type:
 
 ```
-/obsidian:os-operator
+/os-operator
 ```
 
 The skill asks you a few questions:
@@ -236,18 +242,18 @@ The next morning's briefing reflects the change.
 
 ---
 
-## 4. Keep the vault healthy — `/obsidian:os-optimizer`
+## 4. Keep the vault healthy with `/os-optimizer`
 
 Over time your vault accumulates clutter: stale notes from finished jobs, dead links to files you moved, half-written drafts you never finished. The optimizer cleans this up.
 
-It's not a daily tool — run it **once a month**, usually on a slow day. Takes about 15 minutes of your time.
+It is not a daily tool. Run it **once a month**, usually on a slow day. Takes about 15 minutes of your time.
 
 ### What it does
 
 In Claude Code, type:
 
 ```
-/obsidian:os-optimizer
+/os-optimizer
 ```
 
 The optimizer scans every note in your vault against seven quality frameworks:
@@ -272,9 +278,9 @@ When it finishes, you get an HTML dashboard in your browser showing every findin
 
 Don't try to fix everything. The optimizer surfaces dozens of findings; most are minor. Focus on:
 
-1. **Anything in the "critical" or "high" severity** at the top — these are real problems
-2. **Broken wikilinks** — these break navigation
-3. **Orphaned customer projects** — these mean you have a customer file that's not connected to anything
+1. **Anything in the "critical" or "high" severity** at the top. These are real problems.
+2. **Broken wikilinks.** These break navigation.
+3. **Orphaned customer projects.** These mean you have a customer file that is not connected to anything.
 
 Approve the fixes for those. Ignore the rest unless you have time.
 
@@ -316,4 +322,4 @@ Reply to the welcome email to ask about pricing for any of these.
 
 Reply to your welcome email. Glenn responds within one business hour.
 
-— Blueprint IT
+Blueprint IT

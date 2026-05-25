@@ -49,7 +49,7 @@ are simple double-click installers (no terminal commands needed for these).
 
 2. NODE.JS (free, ~3 minutes to install)
    Download: https://nodejs.org
-   Click the green "LTS" button. Double-click the installer that downloads.
+   Click the green "Get Node.js®" button. Double-click the installer that downloads.
    Click Next a few times. Done.
 
 3. CLAUDE CODE (free, ~5 minutes to install)
@@ -121,7 +121,7 @@ you the exact next steps. They are:
 3. RUN THE ONBOARDING INTERVIEW
    At the Claude prompt, type:
 
-       /obsidian:os-setup
+       /os-setup
 
    This kicks off a 10-minute onboarding interview that asks about your
    shop name, owner, key staff, services, and daily routines. As you
