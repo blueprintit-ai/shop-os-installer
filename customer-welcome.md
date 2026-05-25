@@ -47,6 +47,32 @@ Obsidian is the app you will use to browse your Shop OS vault: read notes, see y
 
 If Obsidian offers to set up Obsidian Sync or any paid features, skip those too. You do not need them.
 
+## Create your vault folder
+
+Before running the install command, create an empty folder called **Shop OS Vault** using Finder (Mac) or File Explorer (Windows). The installer will ask you to point it at this folder.
+
+### Where to put the folder
+
+Pick a location based on how you work:
+
+- **One computer only**: anywhere you like. Your home folder, your Documents folder, your Desktop. The fastest option since nothing syncs.
+- **Multiple computers (shop + home + laptop)**: put the folder **inside your Dropbox folder**, your **iCloud Drive folder**, or your **OneDrive folder**. Any computer signed in to the same sync account will see the same vault.
+
+If you go the multi-device route: make sure the sync app (Dropbox, iCloud Drive, or OneDrive) is installed, signed in, and finished its initial sync **before** running the install command. Sync occasionally lags a minute or two. If you save a note on one machine and it has not appeared on another yet, wait a moment.
+
+### How to create the folder
+
+1. Open Finder (Mac) or File Explorer (Windows).
+2. Navigate to the location you chose above.
+3. Right-click on empty space, choose **New Folder**.
+4. Name the folder exactly: `Shop OS Vault`.
+
+Leave that Finder / File Explorer window open. You will drag the folder out of it in a moment.
+
+### How much disk space
+
+Day one your vault is under 50 MB. After a month of typical cabinet-shop use, expect 100 to 500 MB. A busy shop importing many photos and PDFs may reach 2 to 5 GB by year-end. Make sure the drive you pick has at least 10 GB free.
+
 ## Install Shop OS: one command, about 30 seconds
 
 Open Terminal (Mac: press Cmd+Space, type `terminal`, press Enter) or PowerShell (Windows: press the Windows key, type `powershell`, press Enter).
@@ -57,9 +83,17 @@ Paste this command and press Enter:
 npx -y --package=github:blueprintit-ai/shop-os-installer shop-os-install
 ```
 
-The first time you run this, it downloads the installer. That takes about 20 seconds. Then it will ask you for your license key.
+The first time you run this, it downloads the installer. That takes about 20 seconds. Then it walks you through two prompts:
 
-Paste your license key when prompted. The installer takes care of the rest automatically and tells you exactly what to do next.
+1. **Your license key.** Paste it and press Enter.
+2. **The folder you just created.** The cleanest way: **drag the Shop OS Vault folder from Finder / File Explorer directly into the terminal window**. The full path appears automatically. Press Enter.
+
+If drag-and-drop does not work, you can copy the folder's path instead:
+
+- **Mac**: right-click the folder, hold the **Option** key, then choose **"Copy [folder name] as Pathname"**. Paste with Cmd+V into terminal.
+- **Windows**: hold **Shift** and right-click the folder, then choose **"Copy as path"**. Paste with Ctrl+V into PowerShell.
+
+The installer takes care of the rest automatically and tells you exactly what to do next.
 
 ## After install: your first session
 
@@ -73,16 +107,15 @@ Select the "Shop OS Vault" folder the installer created in your home directory. 
 
 You will now see your vault in Obsidian's main window. There is not much in it yet, just a `CLAUDE.md` file and a `Raw/` folder. That is about to change.
 
-### Step 2. Open Claude Code in the same folder
+### Step 2. Open your vault in Claude Code
 
-In Terminal or PowerShell, type:
+Launch the Claude Code app you installed in step 3 of the prerequisites. On Mac it lives in your Applications folder. On Windows it is pinned to the Start menu under "Claude Code".
 
-```
-cd ~/Shop\ OS\ Vault
-claude
-```
+When the app opens, it shows a folder picker, sometimes shown as a list of recent folders or an "Open folder" button. Pick the **Shop OS Vault** folder in your home directory. This is the same folder you just opened in Obsidian.
 
-That launches Claude Code in your vault. You will see a `Claude>` prompt waiting for you.
+Claude Code remembers your choice. Next time you launch the app it opens straight into your vault. No terminal, no commands to memorize.
+
+You will see a chat panel with a prompt waiting for input. That is where you talk to Claude about your shop.
 
 ### Step 3. Run the onboarding interview
 
@@ -102,8 +135,8 @@ Reply to your welcome email. A real human (Glenn) reads every message and respon
 
 Common first-time issues, already documented:
 
-- **`node: command not found`** means you skipped step 2 of the prerequisites. Install Node.js and try again.
-- **`claude: command not found`** means you skipped step 3. Install Claude Code and sign in.
+- **`node: command not found`** during the install command means you skipped step 2 of the prerequisites. Install Node.js and try again.
+- **Claude Code app will not launch or cannot find your vault** means you skipped step 3 of the prerequisites or signed in with a different account. Reinstall from claude.ai/code and sign in with the same Claude account from step 1.
 - **`License rejected`** means the key was mistyped. Double-check you pasted the full key including the `SHOP-` prefix and all three groups of four characters.
 - **Anything else** gets answered by reply email, usually with a 15-minute screen-share to fix the issue live.
 

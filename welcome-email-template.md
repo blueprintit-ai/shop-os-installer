@@ -73,6 +73,42 @@ are simple double-click installers (no terminal commands needed for these).
    skip those too. You don't need them.
 
 
+CREATE YOUR VAULT FOLDER
+────────────────────────────────────────────────────────────
+
+Before running the install command, create an empty folder
+called "Shop OS Vault" in Finder (Mac) or File Explorer (Windows).
+You'll point the installer at this folder during install.
+
+WHERE TO PUT IT
+  One computer only:
+    Anywhere you like — home folder, Documents, Desktop.
+    Fastest option since nothing syncs.
+
+  Multiple computers (shop + home + laptop):
+    Put the folder INSIDE your Dropbox, iCloud Drive, or
+    OneDrive folder. Any computer signed in to the same
+    sync account will see the same vault.
+
+    Make sure the sync app is installed, signed in, and
+    finished its initial sync BEFORE you run the install
+    command below. Sync occasionally lags a minute or two.
+
+HOW TO CREATE THE FOLDER
+  1. Open Finder (Mac) or File Explorer (Windows).
+  2. Navigate to the location you chose above.
+  3. Right-click in empty space, choose "New Folder".
+  4. Name it exactly: Shop OS Vault
+
+  Leave that Finder / File Explorer window open. You'll drag
+  the folder out of it in a moment.
+
+DISK SPACE
+  Day one: under 50 MB. After a month: 100-500 MB. A busy
+  shop importing many photos and PDFs may hit 2-5 GB by
+  year-end. Make sure the drive has at least 10 GB free.
+
+
 INSTALL SHOP OS — one command, ~30 seconds
 ────────────────────────────────────────────────────────────
 
@@ -83,15 +119,28 @@ Paste this command and press Enter:
 
     npx -y --package=github:blueprintit-ai/shop-os-installer shop-os-install
 
-The first time you run this it will download the installer. Takes about
-20 seconds. Then it will ask you for your license key.
+The first time you run this it downloads the installer. Takes
+about 20 seconds. Then it walks you through two prompts:
 
-Paste this when prompted:
+  1. YOUR LICENSE KEY
+     Paste this when asked:
 
-    {{LICENSE_KEY}}
+         {{LICENSE_KEY}}
 
-The installer will set everything up automatically and tell you exactly
-what to do next.
+  2. THE FOLDER YOU JUST CREATED
+     Cleanest way: drag the Shop OS Vault folder from Finder /
+     File Explorer directly into the terminal window. The path
+     appears automatically. Press Enter.
+
+     If drag-and-drop doesn't work, copy the path instead:
+       Mac:     right-click the folder, hold OPTION, choose
+                "Copy [folder name] as Pathname".
+                Paste with Cmd+V into terminal.
+       Windows: hold SHIFT and right-click the folder, choose
+                "Copy as path". Paste with Ctrl+V into PowerShell.
+
+The installer takes care of the rest automatically and tells
+you exactly what to do next.
 
 
 AFTER INSTALL — your first session
@@ -110,13 +159,21 @@ you the exact next steps. They are:
    in it yet — just a CLAUDE.md file and a Raw/ folder. That's about to
    change.
 
-2. OPEN CLAUDE CODE IN THE SAME FOLDER
-   In Terminal/PowerShell, type:
+2. OPEN YOUR VAULT IN CLAUDE CODE
+   Launch the Claude Code app you installed in step 3 of the
+   prerequisites (Mac: Applications folder. Windows: Start menu,
+   pinned as "Claude Code").
 
-       cd ~/Shop\ OS\ Vault    (or whatever folder the installer used)
-       claude
+   When the app opens, it shows a folder picker. Sometimes that is a
+   list of recent folders, sometimes an "Open folder" button. Pick the
+   "Shop OS Vault" folder in your home directory. Same folder you just
+   opened in Obsidian.
 
-   That launches Claude Code in your vault. You'll see a "Claude>" prompt.
+   Claude Code remembers your choice. Next time you launch the app it
+   opens straight into your vault. No terminal, no commands to memorize.
+
+   You'll see a chat panel waiting for input. That's where you talk
+   to Claude about your shop.
 
 3. RUN THE ONBOARDING INTERVIEW
    At the Claude prompt, type:
@@ -142,8 +199,12 @@ responds within one business hour.
 
 Common first-time issues we have already fixed in advance:
 
-  · "node: command not found" → finish step 2 above
-  · "claude: command not found" → finish step 3 above
+  · "node: command not found" during the install command → finish
+                                  step 2 of the prerequisites
+  · Claude Code app won't launch or can't find your vault → reinstall
+                                  from claude.ai/code and make sure you
+                                  signed in with the same Claude account
+                                  from step 1 of the prerequisites
   · "License rejected" → double-check you pasted the full key including
                           the SHOP- prefix and all three groups of four
   · Anything else → reply to this email and I will hop on a 15-min screen

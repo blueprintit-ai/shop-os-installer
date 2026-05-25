@@ -20,7 +20,7 @@
 import { createInterface } from "node:readline/promises";
 import { stdin, stdout, stderr, exit } from "node:process";
 import { homedir } from "node:os";
-import { join, dirname } from "node:path";
+import { join, dirname, resolve } from "node:path";
 import {
   existsSync,
   mkdirSync,
@@ -313,6 +313,73 @@ The more you drop, the more your vault knows about your shop.
   return { created: true, alreadyExisted: existed };
 }
 
+function expandTilde(p) {
+  if (!p) return p;
+  if (p === "~") return homedir();
+  if (p.startsWith("~/") || p.startsWith("~\\")) return join(homedir(), p.slice(2));
+  return p;
+}
+
+// Clean a path that came from drag-and-drop or "Copy as path" / "Copy as Pathname".
+// Mac Terminal drag: backslash-escaped spaces and special chars: /Users/foo/Shop\ OS\ Vault
+// Windows "Copy as path": wraps in double quotes: "C:\Users\foo\Shop OS Vault"
+// Mac "Copy as Pathname": no escaping: /Users/foo/Shop OS Vault
+function unwrapShellPath(p) {
+  if (!p) return p;
+  let s = p.trim();
+  const wasQuoted =
+    (s.startsWith('"') && s.endsWith('"')) ||
+    (s.startsWith("'") && s.endsWith("'"));
+  if (wasQuoted) {
+    // Windows "Copy as path" and PowerShell drag wrap in quotes — keep backslashes
+    // as directory separators.
+    s = s.slice(1, -1);
+  } else {
+    // Mac Terminal drag uses backslash to escape spaces and special chars.
+    s = s.replace(/\\(.)/g, "$1");
+  }
+  return s.trim();
+}
+
+function detectSyncFolders() {
+  const home = homedir();
+  return [
+    { name: "Dropbox", path: join(home, "Dropbox") },
+    { name: "iCloud Drive", path: join(home, "Library/Mobile Documents/com~apple~CloudDocs") },
+    { name: "OneDrive", path: join(home, "OneDrive") },
+  ].filter((f) => existsSync(f.path));
+}
+
+function printVaultLocationGuide() {
+  print(bold("Step 1 of 2: create your vault folder"));
+  print("");
+  print("  Open Finder (Mac) or File Explorer (Windows).");
+  print("  Right-click in the location where you want your vault, choose");
+  print("  " + bold("New Folder") + ", and name it " + cyan("Shop OS Vault") + ".");
+  print("");
+  print("  " + bold("Where to put it:"));
+  print("    " + cyan("Single computer") + "  -> your home folder or Desktop");
+  print("    " + cyan("Multiple machines") + " -> inside Dropbox, iCloud Drive,");
+  print("                       or OneDrive (any computer signed in to");
+  print("                       the same account will see the same vault)");
+  print("");
+  print("  " + dim("Disk space: under 50 MB on day one, 2-5 GB after a year of"));
+  print("  " + dim("heavy use. Make sure the drive has 10 GB free."));
+  print("");
+  print(bold("Step 2 of 2: tell the installer where it is"));
+  print("");
+  print("  When the prompt below appears, " + bold("drag the folder you just created"));
+  print("  " + bold("from Finder / File Explorer into this terminal window") + ". The full");
+  print("  path appears automatically. Press Enter.");
+  print("");
+  print("  " + dim("If drag-and-drop does not work:"));
+  print("    " + dim("Mac:     right-click the folder, hold Option, choose"));
+  print("    " + dim('             "Copy as Pathname", then paste here with Cmd+V'));
+  print("    " + dim("Windows: Shift + right-click the folder, choose"));
+  print("    " + dim('             "Copy as path", then paste here with Ctrl+V'));
+  print("");
+}
+
 function saveLicenseFile(license) {
   const dir = join(homedir(), ".shopos");
   mkdirSync(dir, { recursive: true });
@@ -409,9 +476,34 @@ async function main() {
   print("");
 
   // Vault location (flag overrides prompt)
-  const defaultVault = join(homedir(), "Shop OS Vault");
-  const vaultPath = args.vault
-    || (await ask(rl, "Where to create your Shop OS vault?", { default: defaultVault }));
+  let vaultPath = args.vault;
+  if (!vaultPath) {
+    printVaultLocationGuide();
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      const ans = await ask(rl, "Drag your Shop OS Vault folder here, then press Enter");
+      if (ans) {
+        vaultPath = ans;
+        break;
+      }
+      warn("No path entered. Drag the folder from Finder / File Explorer into this window, or paste the copied path.");
+    }
+    if (!vaultPath) {
+      rl.close();
+      fail("No vault path provided. Create the folder first, then re-run this installer.");
+    }
+  }
+  vaultPath = resolve(expandTilde(unwrapShellPath(vaultPath)));
+
+  if (!existsSync(vaultPath)) {
+    warn(`No folder found at: ${vaultPath}`);
+    const createIt = args.yes
+      ? true
+      : await confirm(rl, "Create it now and continue?", { default: false });
+    if (!createIt) {
+      rl.close();
+      fail("Create the folder in Finder / File Explorer first, then re-run this installer.");
+    }
+  }
 
   const proceed = args.yes
     ? true
@@ -473,9 +565,10 @@ async function main() {
   print(green(bold("✓ Shop OS installation complete!")));
   print("");
   print(bold("Next steps:"));
-  print(`  1. ${cyan(`cd "${vaultPath}"`)}`);
-  print(`  2. Open Claude Code in that folder (run ${cyan("claude")} or open the VSCode extension)`);
-  print(`  3. Run ${cyan("/obsidian:os-setup")} to personalize your vault`);
+  print(`  1. Open the ${cyan("Claude Code")} app you installed (Applications / Start menu)`);
+  print(`  2. Pick this folder when it asks which to open:`);
+  print(`     ${cyan(vaultPath)}`);
+  print(`  3. In the Claude prompt, run ${cyan("/obsidian:os-setup")} to personalize your vault`);
   print(`  4. Walk through the onboarding interview`);
   print("");
   print(dim(`Support: ${SUPPORT_URL}`));
