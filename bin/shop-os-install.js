@@ -257,6 +257,61 @@ or reply to your welcome email.
   return true;
 }
 
+function createRawInbox(vaultPath) {
+  // Create a flat Raw/ inbox with a processed/ subfolder for after-digest moves.
+  // Customers drop any raw materials in Raw/ — no subfolders to think about.
+  // Claude Code reads, classifies, routes into the vault, and moves the
+  // source file to Raw/processed/.
+  const rawDir = join(vaultPath, "Raw");
+  const processedDir = join(rawDir, "processed");
+  const readmePath = join(rawDir, "README.md");
+
+  const existed = existsSync(rawDir);
+  mkdirSync(processedDir, { recursive: true });
+
+  if (existsSync(readmePath)) return { created: false };
+
+  const readme = `---
+type: inbox-readme
+tags: [shop-os, inbox, raw]
+---
+
+# Raw / Inbox
+
+Drop any raw materials here that you want Shop OS to read and route into your vault.
+PDFs, photos, transcripts, contracts, price lists, spreadsheets, scans — anything.
+
+You do NOT need to organize them into subfolders. Just drop them flat. Claude Code
+reads each file, decides where it belongs in the vault, writes a summary into the
+appropriate folder, and moves the original to \`Raw/processed/\` so the inbox stays clean.
+
+## How to trigger a digest
+
+Open Claude Code in this vault and type:
+
+\`\`\`
+Process everything in Raw/. For each file, decide where it belongs, write a summary
+in the right place, and move the original to Raw/processed/. Report back what you did.
+\`\`\`
+
+Claude does the rest. You review the report and the inbox is empty again.
+
+## Examples of what to drop here
+
+- A supplier PDF price list
+- A signed customer contract or quote
+- Photos of a completed job
+- A transcript of a sales call (text file or audio)
+- A staff training document
+- Old paper records you scanned
+- Spreadsheets, web pages saved as PDF, anything else
+
+The more you drop, the more your vault knows about your shop.
+`;
+  writeFileSync(readmePath, readme, "utf8");
+  return { created: true, alreadyExisted: existed };
+}
+
 function saveLicenseFile(license) {
   const dir = join(homedir(), ".shopos");
   mkdirSync(dir, { recursive: true });
@@ -400,6 +455,10 @@ async function main() {
   const wroteClaudeMd = createVaultClaudeMd(vaultPath, license);
   if (wroteClaudeMd) ok("CLAUDE.md scaffolded");
   else info("CLAUDE.md already present (left untouched)");
+
+  const rawResult = createRawInbox(vaultPath);
+  if (rawResult.created) ok("Raw/ inbox + Raw/processed/ created (drop materials in Raw/ to seed the vault)");
+  else info("Raw/ inbox already present (left untouched)");
 
   print(dim("  [4/5] Enabling plugins for this vault"));
   const settingsPath = enableForVault(vaultPath);
