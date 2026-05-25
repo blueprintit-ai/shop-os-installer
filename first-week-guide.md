@@ -10,17 +10,92 @@ tags: [shop-os, customer-onboarding, first-week]
 
 You finished the install and the onboarding interview. The vault is in Obsidian. Now what?
 
-This guide covers the three things you need to know to start running your shop on Shop OS:
+This guide covers the four things you need to know to start running your shop on Shop OS:
 
-1. **How to feed your shop's existing materials into the vault** (seeding)
-2. **How to set up your daily morning briefing** (the `/obsidian:os-operator` skill)
-3. **How to keep the vault healthy over time** (the `/obsidian:os-optimizer` skill)
+1. **How to use Obsidian to browse your vault** (10 minutes — read this first)
+2. **How to feed your shop's existing materials into the vault** (seeding — about an hour the first week)
+3. **How to set up your daily morning briefing** (the `/obsidian:os-operator` skill — 5-10 min setup, then automatic)
+4. **How to keep the vault healthy over time** (the `/obsidian:os-optimizer` skill — 15 min once a month)
 
-You can skip around. Section 1 takes about an hour the first week; sections 2 and 3 are one-time setups that take 5-10 minutes each.
+You can skip around, but section 1 is worth reading first if you've never used Obsidian.
 
 ---
 
-## 1. Seed your vault with what you already have
+## 1. How to use Obsidian to browse your vault
+
+Obsidian is the app you use to **read, browse, and edit** your Shop OS vault. Think of it like Finder + Notes + a wiki rolled into one window. Claude Code does the AI work; Obsidian is where you actually look at the results.
+
+You don't need to learn most of Obsidian's features. The basics get you 95% of the way there.
+
+### The window layout
+
+When you first open your Shop OS vault in Obsidian, you'll see three areas:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  Left sidebar          │  Main pane                     │
+│  (file explorer)       │  (whatever note you're reading)│
+│                        │                                │
+│  ├ CLAUDE.md           │  # Shop OS Vault               │
+│  ├ Context/            │                                │
+│  │  └ organization.md  │  Welcome to your Shop OS       │
+│  ├ Projects/           │  vault. This is the operating  │
+│  │  ├ Acme Cabinets/   │  system Blueprint IT installed │
+│  │  └ Henderson/       │  for [your shop]...            │
+│  ├ Raw/                │                                │
+│  └ Team/               │                                │
+└─────────────────────────────────────────────────────────┘
+```
+
+- **Left sidebar**: a tree of every folder and file in your vault. Click any file to open it in the main pane.
+- **Main pane**: the note you're currently reading. By default it's read-only; double-click anywhere to edit.
+- **Right sidebar** (might be hidden): shows backlinks, outline, and other contextual info. Toggle with `Cmd+Shift+B` (Mac) or `Ctrl+Shift+B` (Windows). You can ignore this for now.
+
+### The 4 keyboard shortcuts you'll actually use
+
+| Shortcut (Mac / Windows) | What it does |
+|---|---|
+| `Cmd+O` / `Ctrl+O` | Quick-open any file. Type a few letters of the filename, hit Enter. |
+| `Cmd+Shift+F` / `Ctrl+Shift+F` | Search across every note in the vault. |
+| `Cmd+,` / `Ctrl+,` | Settings (you rarely need this). |
+| `Cmd+G` / `Ctrl+G` | Open the graph view — visualizes your vault as a network of connected notes. Fun to look at; not essential. |
+
+### Wikilinks — the magic of Obsidian
+
+Throughout your vault, you'll see text in `[[double brackets]]`. These are **wikilinks**. Click any wikilink to jump to that note. If the note doesn't exist yet, clicking creates it.
+
+Example: if a note about a customer mentions `[[Hooker Furnishings]]`, clicking that link takes you to the Hooker Furnishings supplier note. From there, you can navigate to all the jobs that used Hooker products, or to the latest Hooker price list — everything is connected.
+
+You don't need to type wikilinks yourself. Claude Code does that for you when it writes notes.
+
+### How to add a new note manually (if you ever want to)
+
+Three ways:
+
+1. **Right-click** any folder in the left sidebar → "New note" → type the name → start typing
+2. **Cmd+N / Ctrl+N** creates a new note in the current folder
+3. **Type a wikilink** like `[[New customer name]]` in any existing note, click it, and Obsidian creates the note for you
+
+But honestly, the better workflow is: tell Claude Code what you want to add, and Claude writes the note. Example: "Add a note in Projects/Acme/ that the customer called today to push delivery to next Friday." Claude creates and saves it. You see it appear in the Obsidian sidebar in real time.
+
+### What to do if Obsidian feels overwhelming
+
+Two things:
+
+1. **Don't install any community plugins.** Shop OS doesn't need them and they can complicate things. The default Obsidian install has everything you need.
+2. **Don't sign up for Obsidian Sync.** Your vault lives on your computer (and in Dropbox if you put it there). Obsidian Sync is a paid subscription you don't need.
+
+Obsidian is just a viewer. You can always edit the same files in TextEdit, Notepad, VSCode, or any other text editor if Obsidian ever feels like too much. The vault is just a folder of plain markdown files.
+
+### Pro move: keep Obsidian open while you work
+
+Open Obsidian to the vault first thing each morning. Read your operator's morning briefing (we'll set that up in section 3). Throughout the day, glance at it whenever you need to look something up — a supplier price, a customer's past job, your own notes from last week.
+
+When you need to ADD or CHANGE something, that's when you switch over to Claude Code (also in the vault folder) and tell it what you want. Claude writes the note, Obsidian shows you the result.
+
+---
+
+## 2. Seed your vault with what you already have
 
 Right now your vault knows what you told it during the onboarding interview. That's a great start, but the real power kicks in once it knows the things your shop has been collecting for years — supplier price lists, contract templates, customer history, job photos, phone-call notes.
 
@@ -99,7 +174,7 @@ That gives Claude Code enough context to be useful for daily questions. You can 
 
 ---
 
-## 2. Set up your daily morning briefing — `/obsidian:os-operator`
+## 3. Set up your daily morning briefing — `/obsidian:os-operator`
 
 The operator is the autonomous part of Shop OS. You set it up once. After that, it runs on a schedule and writes a fresh briefing to your `Daily/` folder every morning before you walk into the shop.
 
@@ -161,7 +236,7 @@ The next morning's briefing reflects the change.
 
 ---
 
-## 3. Keep the vault healthy — `/obsidian:os-optimizer`
+## 4. Keep the vault healthy — `/obsidian:os-optimizer`
 
 Over time your vault accumulates clutter: stale notes from finished jobs, dead links to files you moved, half-written drafts you never finished. The optimizer cleans this up.
 

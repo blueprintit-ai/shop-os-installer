@@ -36,10 +36,10 @@ You will paste it once during install. We will never ask you to re-enter
 it after that.
 
 
-BEFORE YOU INSTALL — three downloads, ~10 minutes total
+BEFORE YOU INSTALL — four downloads, ~15 minutes total
 ────────────────────────────────────────────────────────────
 
-Shop OS runs on top of three things. All three are required and all three
+Shop OS runs on top of four things. All four are required and all four
 are simple double-click installers (no terminal commands needed for these).
 
 1. CLAUDE MAX SUBSCRIPTION (~$100/month, paid to Anthropic, not us)
@@ -56,6 +56,21 @@ are simple double-click installers (no terminal commands needed for these).
    Download: https://claude.ai/code
    Pick the right installer (Mac or Windows). Double-click. Install.
    When it asks you to sign in, use the same Claude account from step 1.
+
+4. OBSIDIAN (free, ~3 minutes to install)
+   Download: https://obsidian.md
+   Pick the right installer (Mac or Windows). Double-click. Install.
+
+   Obsidian is the app you'll use to BROWSE your Shop OS vault — read
+   notes, see your job folders, search across everything. Think of it
+   as Finder + Notes + a wiki, in one window.
+
+   IMPORTANT: When Obsidian first opens, it will ask you to either
+   create a new vault or open an existing one. SKIP THIS for now.
+   You'll open the Shop OS vault AFTER the install command runs.
+
+   If Obsidian offers to set up "Obsidian Sync" or any paid features,
+   skip those too. You don't need them.
 
 
 INSTALL SHOP OS — one command, ~30 seconds
@@ -82,16 +97,41 @@ what to do next.
 AFTER INSTALL — your first session
 ────────────────────────────────────────────────────────────
 
-The installer will print "✓ Shop OS installation complete!" with three
-numbered next steps. Follow them:
+The installer will print "✓ Shop OS installation complete!" and tell
+you the exact next steps. They are:
 
-1. cd into the Shop OS Vault folder it just created for you
-2. Open Claude Code in that folder
-3. Type /obsidian:os-setup and follow the onboarding interview
+1. OPEN YOUR VAULT IN OBSIDIAN
+   Launch Obsidian. Click "Open folder as vault" (you may need to click
+   the small folder icon in the corner first to access this option).
+   Select the "Shop OS Vault" folder the installer created in your
+   home directory. Click Open.
 
-The onboarding interview takes about 10 minutes. It asks about your
-shop name, owner, key staff, services, and how you want your daily
-routines to work. You will be running your shop on AI by the end.
+   You'll now see your vault in Obsidian's main window. There's not much
+   in it yet — just a CLAUDE.md file and a Raw/ folder. That's about to
+   change.
+
+2. OPEN CLAUDE CODE IN THE SAME FOLDER
+   In Terminal/PowerShell, type:
+
+       cd ~/Shop\ OS\ Vault    (or whatever folder the installer used)
+       claude
+
+   That launches Claude Code in your vault. You'll see a "Claude>" prompt.
+
+3. RUN THE ONBOARDING INTERVIEW
+   At the Claude prompt, type:
+
+       /obsidian:os-setup
+
+   This kicks off a 10-minute onboarding interview that asks about your
+   shop name, owner, key staff, services, and daily routines. As you
+   answer, Obsidian's file list (left sidebar) will fill up with the
+   notes Claude is creating for you. Watch your vault populate in
+   real time.
+
+By the end of the interview, you'll have a configured Shop OS vault
+ready to use. We'll send a follow-up email with a "first week" guide
+that walks you through what to do next.
 
 
 NEED HELP?
