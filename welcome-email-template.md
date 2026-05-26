@@ -23,7 +23,7 @@ Welcome to Shop OS — your license key and install instructions
 Hi {{CUSTOMER_NAME}},
 
 Thanks for picking up Shop OS Foundation. Your license key is below, along
-with everything you need to get installed in the next 15 minutes.
+with everything you need to get installed in under 30 minutes.
 
 
 YOUR LICENSE KEY
@@ -274,7 +274,7 @@ Drop this into a rich-text mailer (Gmail compose in rich mode, ConvertKit, Beehi
 
 <tr><td style="padding:22px 0 0;">
 <p style="font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#0c1e2f;margin:0 0 12px;">Hi {{CUSTOMER_NAME}},</p>
-<p style="font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#0c1e2f;margin:0 0 4px;">Thanks for picking up <em style="font-style:italic;color:#1c6ea4;">Shop OS Foundation</em>. Your license key is below, along with everything you need to get installed in the next 15 minutes.</p>
+<p style="font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#0c1e2f;margin:0 0 4px;">Thanks for picking up <em style="font-style:italic;color:#1c6ea4;">Shop OS Foundation</em>. Your license key is below, along with everything you need to get installed in under 30 minutes.</p>
 </td></tr>
 
 <tr><td style="padding:28px 0 0;">
