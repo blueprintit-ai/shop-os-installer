@@ -138,7 +138,7 @@ async function validateLicense(key) {
   const url = `${LICENSE_SERVER}/validate?key=${encodeURIComponent(key)}`;
   let resp;
   try {
-    resp = await fetch(url, { headers: { "user-agent": "shop-os-installer/0.1.0" } });
+    resp = await fetch(url, { headers: { "user-agent": "shop-os-installer/0.3.0" } });
   } catch (e) {
     return { ok: false, error: `network: ${e.message}` };
   }
@@ -439,11 +439,12 @@ function saveLicenseFile(license) {
 // ---------- arg parsing ----------
 
 function parseArgs(argv) {
-  const args = { license: null, vault: null, yes: false, help: false };
+  const args = { license: null, vault: null, yes: false, existing: false, help: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === "--help" || a === "-h") args.help = true;
     else if (a === "--yes" || a === "-y") args.yes = true;
+    else if (a === "--existing" || a === "-e") args.existing = true;
     else if (a === "--license") args.license = argv[++i];
     else if (a.startsWith("--license=")) args.license = a.slice("--license=".length);
     else if (a === "--vault") args.vault = argv[++i];
@@ -459,6 +460,7 @@ function printHelp() {
   print(bold("Options:"));
   print(`  --license <KEY>   License key (skips interactive prompt)`);
   print(`  --vault <PATH>    Vault location (skips interactive prompt)`);
+  print(`  --existing, -e    Add Shop OS to an existing vault (skips vault creation)`);
   print(`  --yes, -y         Skip the install-here confirmation`);
   print(`  --help, -h        Show this message`);
   print("");
@@ -509,17 +511,35 @@ async function main() {
   }
   print("");
 
+  // Vault mode: new or existing?
+  let isExisting = args.existing;
+  if (!isExisting && !args.vault) {
+    print(bold("Vault mode"));
+    print("");
+    print("  " + bold("new") + "       Create a fresh Shop OS vault in a new folder");
+    print("  " + bold("existing") + "  Add Shop OS to a vault you already have");
+    print("");
+    const modeAns = await ask(rl, "New vault or add to existing?", { default: "new" });
+    isExisting = modeAns.toLowerCase().startsWith("e");
+    print("");
+  }
+
   // Vault location (flag overrides prompt)
   let vaultPath = args.vault;
   if (!vaultPath) {
-    printVaultLocationGuide();
-    for (let attempt = 1; attempt <= 3; attempt++) {
-      const ans = await ask(rl, "Drag your Shop OS Vault folder here, then press Enter");
-      if (ans) {
-        vaultPath = ans;
-        break;
+    if (isExisting) {
+      for (let attempt = 1; attempt <= 3; attempt++) {
+        const ans = await ask(rl, "Drag your existing vault folder here, then press Enter");
+        if (ans) { vaultPath = ans; break; }
+        warn("No path entered. Drag the folder into this window, or paste the copied path.");
       }
-      warn("No path entered. Drag the folder from Finder / File Explorer into this window, or paste the copied path.");
+    } else {
+      printVaultLocationGuide();
+      for (let attempt = 1; attempt <= 3; attempt++) {
+        const ans = await ask(rl, "Drag your Shop OS Vault folder here, then press Enter");
+        if (ans) { vaultPath = ans; break; }
+        warn("No path entered. Drag the folder from Finder / File Explorer into this window, or paste the copied path.");
+      }
     }
     if (!vaultPath) {
       rl.close();
@@ -529,6 +549,10 @@ async function main() {
   vaultPath = resolve(expandTilde(unwrapShellPath(vaultPath)));
 
   if (!existsSync(vaultPath)) {
+    if (isExisting) {
+      rl.close();
+      fail(`No folder found at: ${vaultPath}\nMake sure the path is correct and the folder exists.`);
+    }
     warn(`No folder found at: ${vaultPath}`);
     const createIt = args.yes
       ? true
@@ -539,9 +563,12 @@ async function main() {
     }
   }
 
+  const confirmMsg = isExisting
+    ? `Add Shop OS to existing vault at ${cyan(vaultPath)}?`
+    : `Install Shop OS into ${cyan(vaultPath)}?`;
   const proceed = args.yes
     ? true
-    : await confirm(rl, `Install Shop OS into ${cyan(vaultPath)}?`, { default: true });
+    : await confirm(rl, confirmMsg, { default: true });
 
   if (!proceed) {
     rl.close();
@@ -572,16 +599,18 @@ async function main() {
     info("All required plugins already queued");
   }
 
-  print(dim(`  [3/6] Creating vault at ${vaultPath}`));
+  print(dim(`  [3/6] ${isExisting ? "Configuring" : "Creating"} vault at ${vaultPath}`));
   if (!existsSync(vaultPath)) {
     mkdirSync(vaultPath, { recursive: true });
     ok("Vault directory created");
   } else {
-    info("Vault directory already exists");
+    info(`Vault directory ${isExisting ? "found" : "already exists"}`);
   }
-  const wroteClaudeMd = createVaultClaudeMd(vaultPath, license);
-  if (wroteClaudeMd) ok("CLAUDE.md scaffolded");
-  else info("CLAUDE.md already present (left untouched)");
+  if (!isExisting) {
+    const wroteClaudeMd = createVaultClaudeMd(vaultPath, license);
+    if (wroteClaudeMd) ok("CLAUDE.md scaffolded");
+    else info("CLAUDE.md already present (left untouched)");
+  }
 
   const rawResult = createRawInbox(vaultPath);
   if (rawResult.created) ok("Raw/ inbox + Raw/processed/ created (drop materials in Raw/ to seed the vault)");
