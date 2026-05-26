@@ -186,7 +186,7 @@ A typical morning briefing for a cabinet shop:
 >
 > **Today on the floor:** Aviemore kitchen install (Greg + Pete), Henderson vanity finish (Marco)
 >
-> **Shipping today:** Patel sectional pickup at 2pm
+> **Shipping today:** Patel DIY Closet pickup at 2pm
 >
 > **Open follow-ups:** Smith needs quote revision by Wednesday, Sherwood has not responded since Friday
 >
@@ -287,11 +287,30 @@ When you're ready to go further, ask about these add-ons:
 | Add-on | What it does | When to ask about it |
 |---|---|---|
 | **Shop OS Pro** | Adds `os-evolver` (the vault gets smarter automatically) and `team-os` (multi-user vault) | When your shop has 3+ people sharing the vault |
-| **Marketing Pack** | LinkedIn post writer, newsletter, case studies, infographics | When you want to grow your shop's online presence |
+| **Marketing Pack** | 40+ pre-wired marketing skills (copy, social, email, ads, CRO, launches) | When you want to grow your shop's online presence |
 | **SEO Pack** | Get your shop ranking for "custom cabinets [your city]" | When you want more inbound leads |
 | **Sales Pack** | CRM prospect mining, cold email, lead qualification | When you're doing commercial / B2B work |
 
 Reply to the welcome email to ask about pricing for any of these.
+
+### Marketing Pack details
+
+The Marketing Pack ships [Corey Haines's marketingskills](https://github.com/coreyhaines31/marketingskills) into your vault. Forty-plus pre-wired AI marketing skills, each one connected to your Shop OS so it already knows your brand voice, your ICP, your past projects, and your current customers before you ask it anything.
+
+What you get:
+
+- **Copy** — website pages, landing pages, follow-up emails, cold outreach to GCs and designers
+- **Social** — LinkedIn posts, Instagram captions, Facebook content, ready to publish
+- **Visual** — image generation for Instagram carousels, social headers, before / after mockups
+- **Video** — short-form scripts and storyboards for project tours
+- **Email** — newsletter sequences, post-install follow-ups, win-back campaigns
+- **Ads** — Meta and Google ad creative, headline variations, audience targeting
+- **CRO** — homepage and pricing-page optimization, popup and signup-flow tuning
+- **Launches** — new showroom announcements, new product-line reveals, Product Hunt-style sequences
+- **Lead magnets** — gated guides like "Cabinet Buyer's Checklist" that grow your email list
+- **Strategy** — competitor profiling, customer research synthesis, content-strategy planning
+
+Every skill reads your `Context/` first, so the output sounds like your shop, not generic boilerplate. Reply to your welcome email to get pricing and onboarding.
 
 ## Need help?
 
