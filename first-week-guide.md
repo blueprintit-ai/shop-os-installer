@@ -117,7 +117,7 @@ Shop OS Vault/
 └── CLAUDE.md             (do not edit; Claude Code uses this)
 ```
 
-**Do not create subfolders inside `Raw/`.** That's the LLM's job. Pre-sorting defeats the whole point of having Claude Code do classification. Just drop and go.
+**Do not create subfolders inside `Raw/`.** That's AI's job. Pre-sorting defeats the whole point of having Claude Code do classification. Just drop and go.
 
 ### What kinds of files work
 
