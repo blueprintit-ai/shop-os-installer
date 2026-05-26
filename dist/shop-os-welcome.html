@@ -4,29 +4,49 @@
 <meta charset="utf-8">
 <title>Welcome to Shop OS</title>
 <style>
+/* ============================================================
+   Blueprint IT — Shop OS Foundation customer documents.
+   Visual language matches blueprintit.ai/shop-ossi:
+   warm paper base, blueprint grid overlay, cyan + rust accents,
+   node-cloud cover banner, "Blueprint IT" wordmark.
+============================================================ */
+
+:root {
+  --paper: #f4efe3;
+  --paper-2: #ede6d4;
+  --paper-line: #d9ceb0;
+  --ink: #0c1e2f;
+  --ink-soft: #2a3f55;
+  --ink-mute: #6a7788;
+  --cyan: #1c6ea4;
+  --cyan-soft: #2e8fc9;
+  --rust: #c2461f;
+  --gold: #b68a2c;
+}
+
 @page {
   size: letter;
   margin: 0.85in 0.75in 1.0in 0.75in;
-  background: #F4EFE3;
+  background: #f4efe3;
   @bottom-left {
-    content: "Blueprint IT  ·  Shop OS Foundation";
+    content: "Blueprint IT  \00B7  Shop OS Foundation";
     font-family: "SF Mono", Menlo, Consolas, monospace;
     font-size: 7.5pt;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #5C544A;
-    border-top: 0.5pt solid #C4BBA7;
+    color: #2a3f55;
+    border-top: 0.5pt solid #1c6ea4;
     padding-top: 6pt;
     vertical-align: top;
   }
   @bottom-right {
-    content: "blueprintit.ai  ·  page " counter(page);
+    content: "blueprintit.ai  \00B7  page " counter(page);
     font-family: "SF Mono", Menlo, Consolas, monospace;
     font-size: 7.5pt;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #5C544A;
-    border-top: 0.5pt solid #C4BBA7;
+    color: #2a3f55;
+    border-top: 0.5pt solid #1c6ea4;
     padding-top: 6pt;
     vertical-align: top;
   }
@@ -34,9 +54,20 @@
 
 * { box-sizing: border-box; }
 
+/* ---- Blueprint grid background (matches the website) ----
+   Applied to body so it repeats over every printed page.
+   Slightly higher opacity than the web (0.06/0.12 vs 0.055/0.11)
+   to compensate for print contrast. */
 html, body {
-  background: #F4EFE3;
-  color: #020309;
+  background-color: #f4efe3;
+  background-image:
+    linear-gradient(to right, rgba(28, 110, 164, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(28, 110, 164, 0.06) 1px, transparent 1px),
+    linear-gradient(to right, rgba(28, 110, 164, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(28, 110, 164, 0.12) 1px, transparent 1px);
+  background-size: 24px 24px, 24px 24px, 120px 120px, 120px 120px;
+  background-position: -1px -1px;
+  color: #0c1e2f;
   font-family: Georgia, "Iowan Old Style", "Apple Garamond", serif;
   font-size: 11pt;
   line-height: 1.55;
@@ -46,41 +77,85 @@ html, body {
   print-color-adjust: exact;
 }
 
-/* ---- Cover header ---- */
+/* ---- Cover ---- */
 
 .cover {
-  border-bottom: 1px solid #020309;
+  border-bottom: 1.5pt solid #0c1e2f;
   padding-bottom: 18pt;
   margin-bottom: 24pt;
 }
-.cover .wordmark {
-  font-family: "SF Mono", "JetBrains Mono", "Iosevka", "Menlo", Consolas, monospace;
-  font-size: 9pt;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #020309;
+
+/* Node-cloud banner: SVG accent at the top of the cover.
+   Matches the live ParticleBrainCanvas on shop-ossi (lateral brain
+   silhouette, cyan body, gold edges, rust accents). Static SVG so
+   it renders in PDF and email without JS. */
+.cover-art {
+  width: 100%;
+  margin: -8pt 0 16pt;
+  opacity: 0.78;
+  line-height: 0;
+  border-bottom: 0.75pt solid #1c6ea4;
+  padding-bottom: 8pt;
 }
+.cover-art img {
+  width: 100%;
+  height: 105pt;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.cover-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12pt;
+}
+
+.cover .wordmark {
+  font-family: Georgia, serif;
+  font-size: 13pt;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: #0c1e2f;
+}
+.cover .wordmark em {
+  font-style: italic;
+  color: #c2461f;
+  font-weight: 600;
+  margin-left: 0;
+}
+.cover .wordmark-tag {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 8pt;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #2a3f55;
+  margin-left: 10pt;
+  font-weight: 400;
+}
+
 .cover .doc-no {
   font-family: "SF Mono", Menlo, Consolas, monospace;
   font-size: 9pt;
-  color: #5C544A;
-  float: right;
+  color: #1c6ea4;
   letter-spacing: 0.08em;
 }
 .cover .title {
   font-family: Georgia, serif;
   font-size: 28pt;
   font-weight: 600;
-  margin-top: 14pt;
+  margin-top: 10pt;
   letter-spacing: -0.01em;
+  color: #0c1e2f;
 }
 .cover .tagline {
   font-family: "SF Mono", Menlo, Consolas, monospace;
   font-size: 8.5pt;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: #5C544A;
-  margin-top: 6pt;
+  color: #1c6ea4;
+  margin-top: 8pt;
 }
 
 /* ---- Section structure ---- */
@@ -94,8 +169,9 @@ h2 {
   break-after: avoid;
   page-break-inside: avoid;
   break-inside: avoid;
-  border-top: 1px solid #C4BBA7;
+  border-top: 1pt solid #1c6ea4;
   padding-top: 14pt;
+  color: #0c1e2f;
 }
 h2::before {
   content: attr(data-anchor) "\A";
@@ -104,8 +180,8 @@ h2::before {
   font-size: 8pt;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #5C544A;
-  font-weight: 400;
+  color: #1c6ea4;
+  font-weight: 500;
   margin-bottom: 4pt;
   white-space: pre;
 }
@@ -116,6 +192,7 @@ h3 {
   margin: 18pt 0 4pt 0;
   page-break-after: avoid;
   break-after: avoid;
+  color: #0c1e2f;
 }
 h4 {
   font-family: "SF Mono", Menlo, Consolas, monospace;
@@ -123,14 +200,19 @@ h4 {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   margin: 14pt 0 4pt 0;
-  color: #5C544A;
+  color: #2a3f55;
 }
 
 p { margin: 0 0 9pt 0; }
-strong { font-weight: 600; }
-em { font-style: italic; color: #2A2820; }
+strong { font-weight: 600; color: #0c1e2f; }
+em { font-style: italic; color: #1c6ea4; }
 
-a { color: #020309; text-decoration: underline; text-underline-offset: 2px; }
+a {
+  color: #1c6ea4;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 0.5pt;
+}
 
 ul, ol { margin: 0 0 10pt 18pt; padding: 0; }
 li { margin: 0 0 4pt 0; }
@@ -140,14 +222,15 @@ li { margin: 0 0 4pt 0; }
 code {
   font-family: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
   font-size: 9.5pt;
-  background: #E9E0CB;
+  background: #ede6d4;
   padding: 1pt 4pt;
   border-radius: 2pt;
+  color: #0c1e2f;
 }
 
 pre {
-  background: #E9E0CB;
-  border-left: 2pt solid #020309;
+  background: #ede6d4;
+  border-left: 2.5pt solid #1c6ea4;
   padding: 10pt 12pt;
   margin: 10pt 0;
   overflow: hidden;
@@ -181,12 +264,13 @@ th {
   letter-spacing: 0.1em;
   font-weight: 600;
   padding: 6pt 8pt;
-  border-bottom: 1.5pt solid #020309;
+  border-bottom: 1.5pt solid #0c1e2f;
   background: transparent;
+  color: #1c6ea4;
 }
 td {
   padding: 6pt 8pt;
-  border-bottom: 0.5pt solid #C4BBA7;
+  border-bottom: 0.5pt solid #d9ceb0;
   vertical-align: top;
 }
 tr:last-child td { border-bottom: none; }
@@ -194,14 +278,15 @@ tr:last-child td { border-bottom: none; }
 /* ---- Callouts (rendered from blockquotes) ---- */
 
 blockquote {
-  border-left: 3pt solid #020309;
-  background: #ECE3CE;
+  border-left: 3pt solid #1c6ea4;
+  background: #ede6d4;
   margin: 12pt 0;
   padding: 10pt 14pt;
   font-family: Georgia, serif;
   font-size: 10.5pt;
   page-break-inside: avoid;
   break-inside: avoid;
+  color: #0c1e2f;
 }
 blockquote p:last-child { margin-bottom: 0; }
 
@@ -209,21 +294,19 @@ blockquote p:last-child { margin-bottom: 0; }
 
 hr {
   border: none;
-  border-top: 1px solid #C4BBA7;
+  border-top: 1px solid #1c6ea4;
   margin: 24pt 0;
+  opacity: 0.45;
 }
 
 /* ---- Image / ASCII diagram boxes ---- */
 
 pre.ascii-diagram {
   font-family: "SF Mono", Menlo, Consolas, monospace;
-  background: #ECE3CE;
+  background: #ede6d4;
   font-size: 8.5pt;
   line-height: 1.35;
 }
-
-/* Footer is now rendered via @page @bottom-* margin boxes (above),
-   so it lives inside the page margin and never overlaps body content. */
 
 /* ---- Signature block ---- */
 
@@ -241,9 +324,13 @@ pre.ascii-diagram {
 <body>
 
 <div class="cover">
-  <span class="wordmark">Blueprint IT § Schematics for the AI-native business</span>
-  <span class="doc-no">DOC § SOS-WELCOME-01</span>
-  <div style="clear:both;"></div>
+  <div class="cover-art">
+    <img src="../assets/node-cloud.svg" alt="" />
+  </div>
+  <div class="cover-meta">
+    <span class="wordmark">Blueprint<em>IT</em><span class="wordmark-tag">Schematics for the AI-native business</span></span>
+    <span class="doc-no">DOC § SOS-WELCOME-01</span>
+  </div>
   <div class="title">Welcome to Shop OS</div>
   <div class="tagline">Your license, install steps, and first session</div>
 </div>

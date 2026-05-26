@@ -238,9 +238,95 @@ Welcome aboard.
    glenn@blueprintit.ai
 ```
 
-## HTML body (optional, if you use a rich-text mailer)
+## HTML body (paste-ready, branded version)
 
-Drop this into a styled email template. Most plain-text content above maps cleanly to a single-column HTML layout. If you use Gmail, plain text is usually better — it deliverability-tests cleaner and avoids the spam folder.
+Drop this into a rich-text mailer (Gmail compose in rich mode, ConvertKit, Beehiiv, etc.). Branded to match `blueprintit.ai/shop-ossi`: cyan rule + Blueprint IT wordmark + cyan section markers, no external images so it renders even when "Show images" is blocked. Replace `{{CUSTOMER_NAME}}`, `{{LICENSE_KEY}}`, and `{{PDF_URL}}` before sending.
+
+```html
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Welcome to Shop OS</title>
+</head>
+<body style="margin:0;padding:0;background:#f4efe3;color:#0c1e2f;font-family:Georgia,'Iowan Old Style',serif;-webkit-font-smoothing:antialiased;">
+<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#f4efe3;">
+<tr><td align="center" style="padding:32px 16px;">
+
+<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="max-width:600px;width:100%;">
+
+<tr><td style="border-top:3px solid #1c6ea4;height:0;line-height:0;font-size:0;">&nbsp;</td></tr>
+
+<tr><td style="padding:14px 0 18px;border-bottom:1px solid #d9ceb0;">
+<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+<tr>
+<td style="font-family:Georgia,serif;font-size:15px;font-weight:600;color:#0c1e2f;letter-spacing:-0.005em;">Blueprint<em style="font-style:italic;color:#c2461f;font-weight:600;">IT</em><span style="font-family:Menlo,'SF Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:2.2px;color:#2a3f55;font-weight:400;font-style:normal;margin-left:10px;">&nbsp;&nbsp;Schematics for the AI-native business</span></td>
+<td align="right" style="font-family:Menlo,'SF Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:1.4px;color:#1c6ea4;white-space:nowrap;">DOC § SOS-WELCOME-01</td>
+</tr>
+</table>
+</td></tr>
+
+<tr><td style="padding:24px 0 4px;">
+<h1 style="font-family:Georgia,serif;font-size:28px;font-weight:600;margin:0;color:#0c1e2f;letter-spacing:-0.01em;line-height:1.1;">Welcome to Shop OS</h1>
+<div style="font-family:Menlo,'SF Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:2.4px;color:#1c6ea4;margin-top:8px;">Your license, install steps, and first session</div>
+</td></tr>
+
+<tr><td style="padding:22px 0 0;">
+<p style="font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#0c1e2f;margin:0 0 12px;">Hi {{CUSTOMER_NAME}},</p>
+<p style="font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#0c1e2f;margin:0 0 4px;">Thanks for picking up <em style="font-style:italic;color:#1c6ea4;">Shop OS Foundation</em>. Your license key is below, along with everything you need to get installed in the next 15 minutes.</p>
+</td></tr>
+
+<tr><td style="padding:28px 0 0;">
+<div style="font-family:Menlo,'SF Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:2.2px;color:#1c6ea4;border-top:1px solid #1c6ea4;padding-top:14px;margin-bottom:6px;">§ 01 &nbsp;·&nbsp; Your license key</div>
+<div style="background:#ede6d4;border-left:3px solid #1c6ea4;padding:20px 16px;text-align:center;font-family:Menlo,'SF Mono',monospace;font-size:18px;letter-spacing:3px;color:#0c1e2f;font-weight:600;margin-top:8px;">{{LICENSE_KEY}}</div>
+<p style="font-family:Georgia,serif;font-size:13px;line-height:1.55;color:#2a3f55;margin:10px 0 0;font-style:italic;">Save this somewhere safe. You will paste it once during install. We will never ask you to re-enter it.</p>
+</td></tr>
+
+<tr><td style="padding:28px 0 0;">
+<div style="font-family:Menlo,'SF Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:2.2px;color:#1c6ea4;border-top:1px solid #1c6ea4;padding-top:14px;margin-bottom:6px;">§ 02 &nbsp;·&nbsp; Install Shop OS</div>
+<p style="font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#0c1e2f;margin:8px 0 12px;">The full install guide is attached to this email as a PDF. You can also <a href="{{PDF_URL}}" style="color:#1c6ea4;text-decoration:underline;text-underline-offset:2px;">re-download it any time</a>.</p>
+<p style="font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#0c1e2f;margin:0 0 8px;">Open the PDF and follow the four prerequisites (Claude Max, Node.js, Claude Code, Obsidian), then run this one command in Terminal (Mac) or PowerShell (Windows):</p>
+<div style="background:#ede6d4;border-left:3px solid #1c6ea4;padding:14px 14px;margin:10px 0;font-family:Menlo,'SF Mono',monospace;font-size:11px;color:#0c1e2f;line-height:1.5;word-break:break-all;">npx -y --package=github:blueprintit-ai/shop-os-installer shop-os-install</div>
+<p style="font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#0c1e2f;margin:12px 0 8px;">When the installer asks for your license key, paste this:</p>
+<div style="background:#ede6d4;border-left:3px solid #1c6ea4;padding:14px 16px;margin:8px 0 0;font-family:Menlo,'SF Mono',monospace;font-size:13px;letter-spacing:2px;color:#0c1e2f;text-align:center;font-weight:600;">{{LICENSE_KEY}}</div>
+</td></tr>
+
+<tr><td style="padding:28px 0 0;">
+<div style="font-family:Menlo,'SF Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:2.2px;color:#1c6ea4;border-top:1px solid #1c6ea4;padding-top:14px;margin-bottom:6px;">§ 03 &nbsp;·&nbsp; Need help?</div>
+<p style="font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#0c1e2f;margin:8px 0 0;">Reply to this email. A real human (Glenn) reads every message and responds within one business hour.</p>
+</td></tr>
+
+<tr><td style="padding:32px 0 0;">
+<p style="font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#0c1e2f;margin:0;">Welcome aboard.</p>
+<p style="font-family:Georgia,serif;font-size:15px;line-height:1.5;color:#0c1e2f;margin:18px 0 0;">
+<strong style="font-weight:600;">Glenn Chua</strong><br/>
+Blueprint<em style="font-style:italic;color:#c2461f;font-weight:600;">IT</em><br/>
+<a href="mailto:glenn@blueprintit.ai" style="color:#1c6ea4;text-decoration:underline;text-underline-offset:2px;">glenn@blueprintit.ai</a>
+</p>
+</td></tr>
+
+<tr><td style="padding:32px 0 0;">
+<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+<tr><td style="border-top:1px solid #1c6ea4;height:0;line-height:0;font-size:0;">&nbsp;</td></tr>
+<tr><td style="padding:14px 0 0;font-family:Menlo,'SF Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:2.2px;color:#6a7788;">
+Blueprint IT &nbsp;·&nbsp; Shop OS Foundation &nbsp;·&nbsp; <a href="https://blueprintit.ai" style="color:#6a7788;text-decoration:none;">blueprintit.ai</a>
+</td></tr>
+</table>
+</td></tr>
+
+</table>
+
+</td></tr>
+</table>
+</body>
+</html>
+```
+
+**Which version to use:**
+
+- **Plain text above:** copy-paste into Gmail (Gmail strips a lot of CSS on send; plain text tests cleaner and avoids the spam folder for cold-ish recipients).
+- **HTML version here:** use in mailers that respect inline CSS (ConvertKit, Beehiiv, Resend, Postmark). The Worker's automated path already uses an identical template; this manual version is for parity when issuing licenses by hand via the admin dashboard.
 
 ## Notes for whoever sends this
 
