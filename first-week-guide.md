@@ -289,7 +289,7 @@ When you're ready to go further, ask about these add-ons:
 | **Shop OS Pro** | Adds `os-evolver` (the vault gets smarter automatically) and `team-os` (multi-user vault) | When your shop has 3+ people sharing the vault |
 | **Marketing Pack** | 40+ pre-wired marketing skills (copy, social, email, ads, CRO, launches) | When you want to grow your shop's online presence |
 | **SEO Pack** | Get your shop ranking for "custom cabinets [your city]" | When you want more inbound leads |
-| **Sales Pack** | CRM prospect mining, cold email, lead qualification | When you're doing commercial / B2B work |
+| **Sales Pack** | CRM prospect mining, cold email, lead qualification | When you want to optimize handling leads |
 
 Reply to the welcome email to ask about pricing for any of these.
 
