@@ -151,7 +151,7 @@ The very first launch takes about 20 to 30 seconds while the chat downloads from
 
 ## Need help?
 
-Reply to your welcome email. A real human (Glenn) reads every message and responds within one business hour.
+Reply to your welcome email. We will respond ASAP.
 
 Common first-time issues, already documented:
 

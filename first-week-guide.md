@@ -295,7 +295,7 @@ Reply to the welcome email to ask about pricing for any of these.
 
 ## Need help?
 
-Reply to your welcome email. Glenn responds within one business hour.
+Reply to your welcome email. We will respond ASAP.
 
 <p class="signature">
 <strong>Glenn Chua</strong>, Founder<br>
