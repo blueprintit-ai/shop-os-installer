@@ -267,30 +267,6 @@ The optimizer scans every note in your vault against seven quality frameworks:
 | Progressive disclosure | Skills that load too much at once | (mostly relevant for the OS itself) |
 | General hygiene | Inconsistent naming, missing frontmatter | Files named with mixed case conventions |
 
-When it finishes, you get an HTML dashboard in your browser showing every finding grouped by framework. Each finding has:
-- What it found
-- Why it matters
-- A suggested fix
-- A button to approve the fix (it edits the file for you)
-
-### How to use the dashboard
-
-Don't try to fix everything. The optimizer surfaces dozens of findings; most are minor. Focus on:
-
-1. **Anything in the "critical" or "high" severity** at the top. These are real problems.
-2. **Broken wikilinks.** These break navigation.
-3. **Orphaned customer projects.** These mean you have a customer file that is not connected to anything.
-
-Approve the fixes for those. Ignore the rest unless you have time.
-
-### When to run it
-
-| Cadence | When |
-|---|---|
-| First month | Run it 2-3 weeks in, after you've seeded the vault and used it daily |
-| Steady state | Once a month on a slow day (the 1st of each month works as a habit) |
-| After big imports | Any time you batch-add a lot of materials (new supplier list, year-end records, etc.) |
-
 ---
 
 ## What you now have
@@ -300,7 +276,7 @@ After the first week, your Shop OS vault should have:
 - ✅ Your shop's foundational info (Context/, set up by onboarding)
 - ✅ A pile of seeded materials in their proper folders (Resources/, Projects/, Team/)
 - ✅ A daily briefing arriving at 7am each morning (operator scheduled)
-- ✅ A clean monthly cadence for vault health (optimizer reminder set)
+- ✅ A clean weekly cadence for vault health (optimizer reminder set)
 
 From here, the more you use it, the smarter it gets. Drop your customer call notes into the vault as they happen. Drop new supplier docs in `Raw/` as they arrive. Ask Claude Code questions about your shop's history and it will have real answers.
 
