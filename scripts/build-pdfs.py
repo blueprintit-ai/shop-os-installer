@@ -76,19 +76,9 @@ BRAND_CSS = """
 
 * { box-sizing: border-box; }
 
-/* ---- Blueprint grid background (matches the website) ----
-   Applied to body so it repeats over every printed page.
-   Slightly higher opacity than the web (0.06/0.12 vs 0.055/0.11)
-   to compensate for print contrast. */
+/* Warm paper background (no grid overlay — kept clean for readability). */
 html, body {
   background-color: #f4efe3;
-  background-image:
-    linear-gradient(to right, rgba(28, 110, 164, 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(28, 110, 164, 0.06) 1px, transparent 1px),
-    linear-gradient(to right, rgba(28, 110, 164, 0.12) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(28, 110, 164, 0.12) 1px, transparent 1px);
-  background-size: 24px 24px, 24px 24px, 120px 120px, 120px 120px;
-  background-position: -1px -1px;
   color: #0c1e2f;
   font-family: Georgia, "Iowan Old Style", "Apple Garamond", serif;
   font-size: 11pt;
