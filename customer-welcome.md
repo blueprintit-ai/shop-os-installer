@@ -25,7 +25,7 @@ Save it somewhere safe (1Password, a sticky note, a folder in your inbox). You w
 
 Shop OS runs on top of four things. All four are required. All four are simple double-click installers; no terminal commands needed for these.
 
-### 1. Claude Pro subscription (paid, about $20 per month, paid to Anthropic, not us)
+### 1. Claude Pro subscription (Paid, ~$20 per month, paid to Anthropic, not us)
 
 **Already have a Claude Pro or Max subscription? Skip ahead to step 2.**
 
