@@ -537,7 +537,7 @@ pre.ascii-diagram {
 </tr>
 <tr>
 <td>Where should the briefing land?</td>
-<td><strong><code>Daily/YYYY-MM-DD.md</code></strong> (default)</td>
+<td><strong><code>Daily/</code></strong> (a new dated file gets created in this folder each morning)</td>
 </tr>
 <tr>
 <td>Who should the briefing address?</td>
@@ -547,13 +547,9 @@ pre.ascii-diagram {
 <td>What sections to include?</td>
 <td><strong>Today on the floor, Shipping, Open follow-ups, Material orders, This week's deadlines</strong></td>
 </tr>
-<tr>
-<td>Do you want a Telegram/email notification when it runs?</td>
-<td><strong>Yes if you check those at 7am</strong>, otherwise no (it lands in the vault either way)</td>
-</tr>
 </tbody>
 </table>
-<p>The operator wires itself up automatically. From now on, every morning at 7am, it reads your vault state, writes the briefing, and (if you opted in) pings you on Telegram.</p>
+<p>The operator wires itself up automatically. From now on, every morning at 7am, it reads your vault state and writes the briefing to your <code>Daily/</code> folder.</p>
 <h3>When to NOT run the operator</h3>
 <p>It costs Claude Max subscription tokens each run. If you take a vacation or close the shop for a week, you can pause it. In Claude Code, type:</p>
 <pre><code>Pause the operator until [date]

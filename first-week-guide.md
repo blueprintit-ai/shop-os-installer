@@ -209,12 +209,11 @@ The skill asks you a few questions:
 | Question | Recommended answer for a cabinet shop |
 |---|---|
 | What cadence? | **Daily, 7:00am** (so it's ready when you arrive) |
-| Where should the briefing land? | **`Daily/YYYY-MM-DD.md`** (default) |
+| Where should the briefing land? | **`Daily/`** (a new dated file gets created in this folder each morning) |
 | Who should the briefing address? | **You** (your name from onboarding) |
 | What sections to include? | **Today on the floor, Shipping, Open follow-ups, Material orders, This week's deadlines** |
-| Do you want a Telegram/email notification when it runs? | **Yes if you check those at 7am**, otherwise no (it lands in the vault either way) |
 
-The operator wires itself up automatically. From now on, every morning at 7am, it reads your vault state, writes the briefing, and (if you opted in) pings you on Telegram.
+The operator wires itself up automatically. From now on, every morning at 7am, it reads your vault state and writes the briefing to your `Daily/` folder.
 
 ### When to NOT run the operator
 
