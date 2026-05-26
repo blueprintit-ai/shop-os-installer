@@ -245,7 +245,7 @@ The next morning's briefing reflects the change.
 
 Over time your vault accumulates clutter: stale notes from finished jobs, dead links to files you moved, half-written drafts you never finished. The optimizer cleans this up.
 
-It is not a daily tool. Run it **once a month**, usually on a slow day. Takes about 15 minutes of your time.
+It is not a daily tool. Run it **once a week**.
 
 ### What it does
 
