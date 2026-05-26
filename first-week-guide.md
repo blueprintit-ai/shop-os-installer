@@ -273,6 +273,15 @@ The optimizer scans every note in your vault against seven quality frameworks:
 
 By now, the vault knows a lot about your shop. The next step is letting your team get to that knowledge without pinging you every time. That's what **Shop OS Chat** is for: a simple chat window that anyone in the shop can use to ask vault questions, on the shop computer, without touching Claude Code.
 
+### Two ways to talk to the vault
+
+Shop OS gives you two interfaces, each pointed at a different audience:
+
+- **Shop OS Chat** is the read-only browser chat. It's for **employees** — anyone in the shop who needs an answer from the vault but should not be editing files, scheduling routines, or running maintenance skills. They double-click the launcher, ask in plain language, and get answers grounded in your business data. Nothing they do can change the vault.
+- **Claude Code** is the full-access terminal interface. It's for **you and any designated operators** — the people who run digests, schedule the morning briefing, optimize the vault, edit `Context/`, and trigger the write-side skills (`/os-digest`, `/os-operator`, `/os-optimizer`). Full read, write, and execute against the vault.
+
+Same vault, same context, two doors. The team gets the safe door. You and your trusted operators get the master key.
+
 ### What it is
 
 Inside your vault folder, next to `CLAUDE.md` and `Raw/`, the installer dropped two launcher files:
