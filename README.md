@@ -36,8 +36,8 @@ Welcome to Shop OS. Your license key is:
 
 To install:
 
-1. Sign up for Claude Max at https://claude.ai (~$100/month). We recommend
-   Max over Pro so you don't hit rate limits during heavy weeks.
+1. Sign up for Claude Pro at https://claude.ai (~$20/month). Start with Pro;
+   if your team's daily usage pushes the limits, upgrade to Max (~$100/month).
 2. Install Claude Code (free) from https://claude.ai/code. Mac or Windows.
 3. Open Terminal (Mac) or PowerShell (Windows) and paste:
 

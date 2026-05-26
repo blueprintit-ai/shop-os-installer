@@ -217,7 +217,7 @@ The operator wires itself up automatically. From now on, every morning at 7am, i
 
 ### When to NOT run the operator
 
-It costs Claude Max subscription tokens each run. If you take a vacation or close the shop for a week, you can pause it. In Claude Code, type:
+It costs Claude subscription usage each run. If you take a vacation or close the shop for a week, you can pause it. In Claude Code, type:
 
 ```
 Pause the operator until [date]

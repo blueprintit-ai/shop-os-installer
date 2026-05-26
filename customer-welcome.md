@@ -25,9 +25,9 @@ Save it somewhere safe (1Password, a sticky note, a folder in your inbox). You w
 
 Shop OS runs on top of four things. All four are required. All four are simple double-click installers; no terminal commands needed for these.
 
-### 1. Claude Max subscription (paid, about $100 per month, paid to Anthropic, not us)
+### 1. Claude Pro subscription (paid, about $20 per month, paid to Anthropic, not us)
 
-Sign up at **https://claude.ai**. Pick the Max plan, not Pro. Pro is too slow for daily Shop OS use. You can downgrade later if you find you don't need it.
+Sign up at **https://claude.ai** and pick the **Pro** plan. Pro is the right starting point for Shop OS. As your Shop Brain grows and your team uses it every day, you may find you want higher usage limits, and you can upgrade to the **Max** plan (about $100 per month) any time. Start with Pro.
 
 ### 2. Node.js (free, about 3 minutes to install)
 
