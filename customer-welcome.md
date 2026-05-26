@@ -163,7 +163,8 @@ Common first-time issues, already documented:
 Welcome aboard.
 
 <p class="signature">
-<strong>Glenn Chua</strong><br>
-Blueprint IT<br>
-glenn@blueprintit.ai
+<strong>Glenn Chua</strong>, Founder<br>
+Blueprint IT, LLC<br>
+<a href="mailto:glenn@blueprintit.ai">glenn@blueprintit.ai</a><br>
+<a href="https://blueprintit.ai">www.blueprintit.ai</a>
 </p>

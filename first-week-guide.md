@@ -322,4 +322,9 @@ Reply to the welcome email to ask about pricing for any of these.
 
 Reply to your welcome email. Glenn responds within one business hour.
 
-Blueprint IT
+<p class="signature">
+<strong>Glenn Chua</strong>, Founder<br>
+Blueprint IT, LLC<br>
+<a href="mailto:glenn@blueprintit.ai">glenn@blueprintit.ai</a><br>
+<a href="https://blueprintit.ai">www.blueprintit.ai</a>
+</p>
