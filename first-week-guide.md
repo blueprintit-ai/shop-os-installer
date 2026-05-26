@@ -277,8 +277,8 @@ By now, the vault knows a lot about your shop. The next step is letting your tea
 
 Shop OS gives you two interfaces, each pointed at a different audience:
 
-- **Shop OS Chat** is the read-only browser chat. It's for **employees** — anyone in the shop who needs an answer from the vault but should not be editing files, scheduling routines, or running maintenance skills. They double-click the launcher, ask in plain language, and get answers grounded in your business data. Nothing they do can change the vault.
-- **Claude Code** is the full-access terminal interface. It's for **you and any designated operators** — the people who run digests, schedule the morning briefing, optimize the vault, edit `Context/`, and trigger the write-side skills (`/os-digest`, `/os-operator`, `/os-optimizer`). Full read, write, and execute against the vault.
+- **Shop OS Chat** is the read-only browser chat. It's for **employees**, anyone in the shop who needs an answer from the vault but should not be editing files, scheduling routines, or running maintenance skills. They double-click the launcher, ask in plain language, and get answers grounded in your business data. Nothing they do can change the vault.
+- **Claude Code** is the full-access terminal interface. It's for **you and any designated operators**, the people who run digests, schedule the morning briefing, optimize the vault, edit `Context/`, and trigger the write-side skills (`/os-digest`, `/os-operator`, `/os-optimizer`). Full read, write, and execute against the vault.
 
 Same vault, same context, two doors. The team gets the safe door. You and your trusted operators get the master key.
 
