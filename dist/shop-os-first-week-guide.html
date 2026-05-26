@@ -618,16 +618,70 @@ pre.ascii-diagram {
 </tbody>
 </table>
 <hr>
-<h2 data-anchor="§ 05">What you now have</h2>
+<h2 data-anchor="§ 05">5. Let your team use the vault through Shop OS Chat</h2>
+<p>By now, the vault knows a lot about your shop. The next step is letting your team get to that knowledge without pinging you every time. That's what <strong>Shop OS Chat</strong> is for: a simple chat window that anyone in the shop can use to ask vault questions, on the shop computer, without touching Claude Code.</p>
+<h3>What it is</h3>
+<p>Inside your vault folder, next to <code>CLAUDE.md</code> and <code>Raw/</code>, the installer dropped two launcher files:</p>
+<ul>
+<li><code>Shop OS Chat.command</code> (Mac)</li>
+<li><code>Shop OS Chat.bat</code> (Windows)</li>
+</ul>
+<p>Either one starts the chat. Anyone on the shop computer can double-click it.</p>
+<h3>How to launch it (first time)</h3>
+<ol>
+<li>Double-click <code>Shop OS Chat.command</code> or <code>Shop OS Chat.bat</code>.</li>
+<li>A small terminal window opens. That's normal. It's the chat server running locally on the shop computer.</li>
+<li>The default browser opens to a <code>localhost</code> URL with the chat page.</li>
+<li>The page asks for the person's name. They type it once; the browser remembers from then on and skips straight to the chat.</li>
+</ol>
+<p>The very first launch takes 20 to 30 seconds while the chat downloads. Every launch after that is instant.</p>
+<p><strong>Tip:</strong> drag <code>Shop OS Chat.command</code> (or <code>.bat</code>) to the shop computer's desktop so anyone can hit it without digging through folders.</p>
+<h3>How the team uses it</h3>
+<p>Ask anything that lives in the vault. Examples for a cabinet shop:</p>
+<ul>
+<li>"What's the status of the Aviemore install?"</li>
+<li>"Pull up everything we've quoted Sherwood since January."</li>
+<li>"Who's our Hooker rep and what did the last shipment cost?"</li>
+<li>"Find the SOP for finishing painted maple."</li>
+<li>"Has anyone called us back about the Henderson punch list?"</li>
+</ul>
+<p>The chat reads the vault, finds the relevant notes, and answers in plain language. Every conversation saves into a <code>Chats/</code> folder inside your vault when the person ends it (clicking "End conversation" or closing the tab). You can read those transcripts in Obsidian later, or ask Claude Code "what did Marco ask about the Smith job last week?"</p>
+<h3>What it can and cannot do</h3>
+<p>The chat is intentionally limited to <strong>reading</strong> your vault. It can:</p>
+<ul>
+<li>Answer questions about anything stored in the vault</li>
+<li>Search across every note</li>
+<li>Summarize files, projects, customers, or topics</li>
+<li>Quote relevant passages back to you with the source</li>
+</ul>
+<p>It cannot:</p>
+<ul>
+<li>Create new notes</li>
+<li>Edit existing notes</li>
+<li>Delete anything</li>
+<li>Run skills like <code>/os-digest</code>, <code>/os-operator</code>, or <code>/os-optimizer</code></li>
+</ul>
+<p>If a team member asks it to "add a note about today's call," it will politely decline and point them to ask you. This is on purpose. Your team gets fast answers with zero risk of accidentally changing customer records, supplier lists, or contracts. You stay the one with write access via Claude Code.</p>
+<h3>Make the <code>Chats/</code> folder a weekly habit</h3>
+<p>Open <code>Chats/</code> in Obsidian once a week and skim what your team has been asking. It tells you:</p>
+<ul>
+<li>Which questions keep recurring (those answers belong in an SOP)</li>
+<li>Where your team's mental model is incomplete (training opportunity)</li>
+<li>Which jobs and customers are getting talked about most (signal for what to prioritize)</li>
+</ul>
+<p>It's the cheapest customer-research / team-training feedback loop you'll ever have.</p>
+<hr>
+<h2 data-anchor="§ 06">What you now have</h2>
 <p>After the first week, your Shop OS vault should have:</p>
 <ul>
 <li>✅ Your shop's foundational info (Context/, set up by onboarding)</li>
 <li>✅ A pile of seeded materials in their proper folders (Resources/, Projects/, Team/)</li>
 <li>✅ A daily briefing arriving at 7am each morning (operator scheduled)</li>
 <li>✅ A clean weekly cadence for vault health (optimizer reminder set)</li>
+<li>✅ Your team self-serving vault questions through Shop OS Chat</li>
 </ul>
 <p>From here, the more you use it, the smarter it gets. Drop your customer call notes into the vault as they happen. Drop new supplier docs in <code>Raw/</code> as they arrive. Ask Claude Code questions about your shop's history and it will have real answers.</p>
-<h2 data-anchor="§ 06">What's next (when you want more)</h2>
+<h2 data-anchor="§ 07">What's next (when you want more)</h2>
 <p>When you're ready to go further, ask about these add-ons:</p>
 <table>
 <thead>
@@ -661,7 +715,7 @@ pre.ascii-diagram {
 </tbody>
 </table>
 <p>Reply to the welcome email to ask about pricing for any of these.</p>
-<h2 data-anchor="§ 07">Need help?</h2>
+<h2 data-anchor="§ 08">Need help?</h2>
 <p>Reply to your welcome email. We will respond ASAP.</p>
 <p class="signature">
 <strong>Glenn Chua</strong>, Founder<br>

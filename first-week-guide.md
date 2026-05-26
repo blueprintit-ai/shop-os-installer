@@ -269,6 +269,72 @@ The optimizer scans every note in your vault against seven quality frameworks:
 
 ---
 
+## 5. Let your team use the vault through Shop OS Chat
+
+By now, the vault knows a lot about your shop. The next step is letting your team get to that knowledge without pinging you every time. That's what **Shop OS Chat** is for: a simple chat window that anyone in the shop can use to ask vault questions, on the shop computer, without touching Claude Code.
+
+### What it is
+
+Inside your vault folder, next to `CLAUDE.md` and `Raw/`, the installer dropped two launcher files:
+
+- `Shop OS Chat.command` (Mac)
+- `Shop OS Chat.bat` (Windows)
+
+Either one starts the chat. Anyone on the shop computer can double-click it.
+
+### How to launch it (first time)
+
+1. Double-click `Shop OS Chat.command` or `Shop OS Chat.bat`.
+2. A small terminal window opens. That's normal. It's the chat server running locally on the shop computer.
+3. The default browser opens to a `localhost` URL with the chat page.
+4. The page asks for the person's name. They type it once; the browser remembers from then on and skips straight to the chat.
+
+The very first launch takes 20 to 30 seconds while the chat downloads. Every launch after that is instant.
+
+**Tip:** drag `Shop OS Chat.command` (or `.bat`) to the shop computer's desktop so anyone can hit it without digging through folders.
+
+### How the team uses it
+
+Ask anything that lives in the vault. Examples for a cabinet shop:
+
+- "What's the status of the Aviemore install?"
+- "Pull up everything we've quoted Sherwood since January."
+- "Who's our Hooker rep and what did the last shipment cost?"
+- "Find the SOP for finishing painted maple."
+- "Has anyone called us back about the Henderson punch list?"
+
+The chat reads the vault, finds the relevant notes, and answers in plain language. Every conversation saves into a `Chats/` folder inside your vault when the person ends it (clicking "End conversation" or closing the tab). You can read those transcripts in Obsidian later, or ask Claude Code "what did Marco ask about the Smith job last week?"
+
+### What it can and cannot do
+
+The chat is intentionally limited to **reading** your vault. It can:
+
+- Answer questions about anything stored in the vault
+- Search across every note
+- Summarize files, projects, customers, or topics
+- Quote relevant passages back to you with the source
+
+It cannot:
+
+- Create new notes
+- Edit existing notes
+- Delete anything
+- Run skills like `/os-digest`, `/os-operator`, or `/os-optimizer`
+
+If a team member asks it to "add a note about today's call," it will politely decline and point them to ask you. This is on purpose. Your team gets fast answers with zero risk of accidentally changing customer records, supplier lists, or contracts. You stay the one with write access via Claude Code.
+
+### Make the `Chats/` folder a weekly habit
+
+Open `Chats/` in Obsidian once a week and skim what your team has been asking. It tells you:
+
+- Which questions keep recurring (those answers belong in an SOP)
+- Where your team's mental model is incomplete (training opportunity)
+- Which jobs and customers are getting talked about most (signal for what to prioritize)
+
+It's the cheapest customer-research / team-training feedback loop you'll ever have.
+
+---
+
 ## What you now have
 
 After the first week, your Shop OS vault should have:
@@ -277,6 +343,7 @@ After the first week, your Shop OS vault should have:
 - ✅ A pile of seeded materials in their proper folders (Resources/, Projects/, Team/)
 - ✅ A daily briefing arriving at 7am each morning (operator scheduled)
 - ✅ A clean weekly cadence for vault health (optimizer reminder set)
+- ✅ Your team self-serving vault questions through Shop OS Chat
 
 From here, the more you use it, the smarter it gets. Drop your customer call notes into the vault as they happen. Drop new supplier docs in `Raw/` as they arrive. Ask Claude Code questions about your shop's history and it will have real answers.
 
