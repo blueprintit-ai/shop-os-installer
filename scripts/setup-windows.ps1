@@ -170,4 +170,7 @@ Write-Host ""
 # launch in a separate window (not in this one) so the setup script can finish
 # cleanly and the customer sees Claude Code start in its own console. -NoExit
 # keeps the window open if claude exits, so any error messages remain visible.
-Start-Process powershell -ArgumentList "-NoExit", "-NoProfile", "-Command", "Set-Location -LiteralPath `"$vaultPath`"; claude"
+# Use single quotes around $vaultPath: Start-Process strips backtick-escaped
+# double quotes when it builds the spawned command line, so a path with spaces
+# would split into positional args. PowerShell single quotes survive intact.
+Start-Process powershell -ArgumentList "-NoExit", "-NoProfile", "-Command", "Set-Location -LiteralPath '$vaultPath'; claude"
