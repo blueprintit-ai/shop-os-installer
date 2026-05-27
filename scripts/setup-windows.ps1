@@ -88,7 +88,7 @@ Write-Host ""
 Write-Host "Next: Running Shop OS installer..."
 Write-Host ""
 
-npx -y @blueprintit/shop-os-install
+& npx -y @blueprintit/shop-os-install
 
 Write-Host ""
 Write-Host "=========================================" -ForegroundColor Cyan

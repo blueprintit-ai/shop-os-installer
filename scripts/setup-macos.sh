@@ -58,7 +58,7 @@ echo ""
 echo "Next: Running Shop OS installer..."
 echo ""
 
-npx -y @blueprintit/shop-os-install
+exec npx -y @blueprintit/shop-os-install < /dev/tty
 
 echo ""
 echo "=========================================="
