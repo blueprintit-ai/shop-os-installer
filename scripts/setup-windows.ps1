@@ -166,6 +166,18 @@ Write-Host "Launching Claude Code in your vault..." -ForegroundColor Cyan
 Write-Host "Sign in when prompted, then type /bp-setup to personalize your vault."
 Write-Host ""
 
+# Belt-and-suspenders: confirm the vault actually exists on disk before we
+# spawn a new window into it. If something went wrong during the npx step,
+# surface it here instead of opening a confused-looking PowerShell window
+# pointed at a missing directory.
+if (-not (Test-Path -LiteralPath $vaultPath)) {
+  Write-Host ""
+  Write-Host "✗ Vault folder not found at: $vaultPath" -ForegroundColor Red
+  Write-Host "  The Shop OS installer reported success but the vault is missing."
+  Write-Host "  Re-run the installer or contact support: https://blueprintit.ai/shop-os/support"
+  exit 1
+}
+
 # Open a new PowerShell window in the vault directory and run `claude`. We
 # launch in a separate window (not in this one) so the setup script can finish
 # cleanly and the customer sees Claude Code start in its own console. -NoExit

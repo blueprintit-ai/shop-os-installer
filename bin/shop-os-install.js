@@ -734,13 +734,16 @@ async function main() {
       rl.close();
       fail(`No folder found at: ${vaultPath}\nMake sure the path is correct and the folder exists.`);
     }
-    warn(`No folder found at: ${vaultPath}`);
-    const createIt = args.yes
-      ? true
-      : await confirm(rl, "Create it now and continue?", { default: false });
-    if (!createIt) {
-      rl.close();
-      fail("Create the folder in Finder / File Explorer first, then re-run this installer.");
+    // Vault folder doesn't exist yet — that's expected for a new install.
+    // In --yes mode (setup scripts), proceed silently; the "[3/N] Creating
+    // vault at ..." step below prints its own status. In interactive mode,
+    // confirm with the user before creating.
+    if (!args.yes) {
+      const createIt = await confirm(rl, `Create new vault at ${cyan(vaultPath)}?`, { default: true });
+      if (!createIt) {
+        rl.close();
+        fail("Create the folder in Finder / File Explorer first, then re-run this installer.");
+      }
     }
   }
 
