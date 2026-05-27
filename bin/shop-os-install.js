@@ -21,6 +21,7 @@ import { createInterface } from "node:readline/promises";
 import { stdin, stdout, stderr, exit } from "node:process";
 import { homedir } from "node:os";
 import { join, dirname, resolve } from "node:path";
+import { spawnSync } from "node:child_process";
 import {
   existsSync,
   mkdirSync,
@@ -139,7 +140,7 @@ async function validateLicense(key) {
   const url = `${LICENSE_SERVER}/validate?key=${encodeURIComponent(key)}`;
   let resp;
   try {
-    resp = await fetch(url, { headers: { "user-agent": "shop-os-installer/0.5.1" } });
+    resp = await fetch(url, { headers: { "user-agent": "shop-os-installer/0.5.2" } });
   } catch (e) {
     return { ok: false, error: `network: ${e.message}` };
   }
@@ -173,14 +174,15 @@ function writeJSON(path, obj) {
 }
 
 function ensureMarketplaces(claudeRoot) {
-  // Always (re-)register marketplaces and force-delete any stale clone on
-  // disk. A clone pinned to an old commit is the #1 reason re-installs keep
-  // serving old plugin versions (e.g. obsidian 3.8.0 skills appearing months
-  // after the marketplace shipped 3.12.0). Deleting the directory forces
-  // Claude Code to re-clone from origin on its next launch.
+  // Always (re-)register marketplaces and refresh the on-disk clone to the
+  // latest origin/main. Claude Code does NOT auto-pull marketplace clones, so
+  // a clone left at an old commit (e.g. the 5/20 rebrand snapshot) keeps
+  // serving stale plugins forever. We use git directly to refresh — pull when
+  // possible, fall back to wipe-and-re-clone if pull fails or the directory
+  // isn't a git repo.
   //
   // We still report `added` vs already-known to keep the customer-facing
-  // install output consistent across runs — the cache-wipe is intentionally
+  // install output consistent across runs — the refresh is intentionally
   // invisible.
   const path = join(claudeRoot, "plugins", "known_marketplaces.json");
   const known = readJSON(path, {});
@@ -193,18 +195,45 @@ function ensureMarketplaces(claudeRoot) {
       installLocation,
       lastUpdated: new Date().toISOString(),
     };
-    if (existsSync(installLocation)) {
-      try {
-        rmSync(installLocation, { recursive: true, force: true });
-      } catch {
-        // Best-effort. Locked files on Windows can block removal; in that case
-        // Claude Code will keep using the stale clone. Customer can quit Claude
-        // Code and re-run to recover.
-      }
-    }
+    refreshMarketplaceClone(mp, installLocation);
   }
   writeJSON(path, known);
   return { added, total: MARKETPLACES.length };
+}
+
+function refreshMarketplaceClone(mp, installLocation) {
+  // GitHub HTTPS URL — same form Claude Code uses internally.
+  const repoUrl = `https://github.com/${mp.source.repo}.git`;
+
+  // If a git checkout exists, fast-forward it to origin/main.
+  if (existsSync(join(installLocation, ".git"))) {
+    const fetch = spawnSync("git", ["fetch", "origin", "main", "--depth=1"], {
+      cwd: installLocation,
+      stdio: "ignore",
+    });
+    if (fetch.status === 0) {
+      const reset = spawnSync("git", ["reset", "--hard", "FETCH_HEAD"], {
+        cwd: installLocation,
+        stdio: "ignore",
+      });
+      if (reset.status === 0) return;
+    }
+    // Fetch/reset failed — fall through to wipe + fresh clone.
+  }
+
+  // Wipe anything in the install location before cloning fresh. Best-effort:
+  // locked files on Windows may block removal, in which case clone below will
+  // also fail and the customer falls back to whatever they had.
+  if (existsSync(installLocation)) {
+    try {
+      rmSync(installLocation, { recursive: true, force: true });
+    } catch {
+      // intentional fall-through
+    }
+  }
+
+  mkdirSync(dirname(installLocation), { recursive: true });
+  spawnSync("git", ["clone", "--depth=1", repoUrl, installLocation], { stdio: "ignore" });
 }
 
 function ensurePluginsInstalled(claudeRoot) {
@@ -229,6 +258,30 @@ function ensurePluginsInstalled(claudeRoot) {
   const queued = [];
   for (const id of PLUGINS_TO_ENABLE) {
     if (!existing.plugins[id]) queued.push(id);
+
+    // Wipe the plugin's per-version cache directory so Claude Code reinstalls
+    // from the (just-refreshed) marketplace clone instead of loading a stale
+    // pinned version. The cache layout is cache/<marketplace>/<plugin>/<ver>/,
+    // so removing the whole /<plugin>/ subtree clears every cached version.
+    // Other plugins inside cache/<marketplace>/ are left alone.
+    const [pluginName, marketplaceName] = id.split("@");
+    if (pluginName && marketplaceName) {
+      const pluginCacheDir = join(
+        claudeRoot,
+        "plugins",
+        "cache",
+        marketplaceName,
+        pluginName,
+      );
+      if (existsSync(pluginCacheDir)) {
+        try {
+          rmSync(pluginCacheDir, { recursive: true, force: true });
+        } catch {
+          // Best-effort: locked file on Windows leaves the cache in place.
+        }
+      }
+    }
+
     existing.plugins[id] = [
       {
         scope: "user",
