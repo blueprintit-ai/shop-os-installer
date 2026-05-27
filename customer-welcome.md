@@ -9,7 +9,7 @@ tags: [shop-os, customer-onboarding, install-pack]
 
 Thanks for picking up Shop OS Foundation. This document walks you through everything you need to know to install, run your first session, and start using Shop OS in your business.
 
-It takes about 15 minutes to install the prerequisites and another 30 seconds to run the install command. The whole thing should be done inside half an hour.
+Installation takes about 5 minutes total (depending on your internet speed). It's one command that installs everything automatically.
 
 ## Your license key
 
@@ -21,81 +21,40 @@ SHOP-XXXX-YYYY-ZZZZ
 
 Save it somewhere safe (1Password, a sticky note, a folder in your inbox). You will paste it once during install. We will never ask you to re-enter it after that.
 
-## Before you install: four downloads, about 15 minutes total
+## Before you start: Claude Pro subscription
 
-Shop OS runs on top of four things. All four are required. All four are simple double-click installers; no terminal commands needed for these.
+**Already have Claude Pro or Max?** You're all set. Skip to the next section.
 
-### 1. Claude Pro subscription (Paid, ~$20 per month, paid to Anthropic, not us)
+If not, sign up at **https://claude.ai** and pick the **Pro** plan (~$20/month from Anthropic, not from us). Pro is the right starting point for Shop OS. As your Shop Brain grows and your team uses it every day, you can upgrade to the **Max** plan (~$100/month) for higher usage limits. Start with Pro.
 
-**Already have a Claude Pro or Max subscription? Skip ahead to step 2.**
+## Install Shop OS: one command
 
-Sign up at **https://claude.ai** and pick the **Pro** plan. Pro is the right starting point for Shop OS. As your Shop Brain grows and your team uses it every day, you may find you want higher usage limits, and you can upgrade to the **Max** plan (about $100 per month) any time. Start with Pro.
+Open Terminal (Mac: press Cmd+Space, type `terminal`, press Enter) or PowerShell (Windows: press the Windows key, type `powershell`, press Enter, then right-click and choose **Run as administrator**).
 
-### 2. Node.js (free, about 3 minutes to install)
+Copy and paste **one** of these commands, then press Enter:
 
-Download from **https://nodejs.org**. Click the green "Get Node.js®" button. Double-click the installer that downloads. Click Next a few times. Done.
-
-### 3. Claude Code (free, about 5 minutes to install)
-
-Download from **https://claude.ai/code**. Pick the right installer for your machine (Mac or Windows). Double-click. Install. When it asks you to sign in, use the same Claude account from step 1.
-
-### 4. Obsidian (free, about 3 minutes to install)
-
-Download from **https://obsidian.md**. Pick the right installer for your machine (Mac or Windows). Double-click. Install.
-
-Obsidian is the app you will use to browse your Shop OS vault: read notes, see your job folders, search across everything. Think of it as Finder plus Notes plus a wiki, in one window.
-
-**Important:** When Obsidian first opens, it will ask you to either create a new vault or open an existing one. **Skip this for now.** You will open the Shop OS vault after the install command runs.
-
-If Obsidian offers to set up Obsidian Sync or any paid features, skip those too. You do not need them.
-
-## Create your vault folder
-
-Before running the install command, create an empty folder called **Shop OS Vault** using Finder (Mac) or File Explorer (Windows). The installer will ask you to point it at this folder.
-
-### Where to put the folder
-
-Pick a location based on how you work:
-
-- **One computer only**: anywhere you like. Your home folder, your Documents folder, your Desktop. The fastest option since nothing syncs.
-- **Multiple computers (shop + home + laptop)**: put the folder **inside your Dropbox folder**, your **iCloud Drive folder**, or your **OneDrive folder**. Any computer signed in to the same sync account will see the same vault.
-
-If you go the multi-device route: make sure the sync app (Dropbox, iCloud Drive, or OneDrive) is installed, signed in, and finished its initial sync **before** running the install command. Sync occasionally lags a minute or two. If you save a note on one machine and it has not appeared on another yet, wait a moment.
-
-### How to create the folder
-
-1. Open Finder (Mac) or File Explorer (Windows).
-2. Navigate to the location you chose above.
-3. Right-click on empty space, choose **New Folder**.
-4. Name the folder exactly: `Shop OS Vault`.
-
-Leave that Finder / File Explorer window open. You will drag the folder out of it in a moment.
-
-### How much disk space
-
-Day one your vault is under 50 MB. After a month of typical cabinet-shop use, expect 100 to 500 MB. A busy shop importing many photos and PDFs may reach 2 to 5 GB by year-end. Make sure the drive you pick has at least 10 GB free.
-
-## Install Shop OS: one command, about 30 seconds
-
-Open Terminal (Mac: press Cmd+Space, type `terminal`, press Enter) or PowerShell (Windows: press the Windows key, type `powershell`, press Enter).
-
-Paste this command and press Enter:
-
+**Mac** (in Terminal):
 ```
-npx -y --package=github:blueprintit-ai/shop-os-installer shop-os-install
+curl -fsSL https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-macos.sh | bash
 ```
 
-The first time you run this, it downloads the installer. That takes about 20 seconds. Then it walks you through two prompts:
+**Windows** (in PowerShell as Administrator):
+```powershell
+irm https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-windows.ps1 | iex
+```
 
-1. **Your license key.** Paste it and press Enter.
-2. **The folder you just created.** The cleanest way: **drag the Shop OS Vault folder from Finder / File Explorer directly into the terminal window**. The full path appears automatically. Press Enter.
+This script will:
+1. Install Node.js (if you don't have it)
+2. Install Claude Code (if you don't have it)
+3. Install Obsidian (if you don't have it)
+4. Ask you for your license key
+5. Ask you where to create your Shop OS Vault folder
 
-If drag-and-drop does not work, you can copy the folder's path instead:
+The script creates the vault folder for you, so you don't need to make it yourself. Just pick a location when prompted:
+- **One computer only?** Your home folder, Documents, or Desktop.
+- **Multiple computers?** Put it inside Dropbox, iCloud Drive, or OneDrive so it syncs across your machines.
 
-- **Mac**: right-click the folder, hold the **Option** key, then choose **"Copy [folder name] as Pathname"**. Paste with Cmd+V into terminal.
-- **Windows**: hold **Shift** and right-click the folder, then choose **"Copy as path"**. Paste with Ctrl+V into PowerShell.
-
-The installer takes care of the rest automatically and tells you exactly what to do next.
+The whole thing takes about 5 minutes depending on your internet speed.
 
 ## After install: your first session
 

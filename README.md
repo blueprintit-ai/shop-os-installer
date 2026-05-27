@@ -1,16 +1,34 @@
 # @blueprintit/shop-os-install
 
-One-command installer for **Shop OS** — Blueprint IT's AI Operating System for small businesses.
+One-command installer for **Shop OS**: Blueprint IT's AI Operating System for small businesses.
 
-## What it does
+## Quick Install (Recommended)
 
-When a paying customer runs:
+Paste **one** of these commands. Everything installs automatically:
+
+**Mac** (in Terminal):
+```sh
+curl -fsSL https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-macos.sh | bash
+```
+
+**Windows** (in PowerShell as Administrator):
+```powershell
+irm https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-windows.ps1 | iex
+```
+
+This installs Node.js, Claude Code, Obsidian, and Shop OS in one go. You'll be prompted for your license key partway through.
+
+---
+
+## Manual Install
+
+If you prefer to install prerequisites yourself, run:
 
 ```sh
 npx @blueprintit/shop-os-install
 ```
 
-The installer:
+The installer (run directly or via the setup scripts above):
 
 1. **Pre-flight**: verifies Node 18+ and Claude Code is installed
 2. **License validation**: prompts for the license key, validates against `https://shop-os-license-server.glenn-15d.workers.dev/validate`
@@ -26,7 +44,7 @@ Zero npm dependencies. Uses only Node 18+ built-ins (`fetch`, `readline`, `fs`).
 ## Customer-facing install email template
 
 ```
-Subject: Welcome to Shop OS — your license key inside
+Subject: Welcome to Shop OS: your license key inside
 
 Hi [Customer],
 
@@ -34,23 +52,23 @@ Welcome to Shop OS. Your license key is:
 
     SHOP-XXXX-YYYY-ZZZZ
 
-To install:
+To install, open Terminal (Mac) or PowerShell (Windows) and paste this one command:
 
-1. Sign up for Claude Pro at https://claude.ai (~$20/month). Start with Pro;
-   if your team's daily usage pushes the limits, upgrade to Max (~$100/month).
-2. Install Claude Code (free) from https://claude.ai/code. Mac or Windows.
-3. Open Terminal (Mac) or PowerShell (Windows) and paste:
+Mac (Terminal):
+    curl -fsSL https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-macos.sh | bash
 
-       npx @blueprintit/shop-os-install
+Windows (PowerShell, run as Administrator):
+    irm https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-windows.ps1 | iex
 
-4. Paste your license key when prompted.
-
-The installer does the rest in about 30 seconds.
+The script installs everything (Node.js, Claude Code, Obsidian, and Shop OS) automatically.
+When prompted, paste your license key above. Total time: ~5 minutes depending on your internet speed.
 
 Need help? Reply to this email.
 
-— Blueprint IT
+Blueprint IT
 ```
+
+<span style="background-color:#F4EFE3; color:#020309; padding:2px 8px; border-radius:3px; font-size:0.85em;">🤖 Blueprint IT Vault Operator, last edited: 2026-05-26T14:08:59Z</span>
 
 (The admin dashboard at `/admin` generates this template per-customer on the fly.)
 
