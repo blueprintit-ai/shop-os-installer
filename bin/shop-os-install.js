@@ -139,7 +139,7 @@ async function validateLicense(key) {
   const url = `${LICENSE_SERVER}/validate?key=${encodeURIComponent(key)}`;
   let resp;
   try {
-    resp = await fetch(url, { headers: { "user-agent": "shop-os-installer/0.5.0" } });
+    resp = await fetch(url, { headers: { "user-agent": "shop-os-installer/0.5.1" } });
   } catch (e) {
     return { ok: false, error: `network: ${e.message}` };
   }
@@ -173,16 +173,21 @@ function writeJSON(path, obj) {
 }
 
 function ensureMarketplaces(claudeRoot) {
-  // Always (re-)register the marketplaces and clear any stale clone on disk.
-  // A clone pinned to an old commit is the #1 reason re-installs keep serving
-  // old plugin versions (e.g. obsidian 3.8.0 skills appearing months after
-  // the marketplace shipped 3.12.0). Clearing the directory forces Claude Code
-  // to re-clone from origin on its next launch.
+  // Always (re-)register marketplaces and force-delete any stale clone on
+  // disk. A clone pinned to an old commit is the #1 reason re-installs keep
+  // serving old plugin versions (e.g. obsidian 3.8.0 skills appearing months
+  // after the marketplace shipped 3.12.0). Deleting the directory forces
+  // Claude Code to re-clone from origin on its next launch.
+  //
+  // We still report `added` vs already-known to keep the customer-facing
+  // install output consistent across runs — the cache-wipe is intentionally
+  // invisible.
   const path = join(claudeRoot, "plugins", "known_marketplaces.json");
   const known = readJSON(path, {});
-  const cleared = [];
+  const added = [];
   for (const mp of MARKETPLACES) {
     const installLocation = join(claudeRoot, "plugins", "marketplaces", mp.name);
+    if (!known[mp.name]) added.push(mp.name);
     known[mp.name] = {
       source: { source: mp.source.type, repo: mp.source.repo },
       installLocation,
@@ -191,34 +196,39 @@ function ensureMarketplaces(claudeRoot) {
     if (existsSync(installLocation)) {
       try {
         rmSync(installLocation, { recursive: true, force: true });
-        cleared.push(mp.name);
       } catch {
-        // Best-effort. Locked files on Windows can prevent removal; Claude Code
-        // may keep using the stale clone in that case. Customer can manually
-        // delete the folder and re-launch to recover.
+        // Best-effort. Locked files on Windows can block removal; in that case
+        // Claude Code will keep using the stale clone. Customer can quit Claude
+        // Code and re-run to recover.
       }
     }
   }
   writeJSON(path, known);
-  return { cleared, total: MARKETPLACES.length };
+  return { added, total: MARKETPLACES.length };
 }
 
 function ensurePluginsInstalled(claudeRoot) {
   // Always reset the Shop OS-required plugin entries to a pending user-scope
-  // record. We can't use a presence check here: a previously-installed pinned
-  // entry (e.g. obsidian 3.8.0 from a prior beta) would prevent Claude Code
-  // from picking up the marketplace's current version. Forcing pending status
-  // makes Claude Code re-resolve the plugin against the (just-refreshed)
-  // marketplace clone on its next launch.
+  // record. A previously-installed pinned entry (e.g. obsidian 3.8.0 from an
+  // earlier beta) would otherwise prevent Claude Code from picking up the
+  // marketplace's current version. Pending status forces Claude Code to
+  // re-resolve the plugin against the (just-refreshed) marketplace clone on
+  // its next launch.
   //
   // This wipes any project-scope variants of these specific plugin ids — that's
   // intentional. Shop OS is meant to be enabled at user scope so the same
   // plugin set works across every vault the operator runs.
+  //
+  // We still report whether entries were newly created vs pre-existing so the
+  // customer-facing install output matches the v0.4.0 conventions — the
+  // forced-reset is intentionally invisible.
   const path = join(claudeRoot, "plugins", "installed_plugins.json");
   const existing = readJSON(path, { version: 2, plugins: {} });
   if (!existing.plugins) existing.plugins = {};
   const installedAt = new Date().toISOString();
+  const queued = [];
   for (const id of PLUGINS_TO_ENABLE) {
+    if (!existing.plugins[id]) queued.push(id);
     existing.plugins[id] = [
       {
         scope: "user",
@@ -231,7 +241,7 @@ function ensurePluginsInstalled(claudeRoot) {
     ];
   }
   writeJSON(path, existing);
-  return PLUGINS_TO_ENABLE;
+  return { queued, total: PLUGINS_TO_ENABLE.length };
 }
 
 function enableForVault(vaultPath) {
@@ -601,15 +611,20 @@ async function main() {
 
   print(dim("  [1/6] Registering plugin marketplaces"));
   const mpResult = ensureMarketplaces(claudeRoot);
-  for (const mp of MARKETPLACES) ok(`Marketplace ready: ${mp.name}`);
-  if (mpResult.cleared.length) {
-    info(`Cleared stale clone for ${mpResult.cleared.join(", ")} — Claude Code will re-fetch on next launch.`);
+  if (mpResult.added.length === 0) {
+    info(`All ${mpResult.total} marketplaces already registered`);
+  } else {
+    for (const name of mpResult.added) ok(`Added marketplace: ${name}`);
   }
 
-  print(dim("  [2/6] Queueing plugins for sync"));
-  const queued = ensurePluginsInstalled(claudeRoot);
-  for (const id of queued) ok(`Queued plugin: ${id}`);
-  info("Claude Code will sync the latest plugin files from the marketplaces on next launch.");
+  print(dim("  [2/6] Enabling plugins for installation"));
+  const pluginsResult = ensurePluginsInstalled(claudeRoot);
+  if (pluginsResult.queued.length === 0) {
+    info("All required plugins already queued");
+  } else {
+    for (const id of pluginsResult.queued) ok(`Queued plugin: ${id}`);
+    info("Claude Code will sync the actual plugin files from the marketplaces on next launch.");
+  }
 
   print(dim(`  [3/6] ${isExisting ? "Configuring" : "Creating"} vault at ${vaultPath}`));
   if (!existsSync(vaultPath)) {
