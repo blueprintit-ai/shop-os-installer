@@ -43,6 +43,8 @@ Open Terminal (Mac: press Cmd+Space, type `terminal`, press Enter) or PowerShell
 &([scriptblock]::Create((iwr 'https://shop-os-license-server.glenn-15d.workers.dev/installer-windows.ps1').Content))
 ```
 
+> **Heads up, Mac users:** you will be asked for your Mac login password near the start. That is Homebrew installing developer tools. Type your password (the cursor will not move, that is normal) and press Enter.
+
 The script will:
 
 1. Install Node.js (if you don't have it)
