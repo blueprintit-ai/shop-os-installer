@@ -66,22 +66,25 @@ if (Check-Command git) {
   & winget install --id Git.Git --scope user --silent --accept-package-agreements --accept-source-agreements
 }
 
-# 3. Check/install Claude Code
+# 3. Refresh PATH so freshly-installed node/npm/git are visible this session.
+# WinGet updates the machine/user PATH but doesn't bubble that into the current
+# process, so without this refresh `npm` isn't found when we try to install
+# Claude Code below.
+$env:PATH = [Environment]::GetEnvironmentVariable("PATH","Machine") + ";" + [Environment]::GetEnvironmentVariable("PATH","User")
+
+# 4. Check/install Claude Code via npm.
+# We deliberately avoid the upstream https://claude.ai/install.ps1 installer:
+# on Windows PowerShell 5.1 it fetches its own payload as a byte array and the
+# downstream `[scriptblock]::Create(...)` call fails with a parser error on the
+# stringified bytes ("Unexpected token '97'..."). npm is already present
+# because we just installed Node.js, and it gives us a deterministic install
+# plus a clean `npm update -g` upgrade path.
 Write-Host ""
-if (Test-Path $env:USERPROFILE\.claude) {
+if (Check-Command claude) {
   Write-Host "✓ Claude Code found" -ForegroundColor Green
 } else {
-  Write-Host "📦 Installing Claude Code..." -ForegroundColor Yellow
-  $claudeInstallScript = @"
-  # Temporary inline install script for Claude Code
-  Write-Host "Downloading Claude Code installer..."
-  `$url = "https://claude.ai/install.ps1"
-  `$outfile = "`$env:TEMP\claude-install.ps1"
-  Invoke-WebRequest -Uri `$url -OutFile `$outfile -UseBasicParsing
-  & `$outfile
-  Remove-Item `$outfile -Force
-"@
-  Invoke-Expression $claudeInstallScript
+  Write-Host "📦 Installing Claude Code via npm..." -ForegroundColor Yellow
+  & npm install -g "@anthropic-ai/claude-code"
 }
 
 # 4. Check/install Obsidian
