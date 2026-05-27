@@ -155,12 +155,10 @@ Write-Host ""
 Write-Host "=========================================" -ForegroundColor Cyan
 Write-Host "🎉 Setup complete!" -ForegroundColor Green
 Write-Host ""
-Write-Host "Launching Claude Code..."
-Start-Sleep -Seconds 2
-Start-Process "Claude Code"
-
-Write-Host ""
-Write-Host "Next steps:"
-Write-Host "  1. Sign in to Claude Code if prompted"
-Write-Host "  2. Type /bp-setup at the Claude prompt to personalize your vault"
+Write-Host "Next steps:" -ForegroundColor Cyan
+Write-Host "  1. Open a new PowerShell window in your vault:"
+Write-Host "     cd `"$vaultPath`""
+Write-Host "  2. Start Claude Code:"
+Write-Host "     claude"
+Write-Host "  3. Sign in if prompted, then type /bp-setup to personalize your vault."
 Write-Host ""

@@ -119,8 +119,17 @@ function getClaudeRoot() {
 }
 
 function checkClaudeCode() {
-  const root = getClaudeRoot();
-  if (!existsSync(root)) {
+  // Detect by binary on PATH, not by the ~/.claude directory: when Claude Code
+  // is installed via `npm install -g @anthropic-ai/claude-code` (which the
+  // setup scripts now do), the .claude directory isn't created until the user
+  // launches `claude` for the first time. A binary check correctly identifies
+  // installs from npm, the official .ps1/.sh installer, or the desktop app.
+  const probe = spawnSync(
+    process.platform === "win32" ? "where" : "which",
+    ["claude"],
+    { stdio: "ignore", shell: false },
+  );
+  if (probe.status !== 0) {
     print("");
     print(red("Claude Code is not installed."));
     print("");
@@ -130,6 +139,12 @@ function checkClaudeCode() {
     print("Once Claude Code is installed and you have signed in once,");
     print("re-run this installer.");
     exit(1);
+  }
+  // Stage ~/.claude so downstream marketplace and plugin writes succeed even
+  // if the user hasn't launched `claude` yet to seed the dir themselves.
+  const root = getClaudeRoot();
+  if (!existsSync(root)) {
+    mkdirSync(root, { recursive: true });
   }
   return root;
 }
