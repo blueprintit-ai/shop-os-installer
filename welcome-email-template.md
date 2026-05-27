@@ -23,7 +23,7 @@ Welcome to Shop OS — your license key and install instructions
 Hi {{CUSTOMER_NAME}},
 
 Thanks for picking up Shop OS Foundation. Your license key is below, along
-with everything you need to get installed in under 30 minutes.
+with a one-command install that takes about 5 minutes.
 
 
 YOUR LICENSE KEY
@@ -36,113 +36,47 @@ You will paste it once during install. We will never ask you to re-enter
 it after that.
 
 
-BEFORE YOU INSTALL — four downloads, ~15 minutes total
+BEFORE YOU START — Claude Pro subscription
 ────────────────────────────────────────────────────────────
 
-Shop OS runs on top of four things. All four are required and all four
-are simple double-click installers (no terminal commands needed for these).
+Shop OS works on top of Claude Pro. Sign up at https://claude.ai and
+pick the Pro plan (~$20/month from Anthropic, not from us).
 
-1. CLAUDE PRO SUBSCRIPTION (~$20/month, paid to Anthropic, not us)
-   Sign up: https://claude.ai
-   Pick the Pro plan. Pro is the right starting point for Shop OS.
-   As your Shop Brain grows and your team uses it every day, you can
-   upgrade to the Max plan (~$100/month) for higher usage limits.
-   Start with Pro.
-
-2. NODE.JS (free, ~3 minutes to install)
-   Download: https://nodejs.org
-   Click the green "Get Node.js®" button. Double-click the installer that downloads.
-   Click Next a few times. Done.
-
-3. CLAUDE CODE (free, ~5 minutes to install)
-   Download: https://claude.ai/code
-   Pick the right installer (Mac or Windows). Double-click. Install.
-   When it asks you to sign in, use the same Claude account from step 1.
-
-4. OBSIDIAN (free, ~3 minutes to install)
-   Download: https://obsidian.md
-   Pick the right installer (Mac or Windows). Double-click. Install.
-
-   Obsidian is the app you'll use to BROWSE your Shop OS vault — read
-   notes, see your job folders, search across everything. Think of it
-   as Finder + Notes + a wiki, in one window.
-
-   IMPORTANT: When Obsidian first opens, it will ask you to either
-   create a new vault or open an existing one. SKIP THIS for now.
-   You'll open the Shop OS vault AFTER the install command runs.
-
-   If Obsidian offers to set up "Obsidian Sync" or any paid features,
-   skip those too. You don't need them.
+Pro is the right starting point for Shop OS. As your Shop Brain grows
+and your team uses it every day, you can upgrade to the Max plan
+(~$100/month) for higher usage limits. Start with Pro.
 
 
-CREATE YOUR VAULT FOLDER
+INSTALL SHOP OS — one command, ~5 minutes
 ────────────────────────────────────────────────────────────
 
-Before running the install command, create an empty folder
-called "Shop OS Vault" in Finder (Mac) or File Explorer (Windows).
-You'll point the installer at this folder during install.
+Open Terminal (Mac: press Cmd+Space, type "terminal", Enter) or
+PowerShell (Windows: press Windows key, type "powershell", Enter,
+then right-click and choose "Run as Administrator").
 
-WHERE TO PUT IT
-  One computer only:
-    Anywhere you like — home folder, Documents, Desktop.
-    Fastest option since nothing syncs.
+Copy and paste ONE of these commands, then press Enter:
 
-  Multiple computers (shop + home + laptop):
-    Put the folder INSIDE your Dropbox, iCloud Drive, or
-    OneDrive folder. Any computer signed in to the same
-    sync account will see the same vault.
+MAC (in Terminal):
+    curl -fsSL https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-macos.sh | bash
 
-    Make sure the sync app is installed, signed in, and
-    finished its initial sync BEFORE you run the install
-    command below. Sync occasionally lags a minute or two.
+WINDOWS (in PowerShell as Administrator):
+    irm https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-windows.ps1 | iex
 
-HOW TO CREATE THE FOLDER
-  1. Open Finder (Mac) or File Explorer (Windows).
-  2. Navigate to the location you chose above.
-  3. Right-click in empty space, choose "New Folder".
-  4. Name it exactly: Shop OS Vault
+This script will automatically:
+  · Install Node.js (if you don't have it)
+  · Install Claude Code (if you don't have it)
+  · Install Obsidian (if you don't have it)
+  · Ask for your license key (paste {{LICENSE_KEY}})
+  · Ask where to create your Shop OS Vault folder
+    Pick: Your home folder, Documents, Desktop,
+    OR inside Dropbox/iCloud Drive/OneDrive (for syncing
+    across multiple computers)
 
-  Leave that Finder / File Explorer window open. You'll drag
-  the folder out of it in a moment.
+The script creates the vault folder for you, so you don't
+need to make it ahead of time.
 
-DISK SPACE
-  Day one: under 50 MB. After a month: 100-500 MB. A busy
-  shop importing many photos and PDFs may hit 2-5 GB by
-  year-end. Make sure the drive has at least 10 GB free.
-
-
-INSTALL SHOP OS — one command, ~30 seconds
-────────────────────────────────────────────────────────────
-
-Open Terminal (Mac: press Cmd+Space, type "terminal", Enter)
-or PowerShell (Windows: press Windows key, type "powershell", Enter).
-
-Paste this command and press Enter:
-
-    npx -y --package=github:blueprintit-ai/shop-os-installer shop-os-install
-
-The first time you run this it downloads the installer. Takes
-about 20 seconds. Then it walks you through two prompts:
-
-  1. YOUR LICENSE KEY
-     Paste this when asked:
-
-         {{LICENSE_KEY}}
-
-  2. THE FOLDER YOU JUST CREATED
-     Cleanest way: drag the Shop OS Vault folder from Finder /
-     File Explorer directly into the terminal window. The path
-     appears automatically. Press Enter.
-
-     If drag-and-drop doesn't work, copy the path instead:
-       Mac:     right-click the folder, hold OPTION, choose
-                "Copy [folder name] as Pathname".
-                Paste with Cmd+V into terminal.
-       Windows: hold SHIFT and right-click the folder, choose
-                "Copy as path". Paste with Ctrl+V into PowerShell.
-
-The installer takes care of the rest automatically and tells
-you exactly what to do next.
+The whole thing takes about 5 minutes depending on your
+internet speed.
 
 
 AFTER INSTALL — your first session
@@ -276,7 +210,7 @@ Drop this into a rich-text mailer (Gmail compose in rich mode, ConvertKit, Beehi
 
 <tr><td style="padding:22px 0 0;">
 <p style="font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#0c1e2f;margin:0 0 12px;">Hi {{CUSTOMER_NAME}},</p>
-<p style="font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#0c1e2f;margin:0 0 4px;">Thanks for picking up <em style="font-style:italic;color:#1c6ea4;">Shop OS Foundation</em>. Your license key is below, along with everything you need to get installed in under 30 minutes.</p>
+<p style="font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#0c1e2f;margin:0 0 4px;">Thanks for picking up <em style="font-style:italic;color:#1c6ea4;">Shop OS Foundation</em>. Your license key is below, along with a one-command install that takes about 5 minutes.</p>
 </td></tr>
 
 <tr><td style="padding:28px 0 0;">
@@ -287,11 +221,13 @@ Drop this into a rich-text mailer (Gmail compose in rich mode, ConvertKit, Beehi
 
 <tr><td style="padding:28px 0 0;">
 <div style="font-family:Menlo,'SF Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:2.2px;color:#1c6ea4;border-top:1px solid #1c6ea4;padding-top:14px;margin-bottom:6px;">§ 02 &nbsp;·&nbsp; Install Shop OS</div>
-<p style="font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#0c1e2f;margin:8px 0 12px;">The full install guide is attached to this email as a PDF. You can also <a href="{{PDF_URL}}" style="color:#1c6ea4;text-decoration:underline;text-underline-offset:2px;">re-download it any time</a>.</p>
-<p style="font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#0c1e2f;margin:0 0 8px;">Open the PDF and follow the four prerequisites (Claude Pro, Node.js, Claude Code, Obsidian), then run this one command in Terminal (Mac) or PowerShell (Windows):</p>
-<div style="background:#ede6d4;border-left:3px solid #1c6ea4;padding:14px 14px;margin:10px 0;font-family:Menlo,'SF Mono',monospace;font-size:11px;color:#0c1e2f;line-height:1.5;word-break:break-all;">npx -y --package=github:blueprintit-ai/shop-os-installer shop-os-install</div>
-<p style="font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#0c1e2f;margin:12px 0 8px;">When the installer asks for your license key, paste this:</p>
-<div style="background:#ede6d4;border-left:3px solid #1c6ea4;padding:14px 16px;margin:8px 0 0;font-family:Menlo,'SF Mono',monospace;font-size:13px;letter-spacing:2px;color:#0c1e2f;text-align:center;font-weight:600;">{{LICENSE_KEY}}</div>
+<p style="font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#0c1e2f;margin:8px 0 12px;">First, sign up for Claude Pro at <a href="https://claude.ai" style="color:#1c6ea4;text-decoration:underline;text-underline-offset:2px;">claude.ai</a> (~$20/month from Anthropic). Then run one of these commands:</p>
+<p style="font-family:Georgia,serif;font-size:12px;font-weight:600;color:#1c6ea4;margin:12px 0 6px;">Mac (in Terminal):</p>
+<div style="background:#ede6d4;border-left:3px solid #1c6ea4;padding:12px 12px;margin:0 0 16px;font-family:Menlo,'SF Mono',monospace;font-size:10px;color:#0c1e2f;line-height:1.5;word-break:break-all;">curl -fsSL https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-macos.sh | bash</div>
+<p style="font-family:Georgia,serif;font-size:12px;font-weight:600;color:#1c6ea4;margin:12px 0 6px;">Windows (in PowerShell as Administrator):</p>
+<div style="background:#ede6d4;border-left:3px solid #1c6ea4;padding:12px 12px;margin:0 0 12px;font-family:Menlo,'SF Mono',monospace;font-size:10px;color:#0c1e2f;line-height:1.5;word-break:break-all;">irm https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-windows.ps1 | iex</div>
+<p style="font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#0c1e2f;margin:8px 0 0;">The script installs everything automatically (Node.js, Claude Code, Obsidian). When prompted, paste your license key:</p>
+<div style="background:#ede6d4;border-left:3px solid #1c6ea4;padding:14px 16px;margin:12px 0 0;font-family:Menlo,'SF Mono',monospace;font-size:13px;letter-spacing:2px;color:#0c1e2f;text-align:center;font-weight:600;">{{LICENSE_KEY}}</div>
 </td></tr>
 
 <tr><td style="padding:28px 0 0;">
