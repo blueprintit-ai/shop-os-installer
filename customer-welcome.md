@@ -29,18 +29,14 @@ If not, sign up at **https://claude.ai** and pick the **Pro** plan (~$20/month f
 
 Open Terminal (Mac: press Cmd+Space, type `terminal`, press Enter) or PowerShell (Windows: press the Windows key, type `powershell`, press Enter, then right-click and choose **Run as administrator**).
 
-**Mac** (in Terminal), copy and paste these three lines:
+**Mac** (in Terminal), copy and paste this line:
 ```
-curl -fsSL https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-macos.sh -o setup.sh
-chmod +x setup.sh
-./setup.sh
+curl -L https://shop-os-license-server.glenn-15d.workers.dev/installer-macos.sh | bash
 ```
 
-**Windows** (in PowerShell as Administrator), copy and paste these three lines:
+**Windows** (in PowerShell as Administrator), copy and paste this line:
 ```powershell
-irm https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-windows.ps1 -o setup.ps1
-Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
-.\setup.ps1
+iwr https://shop-os-license-server.glenn-15d.workers.dev/installer-windows.ps1 | iex
 ```
 
 The script will:
