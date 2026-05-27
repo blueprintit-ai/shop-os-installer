@@ -151,6 +151,13 @@ $env:PATH = [Environment]::GetEnvironmentVariable("PATH","Machine") + ";" + [Env
 # 6. Run Shop OS installer with license key and vault path
 & npx -y @blueprintit/shop-os-install --license "$licenseKey" --vault "$vaultPath" --yes
 
+# Give Dropbox / OneDrive a moment to sync the newly created vault so it shows
+# up in Explorer when the user opens it. Without this pause, customers see a
+# stale Explorer view, assume the install failed, and re-run.
+Write-Host ""
+Write-Host "Waiting for cloud sync to pick up the new vault..." -ForegroundColor DarkGray
+Start-Sleep -Seconds 5
+
 Write-Host ""
 Write-Host "=========================================" -ForegroundColor Cyan
 Write-Host "🎉 Setup complete!" -ForegroundColor Green
