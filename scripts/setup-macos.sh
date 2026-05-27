@@ -64,20 +64,21 @@ if [ -z "$LICENSE_KEY" ]; then
 fi
 
 echo ""
-echo "Where would you like to create your Shop OS Vault?"
-echo "  Examples:"
-echo "    ~/Shop OS Vault (home folder)"
-echo "    ~/Dropbox/Shop OS Vault (synced via Dropbox)"
+echo "A folder picker will open. Navigate to where you want Shop OS installed."
+echo "(Examples: home folder, Dropbox, Documents)"
 echo ""
-read -p "Enter vault path: " VAULT_PATH
 
-if [ -z "$VAULT_PATH" ]; then
-  echo "✗ No vault path provided. Exiting."
+PARENT_DIR=$(osascript -e 'POSIX path of (choose folder with prompt "Choose where to install Shop OS:")')
+
+if [ -z "$PARENT_DIR" ]; then
+  echo "✗ No folder selected. Exiting."
   exit 1
 fi
 
-# Expand tilde
-VAULT_PATH="${VAULT_PATH/#\~/$HOME}"
+read -p "Name your vault folder [Shop OS Vault]: " VAULT_NAME
+VAULT_NAME="${VAULT_NAME:-Shop OS Vault}"
+
+VAULT_PATH="${PARENT_DIR%/}/$VAULT_NAME"
 
 echo ""
 echo "Installing Shop OS to: $VAULT_PATH"

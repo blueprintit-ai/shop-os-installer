@@ -93,17 +93,27 @@ if ([string]::IsNullOrWhiteSpace($licenseKey)) {
 }
 
 Write-Host ""
-Write-Host "Where would you like to create your Shop OS Vault?"
-Write-Host "  Examples:"
-Write-Host "    C:\Users\YourName\Shop OS Vault"
-Write-Host "    C:\Users\YourName\Dropbox\Shop OS Vault (synced via Dropbox)"
+Write-Host "A folder picker will open. Navigate to where you want Shop OS installed."
+Write-Host "(Examples: your home folder, Dropbox, Documents)"
 Write-Host ""
 
-$vaultPath = Read-Host "Enter vault path"
-if ([string]::IsNullOrWhiteSpace($vaultPath)) {
-  Write-Host "✗ No vault path provided. Exiting." -ForegroundColor Red
+Add-Type -AssemblyName System.Windows.Forms
+$picker = New-Object System.Windows.Forms.FolderBrowserDialog
+$picker.Description = "Choose where to install Shop OS"
+$picker.RootFolder = "MyComputer"
+$picker.ShowNewFolderButton = $true
+$result = $picker.ShowDialog()
+
+if ($result -ne [System.Windows.Forms.DialogResult]::OK) {
+  Write-Host "✗ No folder selected. Exiting." -ForegroundColor Red
   exit 1
 }
+
+$parentDir = $picker.SelectedPath
+$vaultName = Read-Host "Name your vault folder [Shop OS Vault]"
+if ([string]::IsNullOrWhiteSpace($vaultName)) { $vaultName = "Shop OS Vault" }
+
+$vaultPath = Join-Path $parentDir $vaultName
 
 Write-Host ""
 Write-Host "Installing Shop OS to: $vaultPath" -ForegroundColor Cyan

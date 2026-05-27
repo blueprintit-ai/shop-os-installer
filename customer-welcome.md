@@ -51,7 +51,7 @@ The script will:
 2. Install Claude Code (if you don't have it)
 3. Install Obsidian (if you don't have it)
 4. Prompt you for your license key
-5. Ask you where to create your Shop OS Vault folder
+5. Open a folder picker - click to choose where to install, then enter a name for your vault (default: "Shop OS Vault")
 
 The script creates the vault folder for you, so you don't need to make it yourself. Just pick a location when prompted:
 - **One computer only?** Your home folder, Documents, or Desktop.
