@@ -696,8 +696,9 @@ pre.ascii-diagram {
 <p><strong>Mac</strong> (in Terminal), copy and paste this line:</p>
 <pre><code>curl -L https://shop-os-license-server.glenn-15d.workers.dev/installer-macos.sh | bash
 </code></pre>
-<p><strong>Windows</strong> (in PowerShell as Administrator), copy and paste this line:</p>
-<pre><code class="language-powershell">iwr https://shop-os-license-server.glenn-15d.workers.dev/installer-windows.ps1 | iex
+<p><strong>Windows</strong> (in PowerShell as Administrator), copy and paste these two lines:</p>
+<pre><code class="language-powershell">iwr https://shop-os-license-server.glenn-15d.workers.dev/installer-windows.ps1 -OutFile setup.ps1
+.\setup.ps1
 </code></pre>
 <p>The script will:</p>
 <ol>
