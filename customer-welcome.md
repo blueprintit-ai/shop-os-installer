@@ -71,17 +71,7 @@ Select the "Shop OS Vault" folder the installer created in your home directory. 
 
 You will now see your vault in Obsidian's main window. There is not much in it yet, just a `CLAUDE.md` file and a `Raw/` folder. That is about to change.
 
-### Step 2. Open your vault in Claude Code
-
-Launch the Claude Code app you installed in step 3 of the prerequisites. On Mac it lives in your Applications folder. On Windows it is pinned to the Start menu under "Claude Code".
-
-When the app opens, it shows a folder picker, sometimes shown as a list of recent folders or an "Open folder" button. Pick the **Shop OS Vault** folder in your home directory. This is the same folder you just opened in Obsidian.
-
-Claude Code remembers your choice. Next time you launch the app it opens straight into your vault. No terminal, no commands to memorize.
-
-You will see a chat panel with a prompt waiting for input. That is where you talk to Claude about your shop.
-
-### Step 3. Run the onboarding interview
+### Step 2. Run the onboarding interview
 
 At the Claude prompt, type:
 

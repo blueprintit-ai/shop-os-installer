@@ -91,6 +91,11 @@ echo ""
 echo "=========================================="
 echo "🎉 Setup complete!"
 echo ""
+echo "Launching Claude Code..."
+sleep 2
+open -a "Claude Code"
+
+echo ""
 echo "Next steps:"
 echo "  1. If this is your first time, sign in to Claude Code (you'll be prompted)"
 echo "  2. Open your Shop OS Vault folder in Obsidian"

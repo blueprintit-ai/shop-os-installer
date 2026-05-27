@@ -126,6 +126,11 @@ Write-Host ""
 Write-Host "=========================================" -ForegroundColor Cyan
 Write-Host "🎉 Setup complete!" -ForegroundColor Green
 Write-Host ""
+Write-Host "Launching Claude Code..."
+Start-Sleep -Seconds 2
+Start-Process "Claude Code"
+
+Write-Host ""
 Write-Host "Next steps:"
 Write-Host "  1. If this is your first time, sign in to Claude Code (you'll be prompted)"
 Write-Host "  2. Open your Shop OS Vault folder in Obsidian"
