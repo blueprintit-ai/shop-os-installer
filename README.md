@@ -4,19 +4,23 @@ One-command installer for **Shop OS**: Blueprint IT's AI Operating System for sm
 
 ## Quick Install (Recommended)
 
-Paste **one** of these commands. Everything installs automatically:
+Download and run **one** of these setup scripts. Everything installs automatically:
 
 **Mac** (in Terminal):
 ```sh
-curl -fsSL https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-macos.sh | bash
+curl -fsSL https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-macos.sh -o setup.sh
+chmod +x setup.sh
+./setup.sh
 ```
 
 **Windows** (in PowerShell as Administrator):
 ```powershell
-irm https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-windows.ps1 | iex
+irm https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-windows.ps1 -o setup.ps1
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+.\setup.ps1
 ```
 
-This installs Node.js, Claude Code, Obsidian, and Shop OS in one go. You'll be prompted for your license key partway through.
+This installs Node.js, Claude Code, Obsidian, and Shop OS in one go. You'll be prompted for your license key and vault location.
 
 ---
 

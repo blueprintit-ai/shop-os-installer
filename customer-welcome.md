@@ -31,23 +31,25 @@ If not, sign up at **https://claude.ai** and pick the **Pro** plan (~$20/month f
 
 Open Terminal (Mac: press Cmd+Space, type `terminal`, press Enter) or PowerShell (Windows: press the Windows key, type `powershell`, press Enter, then right-click and choose **Run as administrator**).
 
-Copy and paste **one** of these commands, then press Enter:
-
-**Mac** (in Terminal):
+**Mac** (in Terminal), copy and paste these three lines:
 ```
-curl -fsSL https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-macos.sh | bash
+curl -fsSL https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-macos.sh -o setup.sh
+chmod +x setup.sh
+./setup.sh
 ```
 
-**Windows** (in PowerShell as Administrator):
+**Windows** (in PowerShell as Administrator), copy and paste these three lines:
 ```powershell
-irm https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-windows.ps1 | iex
+irm https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-windows.ps1 -o setup.ps1
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+.\setup.ps1
 ```
 
-This script will:
+The script will:
 1. Install Node.js (if you don't have it)
 2. Install Claude Code (if you don't have it)
 3. Install Obsidian (if you don't have it)
-4. Ask you for your license key
+4. Prompt you for your license key
 5. Ask you where to create your Shop OS Vault folder
 
 The script creates the vault folder for you, so you don't need to make it yourself. Just pick a location when prompted:

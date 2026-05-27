@@ -54,13 +54,15 @@ Open Terminal (Mac: press Cmd+Space, type "terminal", Enter) or
 PowerShell (Windows: press Windows key, type "powershell", Enter,
 then right-click and choose "Run as Administrator").
 
-Copy and paste ONE of these commands, then press Enter:
+MAC (in Terminal), copy and paste these three lines:
+    curl -fsSL https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-macos.sh -o setup.sh
+    chmod +x setup.sh
+    ./setup.sh
 
-MAC (in Terminal):
-    curl -fsSL https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-macos.sh | bash
-
-WINDOWS (in PowerShell as Administrator):
-    irm https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-windows.ps1 | iex
+WINDOWS (in PowerShell as Administrator), copy and paste these three lines:
+    irm https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-windows.ps1 -o setup.ps1
+    Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+    .\setup.ps1
 
 This script will automatically:
   · Install Node.js (if you don't have it)
@@ -221,11 +223,11 @@ Drop this into a rich-text mailer (Gmail compose in rich mode, ConvertKit, Beehi
 
 <tr><td style="padding:28px 0 0;">
 <div style="font-family:Menlo,'SF Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:2.2px;color:#1c6ea4;border-top:1px solid #1c6ea4;padding-top:14px;margin-bottom:6px;">§ 02 &nbsp;·&nbsp; Install Shop OS</div>
-<p style="font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#0c1e2f;margin:8px 0 12px;">First, sign up for Claude Pro at <a href="https://claude.ai" style="color:#1c6ea4;text-decoration:underline;text-underline-offset:2px;">claude.ai</a> (~$20/month from Anthropic). Then run one of these commands:</p>
-<p style="font-family:Georgia,serif;font-size:12px;font-weight:600;color:#1c6ea4;margin:12px 0 6px;">Mac (in Terminal):</p>
-<div style="background:#ede6d4;border-left:3px solid #1c6ea4;padding:12px 12px;margin:0 0 16px;font-family:Menlo,'SF Mono',monospace;font-size:10px;color:#0c1e2f;line-height:1.5;word-break:break-all;">curl -fsSL https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-macos.sh | bash</div>
-<p style="font-family:Georgia,serif;font-size:12px;font-weight:600;color:#1c6ea4;margin:12px 0 6px;">Windows (in PowerShell as Administrator):</p>
-<div style="background:#ede6d4;border-left:3px solid #1c6ea4;padding:12px 12px;margin:0 0 12px;font-family:Menlo,'SF Mono',monospace;font-size:10px;color:#0c1e2f;line-height:1.5;word-break:break-all;">irm https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-windows.ps1 | iex</div>
+<p style="font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#0c1e2f;margin:8px 0 12px;">First, sign up for Claude Pro at <a href="https://claude.ai" style="color:#1c6ea4;text-decoration:underline;text-underline-offset:2px;">claude.ai</a> (~$20/month from Anthropic). Then run these commands:</p>
+<p style="font-family:Georgia,serif;font-size:12px;font-weight:600;color:#1c6ea4;margin:12px 0 6px;">Mac (in Terminal), copy and paste all three lines:</p>
+<div style="background:#ede6d4;border-left:3px solid #1c6ea4;padding:12px 12px;margin:0 0 16px;font-family:Menlo,'SF Mono',monospace;font-size:10px;color:#0c1e2f;line-height:1.5;word-break:break-all;">curl -fsSL https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-macos.sh -o setup.sh<br/>chmod +x setup.sh<br/>./setup.sh</div>
+<p style="font-family:Georgia,serif;font-size:12px;font-weight:600;color:#1c6ea4;margin:12px 0 6px;">Windows (in PowerShell as Administrator), copy and paste all three lines:</p>
+<div style="background:#ede6d4;border-left:3px solid #1c6ea4;padding:12px 12px;margin:0 0 12px;font-family:Menlo,'SF Mono',monospace;font-size:10px;color:#0c1e2f;line-height:1.5;word-break:break-all;">irm https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-windows.ps1 -o setup.ps1<br/>Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process<br/>.\setup.ps1</div>
 <p style="font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#0c1e2f;margin:8px 0 0;">The script installs everything automatically (Node.js, Claude Code, Obsidian). When prompted, paste your license key:</p>
 <div style="background:#ede6d4;border-left:3px solid #1c6ea4;padding:14px 16px;margin:12px 0 0;font-family:Menlo,'SF Mono',monospace;font-size:13px;letter-spacing:2px;color:#0c1e2f;text-align:center;font-weight:600;">{{LICENSE_KEY}}</div>
 </td></tr>
