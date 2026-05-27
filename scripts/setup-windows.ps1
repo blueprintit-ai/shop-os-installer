@@ -162,10 +162,12 @@ Write-Host ""
 Write-Host "=========================================" -ForegroundColor Cyan
 Write-Host "🎉 Setup complete!" -ForegroundColor Green
 Write-Host ""
-Write-Host "Next steps:" -ForegroundColor Cyan
-Write-Host "  1. Open a new PowerShell window in your vault:"
-Write-Host "     cd `"$vaultPath`""
-Write-Host "  2. Start Claude Code:"
-Write-Host "     claude"
-Write-Host "  3. Sign in if prompted, then type /bp-setup to personalize your vault."
+Write-Host "Launching Claude Code in your vault..." -ForegroundColor Cyan
+Write-Host "Sign in when prompted, then type /bp-setup to personalize your vault."
 Write-Host ""
+
+# Open a new PowerShell window in the vault directory and run `claude`. We
+# launch in a separate window (not in this one) so the setup script can finish
+# cleanly and the customer sees Claude Code start in its own console. -NoExit
+# keeps the window open if claude exits, so any error messages remain visible.
+Start-Process powershell -ArgumentList "-NoExit", "-NoProfile", "-Command", "Set-Location -LiteralPath `"$vaultPath`"; claude"
