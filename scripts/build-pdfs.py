@@ -409,6 +409,12 @@ def md_to_pdf(src_md: Path, out_pdf: Path, title: str, doc_number: str, subtitle
 
     print(f"  - rendered HTML : {html_path.name}", file=sys.stderr)
 
+    # Also write template version for license server (per-customer PDF generation)
+    if "shop-os-welcome" in str(out_pdf):
+        template_path = out_pdf.parent / "shop-os-welcome-template.html"
+        template_path.write_text(full_html, encoding="utf-8")
+        print(f"  - template HTML : {template_path.name}", file=sys.stderr)
+
     # Chrome headless -> PDF
     chrome_cmd = [
         CHROME,

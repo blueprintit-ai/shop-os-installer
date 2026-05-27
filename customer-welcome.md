@@ -13,8 +13,6 @@ Installation takes about 5 minutes total (depending on your internet speed). It'
 
 ## Your license key
 
-Your license key was included in the welcome email we sent you. It looks like this:
-
 ```
 SHOP-XXXX-YYYY-ZZZZ
 ```
