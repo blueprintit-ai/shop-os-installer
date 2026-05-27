@@ -46,6 +46,7 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
 ```
 
 The script will:
+
 1. Install Node.js (if you don't have it)
 2. Install Claude Code (if you don't have it)
 3. Install Obsidian (if you don't have it)
