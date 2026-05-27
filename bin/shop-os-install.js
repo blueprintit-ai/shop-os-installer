@@ -233,6 +233,7 @@ function createVaultClaudeMd(vaultPath, license) {
   if (existsSync(claudeMd)) return false; // do not overwrite an existing vault
   const content = `---
 os-mode: business
+bp-setup-state: pending
 license-customer: ${license.customer}
 license-product: ${license.product}
 installed-at: ${new Date().toISOString()}
