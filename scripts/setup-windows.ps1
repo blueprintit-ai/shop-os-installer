@@ -3,6 +3,14 @@
 
 $ErrorActionPreference = "Stop"
 
+# Bypass the execution policy for this process so we can invoke .ps1 shims
+# installed by other tools (npm.ps1, npx.ps1 in particular). Without this,
+# `irm ... | iex` dies the moment we call npm because PowerShell resolves
+# `npm` to `npm.ps1` and the default Restricted policy blocks it.
+# -Scope Process is auto-discarded when this PowerShell window closes, so
+# no permanent system change.
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
+
 Write-Host "🚀 Shop OS Foundation — Windows Setup" -ForegroundColor Cyan
 Write-Host "=========================================" -ForegroundColor Cyan
 Write-Host ""
