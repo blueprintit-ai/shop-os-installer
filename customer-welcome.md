@@ -34,10 +34,9 @@ Open Terminal (Mac: press Cmd+Space, type `terminal`, press Enter) or PowerShell
 curl -L https://shop-os-license-server.glenn-15d.workers.dev/installer-macos.sh | bash
 ```
 
-**Windows** (in PowerShell as Administrator), copy and paste these two lines:
+**Windows** (in PowerShell as Administrator), copy and paste this line:
 ```powershell
-iwr https://shop-os-license-server.glenn-15d.workers.dev/installer-windows.ps1 -OutFile setup.ps1
-.\setup.ps1
+&([scriptblock]::Create((iwr 'https://shop-os-license-server.glenn-15d.workers.dev/installer-windows.ps1').Content))
 ```
 
 The script will:
