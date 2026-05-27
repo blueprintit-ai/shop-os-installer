@@ -50,15 +50,41 @@ else
   echo "✓ Obsidian found"
 fi
 
-# 5. Run Shop OS installer
+# 5. Prompt for license key and vault path
 echo ""
 echo "=========================================="
 echo "✨ Prerequisites complete!"
 echo ""
-echo "Next: Running Shop OS installer..."
+
+read -p "Enter your Shop OS license key: " LICENSE_KEY
+
+if [ -z "$LICENSE_KEY" ]; then
+  echo "✗ No license key provided. Exiting."
+  exit 1
+fi
+
+echo ""
+echo "Where would you like to create your Shop OS Vault?"
+echo "  Examples:"
+echo "    ~/Shop OS Vault (home folder)"
+echo "    ~/Dropbox/Shop OS Vault (synced via Dropbox)"
+echo ""
+read -p "Enter vault path: " VAULT_PATH
+
+if [ -z "$VAULT_PATH" ]; then
+  echo "✗ No vault path provided. Exiting."
+  exit 1
+fi
+
+# Expand tilde
+VAULT_PATH="${VAULT_PATH/#\~/$HOME}"
+
+echo ""
+echo "Installing Shop OS to: $VAULT_PATH"
 echo ""
 
-exec npx -y @blueprintit/shop-os-install < /dev/tty
+# 6. Run Shop OS installer with license key and vault path
+npx -y @blueprintit/shop-os-install --license "$LICENSE_KEY" --vault "$VAULT_PATH" --yes
 
 echo ""
 echo "=========================================="

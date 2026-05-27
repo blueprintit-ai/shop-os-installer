@@ -80,15 +80,37 @@ if (Check-Command obsidian -ErrorAction SilentlyContinue) {
   & winget install --id Obsidian.Obsidian --scope user --silent --accept-package-agreements --accept-source-agreements
 }
 
-# 5. Run Shop OS installer
+# 5. Prompt for license key and vault path
 Write-Host ""
 Write-Host "=========================================" -ForegroundColor Cyan
 Write-Host "✨ Prerequisites complete!" -ForegroundColor Green
 Write-Host ""
-Write-Host "Next: Running Shop OS installer..."
+
+$licenseKey = Read-Host "Enter your Shop OS license key"
+if ([string]::IsNullOrWhiteSpace($licenseKey)) {
+  Write-Host "✗ No license key provided. Exiting." -ForegroundColor Red
+  exit 1
+}
+
+Write-Host ""
+Write-Host "Where would you like to create your Shop OS Vault?"
+Write-Host "  Examples:"
+Write-Host "    C:\Users\YourName\Shop OS Vault"
+Write-Host "    C:\Users\YourName\Dropbox\Shop OS Vault (synced via Dropbox)"
 Write-Host ""
 
-& npx -y @blueprintit/shop-os-install
+$vaultPath = Read-Host "Enter vault path"
+if ([string]::IsNullOrWhiteSpace($vaultPath)) {
+  Write-Host "✗ No vault path provided. Exiting." -ForegroundColor Red
+  exit 1
+}
+
+Write-Host ""
+Write-Host "Installing Shop OS to: $vaultPath" -ForegroundColor Cyan
+Write-Host ""
+
+# 6. Run Shop OS installer with license key and vault path
+& npx -y @blueprintit/shop-os-install --license "$licenseKey" --vault "$vaultPath" --yes
 
 Write-Host ""
 Write-Host "=========================================" -ForegroundColor Cyan
