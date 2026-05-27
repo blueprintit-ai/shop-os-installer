@@ -328,6 +328,8 @@ pre.ascii-diagram {
   margin-top: 10pt;
   line-height: 1.5;
   font-family: Georgia, serif;
+  page-break-inside: avoid;
+  break-inside: avoid;
 }
 
 /* ---- Page break helpers ---- */

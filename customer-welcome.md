@@ -31,7 +31,7 @@ Open Terminal (Mac: press Cmd+Space, type `terminal`, press Enter) or PowerShell
 
 **Mac** (in Terminal), copy and paste this line:
 ```
-curl -L https://shop-os-license-server.glenn-15d.workers.dev/installer-macos.sh | bash
+/bin/bash -c "$(curl -fsSL https://shop-os-license-server.glenn-15d.workers.dev/installer-macos.sh)"
 ```
 
 **Windows** (in PowerShell as Administrator), copy and paste this line:
@@ -70,7 +70,7 @@ You will now see your vault in Obsidian's main window. There is not much in it y
 At the Claude prompt, type:
 
 ```
-/os-setup
+/bp-setup
 ```
 
 This kicks off a 10-minute onboarding interview that asks about your shop name, owner, key staff, services, and daily routines. As you answer, Obsidian's file list on the left side will fill up with the notes Claude is creating for you. You can watch your vault populate in real time.
@@ -110,9 +110,9 @@ Common first-time issues, already documented:
 
 Welcome aboard.
 
-<p class="signature">
+<div class="signature" style="page-break-inside: avoid; break-inside: avoid;">
 <strong>Glenn Chua</strong>, Founder<br>
 Blueprint IT, LLC<br>
 <a href="mailto:glenn@blueprintit.ai">glenn@blueprintit.ai</a><br>
 <a href="https://blueprintit.ai">www.blueprintit.ai</a>
-</p>
+</div>

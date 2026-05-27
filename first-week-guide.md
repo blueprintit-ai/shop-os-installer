@@ -14,8 +14,8 @@ This guide covers the four things you need to know to start running your shop on
 
 1. **How to use Obsidian to browse your vault.** 10 minutes. Read this first.
 2. **How to feed your shop's existing materials into the vault.** Seeding. About an hour the first week.
-3. **How to set up your daily morning briefing.** The `/os-operator` skill. 5-10 minute setup, then automatic.
-4. **How to keep the vault healthy over time.** The `/os-optimizer` skill. 15 minutes once a month.
+3. **How to set up your daily morning briefing.** The `/bp-operator` skill. 5-10 minute setup, then automatic.
+4. **How to keep the vault healthy over time.** The `/bp-optimizer` skill. 15 minutes once a month.
 
 You can skip around, but section 1 is worth reading first if you've never used Obsidian.
 
@@ -147,7 +147,7 @@ You don't need to memorize this table. Just drop files in `Raw/` and let Claude 
 After you have dropped some files in `Raw/`, open Claude Code in your vault folder. Type the slash command:
 
 ```
-/os-digest
+/bp-digest
 ```
 
 That's it. One command, easy to remember. It runs the full workflow: reads every file in `Raw/`, classifies each one, writes a structured note in the right vault folder, moves the original to `Raw/processed/`, and gives you a report like:
@@ -176,7 +176,7 @@ That gives Claude Code enough context to be useful for daily questions. You can 
 
 ---
 
-## 3. Set up your daily morning briefing with `/os-operator`
+## 3. Set up your daily morning briefing with `/bp-operator`
 
 The operator is the autonomous part of Shop OS. You set it up once. After that, it runs on a schedule and writes a fresh briefing to your `Daily/` folder every morning before you walk into the shop.
 
@@ -201,7 +201,7 @@ You read this with your coffee and know what your day looks like before you set 
 In Claude Code, type:
 
 ```
-/os-operator
+/bp-operator
 ```
 
 The skill asks you a few questions:
@@ -241,7 +241,7 @@ The next morning's briefing reflects the change.
 
 ---
 
-## 4. Keep the vault healthy with `/os-optimizer`
+## 4. Keep the vault healthy with `/bp-optimizer`
 
 Over time your vault accumulates clutter: stale notes from finished jobs, dead links to files you moved, half-written drafts you never finished. The optimizer cleans this up.
 
@@ -252,7 +252,7 @@ It is not a daily tool. Run it **once a week**.
 In Claude Code, type:
 
 ```
-/os-optimizer
+/bp-optimizer
 ```
 
 The optimizer scans every note in your vault against seven quality frameworks:
@@ -278,7 +278,7 @@ By now, the vault knows a lot about your shop. The next step is letting your tea
 Shop OS gives you two interfaces, each pointed at a different audience:
 
 - **Shop OS Chat** is the read-only browser chat. It's for **employees**, anyone in the shop who needs an answer from the vault but should not be editing files, scheduling routines, or running maintenance skills. They double-click the launcher, ask in plain language, and get answers grounded in your business data. Nothing they do can change the vault.
-- **Claude Code** is the full-access terminal interface. It's for **you and any designated operators**, the people who run digests, schedule the morning briefing, optimize the vault, edit `Context/`, and trigger the write-side skills (`/os-digest`, `/os-operator`, `/os-optimizer`). Full read, write, and execute against the vault.
+- **Claude Code** is the full-access terminal interface. It's for **you and any designated operators**, the people who run digests, schedule the morning briefing, optimize the vault, edit `Context/`, and trigger the write-side skills (`/bp-digest`, `/bp-operator`, `/bp-optimizer`). Full read, write, and execute against the vault.
 
 Same vault, same context, two doors. The team gets the safe door. You and your trusted operators get the master key.
 
@@ -328,7 +328,7 @@ It cannot:
 - Create new notes
 - Edit existing notes
 - Delete anything
-- Run skills like `/os-digest`, `/os-operator`, or `/os-optimizer`
+- Run skills like `/bp-digest`, `/bp-operator`, or `/bp-optimizer`
 
 If a team member asks it to "add a note about today's call," it will politely decline and point them to ask you. This is on purpose. Your team gets fast answers with zero risk of accidentally changing customer records, supplier lists, or contracts. You stay the one with write access via Claude Code.
 
@@ -362,7 +362,6 @@ When you're ready to go further, ask about these add-ons:
 
 | Add-on | What it does | When to ask about it |
 |---|---|---|
-| **Shop OS Pro** | Adds `os-evolver` (the vault gets smarter automatically) and `team-os` (multi-user vault) | When your shop has 3+ people sharing the vault |
 | **Marketing Pack** | 40+ pre-wired marketing skills (copy, social, email, ads, CRO, launches) | When you want to grow your shop's online presence |
 | **SEO Pack** | Get your shop ranking for "custom cabinets [your city]" | When you want more inbound leads |
 | **Sales Pack** | CRM prospect mining, cold email, lead qualification | When you want to optimize handling leads |

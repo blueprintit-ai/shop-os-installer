@@ -244,7 +244,7 @@ Welcome to your Shop OS vault. This is the operating system Blueprint IT install
 
 To finish onboarding, run the following slash command inside Claude Code:
 
-\`/obsidian:os-setup\`
+\`/bp-setup\`
 
 This walks you through personalizing the vault for your shop: name, owner, key staff,
 services, daily routines, and more.
@@ -290,7 +290,7 @@ appropriate folder, and moves the original to \`Raw/processed/\` so the inbox st
 Open Claude Code in this vault and type the slash command:
 
 \`\`\`
-/os-digest
+/bp-digest
 \`\`\`
 
 One command, easy to remember. Claude does the rest: reads each file, classifies it,
@@ -365,11 +365,10 @@ function unwrapShellPath(p) {
     (s.startsWith('"') && s.endsWith('"')) ||
     (s.startsWith("'") && s.endsWith("'"));
   if (wasQuoted) {
-    // Windows "Copy as path" and PowerShell drag wrap in quotes — keep backslashes
-    // as directory separators.
     s = s.slice(1, -1);
-  } else {
+  } else if (process.platform !== "win32") {
     // Mac Terminal drag uses backslash to escape spaces and special chars.
+    // On Windows, backslashes are path separators — leave them alone.
     s = s.replace(/\\(.)/g, "$1");
   }
   return s.trim();
@@ -635,7 +634,7 @@ async function main() {
   print(`  1. Open the ${cyan("Claude Code")} app you installed (Applications / Start menu)`);
   print(`  2. Pick this folder when it asks which to open:`);
   print(`     ${cyan(vaultPath)}`);
-  print(`  3. In the Claude prompt, run ${cyan("/obsidian:os-setup")} to personalize your vault`);
+  print(`  3. Type ${cyan("/bp-setup")} to personalize your vault`);
   print(`  4. Walk through the onboarding interview`);
   print("");
   print(`  5. To let your team chat with the vault (read-only),`);

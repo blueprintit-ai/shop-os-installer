@@ -306,6 +306,8 @@ pre.ascii-diagram {
   margin-top: 10pt;
   line-height: 1.5;
   font-family: Georgia, serif;
+  page-break-inside: avoid;
+  break-inside: avoid;
 }
 
 /* ---- Page break helpers ---- */
@@ -687,8 +689,8 @@ pre.ascii-diagram {
 <ol>
 <li><strong>How to use Obsidian to browse your vault.</strong> 10 minutes. Read this first.</li>
 <li><strong>How to feed your shop's existing materials into the vault.</strong> Seeding. About an hour the first week.</li>
-<li><strong>How to set up your daily morning briefing.</strong> The <code>/os-operator</code> skill. 5-10 minute setup, then automatic.</li>
-<li><strong>How to keep the vault healthy over time.</strong> The <code>/os-optimizer</code> skill. 15 minutes once a month.</li>
+<li><strong>How to set up your daily morning briefing.</strong> The <code>/bp-operator</code> skill. 5-10 minute setup, then automatic.</li>
+<li><strong>How to keep the vault healthy over time.</strong> The <code>/bp-optimizer</code> skill. 15 minutes once a month.</li>
 </ol>
 <p>You can skip around, but section 1 is worth reading first if you've never used Obsidian.</p>
 <hr>
@@ -832,7 +834,7 @@ pre.ascii-diagram {
 <p>You don't need to memorize this table. Just drop files in <code>Raw/</code> and let Claude decide.</p>
 <h3>How to actually trigger the digest</h3>
 <p>After you have dropped some files in <code>Raw/</code>, open Claude Code in your vault folder. Type the slash command:</p>
-<pre><code>/os-digest
+<pre><code>/bp-digest
 </code></pre>
 <p>That's it. One command, easy to remember. It runs the full workflow: reads every file in <code>Raw/</code>, classifies each one, writes a structured note in the right vault folder, moves the original to <code>Raw/processed/</code>, and gives you a report like:</p>
 <pre><code>Processed 4 files:
@@ -853,7 +855,7 @@ pre.ascii-diagram {
 </ul>
 <p>That gives Claude Code enough context to be useful for daily questions. You can always add more later.</p>
 <hr>
-<h2 data-anchor="§ 03">3. Set up your daily morning briefing with <code>/os-operator</code></h2>
+<h2 data-anchor="§ 03">3. Set up your daily morning briefing with <code>/bp-operator</code></h2>
 <p>The operator is the autonomous part of Shop OS. You set it up once. After that, it runs on a schedule and writes a fresh briefing to your <code>Daily/</code> folder every morning before you walk into the shop.</p>
 <p>A typical morning briefing for a cabinet shop:</p>
 <blockquote>
@@ -867,7 +869,7 @@ pre.ascii-diagram {
 <p>You read this with your coffee and know what your day looks like before you set foot in the shop.</p>
 <h3>Setup</h3>
 <p>In Claude Code, type:</p>
-<pre><code>/os-operator
+<pre><code>/bp-operator
 </code></pre>
 <p>The skill asks you a few questions:</p>
 <table>
@@ -910,12 +912,12 @@ pre.ascii-diagram {
 </code></pre>
 <p>The next morning's briefing reflects the change.</p>
 <hr>
-<h2 data-anchor="§ 04">4. Keep the vault healthy with <code>/os-optimizer</code></h2>
+<h2 data-anchor="§ 04">4. Keep the vault healthy with <code>/bp-optimizer</code></h2>
 <p>Over time your vault accumulates clutter: stale notes from finished jobs, dead links to files you moved, half-written drafts you never finished. The optimizer cleans this up.</p>
 <p>It is not a daily tool. Run it <strong>once a week</strong>.</p>
 <h3>What it does</h3>
 <p>In Claude Code, type:</p>
-<pre><code>/os-optimizer
+<pre><code>/bp-optimizer
 </code></pre>
 <p>The optimizer scans every note in your vault against seven quality frameworks:</p>
 <table>
@@ -971,7 +973,7 @@ pre.ascii-diagram {
 <p>Shop OS gives you two interfaces, each pointed at a different audience:</p>
 <ul>
 <li><strong>Shop OS Chat</strong> is the read-only browser chat. It's for <strong>employees</strong>, anyone in the shop who needs an answer from the vault but should not be editing files, scheduling routines, or running maintenance skills. They double-click the launcher, ask in plain language, and get answers grounded in your business data. Nothing they do can change the vault.</li>
-<li><strong>Claude Code</strong> is the full-access terminal interface. It's for <strong>you and any designated operators</strong>, the people who run digests, schedule the morning briefing, optimize the vault, edit <code>Context/</code>, and trigger the write-side skills (<code>/os-digest</code>, <code>/os-operator</code>, <code>/os-optimizer</code>). Full read, write, and execute against the vault.</li>
+<li><strong>Claude Code</strong> is the full-access terminal interface. It's for <strong>you and any designated operators</strong>, the people who run digests, schedule the morning briefing, optimize the vault, edit <code>Context/</code>, and trigger the write-side skills (<code>/bp-digest</code>, <code>/bp-operator</code>, <code>/bp-optimizer</code>). Full read, write, and execute against the vault.</li>
 </ul>
 <p>Same vault, same context, two doors. The team gets the safe door. You and your trusted operators get the master key.</p>
 <h3>What it is</h3>
@@ -1013,7 +1015,7 @@ pre.ascii-diagram {
 <li>Create new notes</li>
 <li>Edit existing notes</li>
 <li>Delete anything</li>
-<li>Run skills like <code>/os-digest</code>, <code>/os-operator</code>, or <code>/os-optimizer</code></li>
+<li>Run skills like <code>/bp-digest</code>, <code>/bp-operator</code>, or <code>/bp-optimizer</code></li>
 </ul>
 <p>If a team member asks it to "add a note about today's call," it will politely decline and point them to ask you. This is on purpose. Your team gets fast answers with zero risk of accidentally changing customer records, supplier lists, or contracts. You stay the one with write access via Claude Code.</p>
 <h3>Make the <code>Chats/</code> folder a weekly habit</h3>
@@ -1046,11 +1048,6 @@ pre.ascii-diagram {
 </tr>
 </thead>
 <tbody>
-<tr>
-<td><strong>Shop OS Pro</strong></td>
-<td>Adds <code>os-evolver</code> (the vault gets smarter automatically) and <code>team-os</code> (multi-user vault)</td>
-<td>When your shop has 3+ people sharing the vault</td>
-</tr>
 <tr>
 <td><strong>Marketing Pack</strong></td>
 <td>40+ pre-wired marketing skills (copy, social, email, ads, CRO, launches)</td>

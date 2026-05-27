@@ -41,7 +41,7 @@ The installer (run directly or via the setup scripts above):
 5. **Vault**: creates a Shop OS vault folder (default `~/Shop OS Vault`) with a starter `CLAUDE.md`
 6. **Per-vault config**: writes `<vault>/.claude/settings.json` with `enabledPlugins` set for obsidian + superpowers
 7. **License record**: saves `~/.shopos/license.json` (chmod 600) for downstream skill validation
-8. **Next steps**: prints `cd` command and the `/obsidian:os-setup` slash command to run
+8. **Next steps**: prints `cd` command and the `/bp-setup` slash command to run
 
 Zero npm dependencies. Uses only Node 18+ built-ins (`fetch`, `readline`, `fs`).
 

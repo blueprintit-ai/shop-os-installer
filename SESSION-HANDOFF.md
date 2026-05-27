@@ -14,16 +14,16 @@ End-of-session snapshot. Read this in the next chat to pick up where we left off
 
 In rough order, everything from the Karpathy/Nodus knowledge-graph engine through to the Shop OS Foundation product:
 
-1. **Knowledge-graph engine for any vault.** Lives in `Projects/blueprint-os/` (the os-evolver source). Phase 1 (graph + diagnostics), Phase 1A (mechanical wikilink enricher), Phase 1B (LLM enricher), Phase 2 (vault audit), Phase 3 (note drafter for dangling refs), Phase 4 (bridge questions for cluster gaps), Phase 5 (website ingester). All Python-deterministic where possible. LLM portions refactored to be subscription-only (no Anthropic API key required); agent reads a prep file and processes it.
-2. **/os-evolver skill** in the obsidian plugin wraps the engine. Lives in `BenAI/obsidian/skills/os-evolver/`. Currently held out of Shop OS Foundation as a Pro-tier feature.
+1. **Knowledge-graph engine for any vault.** Lives in `Projects/blueprint-os/` (the bp-evolver source). Phase 1 (graph + diagnostics), Phase 1A (mechanical wikilink enricher), Phase 1B (LLM enricher), Phase 2 (vault audit), Phase 3 (note drafter for dangling refs), Phase 4 (bridge questions for cluster gaps), Phase 5 (website ingester). All Python-deterministic where possible. LLM portions refactored to be subscription-only (no Anthropic API key required); agent reads a prep file and processes it.
+2. **/bp-evolver skill** in the obsidian plugin wraps the engine. Lives in `BenAI/obsidian/skills/bp-evolver/`. Currently held out of Shop OS Foundation as a Pro-tier feature.
 3. **End-to-end deployment on CDF Vault** (`AI Clients/Capital Discount Furniture/CDF Vault/`). 7 edges -> 53 edges (7.5x), 89% -> 52% orphan rate, 0 dangling refs, 0 critical findings, STAR_TOPOLOGY resolved. Loop demonstrated on a real paying client vault. Detail: see `Intelligence/market/blueprintit-site-self-audit.md` and the CDF vault's own `Reports/knowledge-graph/`.
-4. **Shop OS Foundation productization.** 28-skill bundle: 4 obsidian (`os-setup`, `assistant`, `os-operator`, `os-optimizer`), 10 meta, 14 superpowers (auto-installed for `/os-operator` scheduling). Plus `os-digest` as of obsidian v3.11.0.
+4. **Shop OS Foundation productization.** 28-skill bundle: 4 obsidian (`bp-setup`, `assistant`, `bp-operator`, `bp-optimizer`), 10 meta, 14 superpowers (auto-installed for `/bp-operator` scheduling). Plus `bp-digest` as of obsidian v3.11.0.
 5. **License server live.** Cloudflare Worker at `shop-os-license-server.glenn-15d.workers.dev`. KV-backed. Free tier.
 6. **Admin dashboard live.** Same Worker, `/admin` route. Browser-based, manages licenses, generates per-customer welcome email templates.
 7. **npx installer live.** Public repo `blueprintit-ai/shop-os-installer`, currently v0.1.2. One command: `npx -y --package=github:blueprintit-ai/shop-os-installer shop-os-install`.
 8. **Customer-facing PDFs.** Blueprint IT branded (parchment, section symbols, monospace anchors). Built via Chrome headless from clean markdown sources. Lives in `dist/`.
 9. **End-to-end install validated on a Windows mini PC.** Glenn ran the full pipeline on a fresh machine; the full chain works.
-10. **`/os-digest` skill** (obsidian v3.11.0) replaces a long natural-language prompt with one slash command for processing the `Raw/` inbox.
+10. **`/bp-digest` skill** (obsidian v3.11.0) replaces a long natural-language prompt with one slash command for processing the `Raw/` inbox.
 
 ## Where everything lives
 
@@ -74,5 +74,5 @@ Memory will also auto-load the Shop OS infrastructure / URLs / open-loops entrie
 - All LLM work in customer-facing skills runs through the Claude Code subscription. Never reintroduce direct `ANTHROPIC_API_KEY` requirements in skills shipped to customers.
 - Never use em dashes (Blueprint IT brand rule). Periods, commas, colons.
 - Customer-facing PDFs use the brand template in `Projects/shop-os-installer/scripts/build-pdfs.py`. Parchment background, monospace section anchors, no em dashes.
-- Foundation = subscription-only. Pro = adds os-evolver + team-os. Add-on packs = marketing/SEO/ads/sales themed bundles.
-- Customer-facing slash commands use bare form: `/os-setup`, `/os-operator`, `/os-optimizer`, `/os-digest`. Not the `/obsidian:` prefix form.
+- Foundation = subscription-only. Pro = adds bp-evolver + team-os. Add-on packs = marketing/SEO/ads/sales themed bundles.
+- Customer-facing slash commands use bare form: `/bp-setup`, `/bp-operator`, `/bp-optimizer`, `/bp-digest`. Not the `/obsidian:` prefix form.

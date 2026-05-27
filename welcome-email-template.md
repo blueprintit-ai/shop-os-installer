@@ -116,7 +116,7 @@ you the exact next steps. They are:
 3. RUN THE ONBOARDING INTERVIEW
    At the Claude prompt, type:
 
-       /os-setup
+       /bp-setup
 
    This kicks off a 10-minute onboarding interview that asks about your
    shop name, owner, key staff, services, and daily routines. As you
