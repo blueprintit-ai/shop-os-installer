@@ -47,6 +47,20 @@ and your team uses it every day, you can upgrade to the Max plan
 (~$100/month) for higher usage limits. Start with Pro.
 
 
+STEP 0 — Set up Claude Code Terminal (first-time only)
+────────────────────────────────────────────────────────────
+
+If you have never used Claude Code Terminal on this computer, watch
+this 60-second walkthrough first:
+
+    {{VIDEO_URL}}
+
+It covers signing in with your Claude account through your browser and
+picking a color theme, so the install command below runs end-to-end
+without stopping for setup screens. If you already use Claude Code on
+this machine, skip ahead.
+
+
 INSTALL SHOP OS — one command, ~5 minutes
 ────────────────────────────────────────────────────────────
 
@@ -84,49 +98,19 @@ internet speed.
 AFTER INSTALL — your first session
 ────────────────────────────────────────────────────────────
 
-The installer will print "✓ Shop OS installation complete!" and tell
-you the exact next steps. They are:
+The installer prints "✓ Shop OS installation complete!" and launches
+Claude Code Terminal into your new vault automatically. At the Claude
+prompt, type:
 
-1. OPEN YOUR VAULT IN OBSIDIAN
-   Launch Obsidian. Click "Open folder as vault" (you may need to click
-   the small folder icon in the corner first to access this option).
-   Select the "Shop OS Vault" folder the installer created in your
-   home directory. Click Open.
+    /bp-setup
 
-   You'll now see your vault in Obsidian's main window. There's not much
-   in it yet — just a CLAUDE.md file and a Raw/ folder. That's about to
-   change.
-
-2. OPEN YOUR VAULT IN CLAUDE CODE
-   Launch the Claude Code app you installed in step 3 of the
-   prerequisites (Mac: Applications folder. Windows: Start menu,
-   pinned as "Claude Code").
-
-   When the app opens, it shows a folder picker. Sometimes that is a
-   list of recent folders, sometimes an "Open folder" button. Pick the
-   "Shop OS Vault" folder in your home directory. Same folder you just
-   opened in Obsidian.
-
-   Claude Code remembers your choice. Next time you launch the app it
-   opens straight into your vault. No terminal, no commands to memorize.
-
-   You'll see a chat panel waiting for input. That's where you talk
-   to Claude about your shop.
-
-3. RUN THE ONBOARDING INTERVIEW
-   At the Claude prompt, type:
-
-       /bp-setup
-
-   This kicks off a 10-minute onboarding interview that asks about your
-   shop name, owner, key staff, services, and daily routines. As you
-   answer, Obsidian's file list (left sidebar) will fill up with the
-   notes Claude is creating for you. Watch your vault populate in
-   real time.
+This kicks off a 10-minute onboarding interview that asks about your
+shop name, owner, key staff, services, and daily routines.
 
 By the end of the interview, you'll have a configured Shop OS vault
 ready to use. We'll send a follow-up email with a "first week" guide
-that walks you through what to do next.
+that walks you through what to do next, including how to open the
+vault in Obsidian to browse and edit notes.
 
 
 SHOP OS CHAT, FOR YOUR TEAM
@@ -223,7 +207,7 @@ Drop this into a rich-text mailer (Gmail compose in rich mode, ConvertKit, Beehi
 
 <tr><td style="padding:28px 0 0;">
 <div style="font-family:Menlo,'SF Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:2.2px;color:#1c6ea4;border-top:1px solid #1c6ea4;padding-top:14px;margin-bottom:6px;">§ 02 &nbsp;·&nbsp; Install Shop OS</div>
-<p style="font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#0c1e2f;margin:8px 0 12px;">First, sign up for Claude Pro at <a href="https://claude.ai" style="color:#1c6ea4;text-decoration:underline;text-underline-offset:2px;">claude.ai</a> (~$20/month from Anthropic). Then run these commands:</p>
+<p style="font-family:Georgia,serif;font-size:15px;line-height:1.55;color:#0c1e2f;margin:8px 0 12px;">First, sign up for Claude Pro at <a href="https://claude.ai" style="color:#1c6ea4;text-decoration:underline;text-underline-offset:2px;">claude.ai</a> (~$20/month from Anthropic). New to Claude Code Terminal? Watch this 60-second setup walkthrough first: <a href="{{VIDEO_URL}}" style="color:#1c6ea4;text-decoration:underline;text-underline-offset:2px;">{{VIDEO_URL}}</a>. Then run these commands:</p>
 <p style="font-family:Georgia,serif;font-size:12px;font-weight:600;color:#1c6ea4;margin:12px 0 6px;">Mac (in Terminal), copy and paste all three lines:</p>
 <div style="background:#ede6d4;border-left:3px solid #1c6ea4;padding:12px 12px;margin:0 0 16px;font-family:Menlo,'SF Mono',monospace;font-size:10px;color:#0c1e2f;line-height:1.5;word-break:break-all;">curl -fsSL https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-macos.sh -o setup.sh<br/>chmod +x setup.sh<br/>./setup.sh</div>
 <p style="font-family:Georgia,serif;font-size:12px;font-weight:600;color:#1c6ea4;margin:12px 0 6px;">Windows (in PowerShell as Administrator), copy and paste all three lines:</p>

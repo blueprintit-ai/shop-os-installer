@@ -25,6 +25,10 @@ Save it somewhere safe (1Password, a sticky note, a folder in your inbox). You w
 
 If not, sign up at **https://claude.ai** and pick the **Pro** plan (~$20/month from Anthropic, not from us). Pro is the right starting point for Shop OS. As your Shop Brain grows and your team uses it every day, you can upgrade to the **Max** plan (~$100/month) for higher usage limits. Start with Pro.
 
+## Step 0: Set up Claude Code Terminal (first-time only)
+
+If you have never used Claude Code Terminal on this computer, watch this 60-second walkthrough first: **{{VIDEO_URL}}**. It covers signing in with your Claude account through your browser and picking a color theme, so the one-command install below runs end-to-end without stopping for setup screens. If you already use Claude Code on this machine, skip ahead.
+
 ## Install Shop OS: One Command
 
 Open Terminal (Mac: press Cmd+Space, type `terminal`, press Enter) or PowerShell (Windows: press the Windows key, type `powershell`, press Enter, then right-click and choose **Run as administrator**).
@@ -55,27 +59,13 @@ The whole thing takes about 5 minutes depending on your internet speed.
 
 ## After install: your first session
 
-The installer prints `✓ Shop OS installation complete!` along with the exact next steps. Here they are spelled out.
-
-### Step 1. Open your vault in Obsidian
-
-Launch Obsidian. Click "Open folder as vault". You may need to click the small folder icon in the corner first to access this option.
-
-Select the "Shop OS Vault" folder the installer created in your home directory. Click Open.
-
-You will now see your vault in Obsidian's main window. There is not much in it yet, just a `CLAUDE.md` file and a `Raw/` folder. That is about to change.
-
-### Step 2. Run the onboarding interview
-
-At the Claude prompt, type:
+The installer prints `✓ Shop OS installation complete!` and launches Claude Code into your new vault automatically. At the Claude prompt, type:
 
 ```
 /bp-setup
 ```
 
-This kicks off a 10-minute onboarding interview that asks about your shop name, owner, key staff, services, and daily routines. As you answer, Obsidian's file list on the left side will fill up with the notes Claude is creating for you. You can watch your vault populate in real time.
-
-By the end of the interview, you have a configured Shop OS vault ready to use. We send a follow-up document called "Your First Week with Shop OS" that walks you through what to do next.
+This kicks off a 10-minute onboarding interview that asks about your shop name, owner, key staff, services, and daily routines. By the end of the interview, you have a configured Shop OS vault ready to use. We send a follow-up document called "Your First Week with Shop OS" that walks you through what to do next, including how to open the vault in Obsidian to browse and edit notes.
 
 ## Letting your team use Shop OS Chat
 

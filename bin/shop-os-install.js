@@ -140,7 +140,7 @@ async function validateLicense(key) {
   const url = `${LICENSE_SERVER}/validate?key=${encodeURIComponent(key)}`;
   let resp;
   try {
-    resp = await fetch(url, { headers: { "user-agent": "shop-os-installer/0.5.2" } });
+    resp = await fetch(url, { headers: { "user-agent": "shop-os-installer/0.5.3" } });
   } catch (e) {
     return { ok: false, error: `network: ${e.message}` };
   }
@@ -297,6 +297,45 @@ function ensurePluginsInstalled(claudeRoot) {
   return { queued, total: PLUGINS_TO_ENABLE.length };
 }
 
+// Vault-scoped permission allowlist. Non-technical Shop OS customers were hitting
+// constant tool-permission prompts during /bp-setup (~50+ Read/Write/Bash dialogs
+// per onboarding run). These patterns pre-approve the tool surface bp-setup and
+// the daily Shop OS flow actually use, scoped to this vault's project settings —
+// not the user's global settings. Risk model: customer's own paid Claude
+// subscription, own machine, own data; we trade some inbound-injection surface
+// for a workable UX. Writes/edits are intentionally bounded to the vault path.
+function buildPermissionAllowList(vaultPath) {
+  return [
+    // Read-side: bp-setup reads reference templates from the marketplace clone
+    // (~/.claude/plugins/...) AND any context files the user drops in. Read,
+    // Glob, and Grep are low-risk; allow them broadly.
+    "Read",
+    "Glob",
+    "Grep",
+    // Write-side: scope to the vault directory so Claude can't be coaxed into
+    // writing outside it.
+    `Write(${vaultPath}/**)`,
+    `Edit(${vaultPath}/**)`,
+    // Bash: bp-setup creates directories, chmods hooks, finds reference files.
+    // Restrict to the specific subcommands the skill actually invokes.
+    "Bash(mkdir:*)",
+    "Bash(chmod:*)",
+    "Bash(find:*)",
+    "Bash(ls:*)",
+    "Bash(cat:*)",
+    "Bash(grep:*)",
+    "Bash(echo:*)",
+    "Bash(test:*)",
+    "Bash(touch:*)",
+    // Network: bp-setup's Phase B+ fetches links the user pastes (LinkedIn,
+    // About pages, brand guidelines, etc.).
+    "WebFetch",
+    "WebSearch",
+    // Plan tool: surfaced by some Superpowers skills, no need to prompt.
+    "TodoWrite",
+  ];
+}
+
 function enableForVault(vaultPath) {
   const settingsPath = join(vaultPath, ".claude", "settings.json");
   const settings = readJSON(settingsPath, {});
@@ -304,8 +343,55 @@ function enableForVault(vaultPath) {
   for (const id of PLUGINS_TO_ENABLE) {
     settings.enabledPlugins[id] = true;
   }
+  // Merge (don't clobber) any existing permission allowlist a re-install would
+  // have written, then re-add ours. De-dupe by entry string.
+  if (!settings.permissions) settings.permissions = {};
+  const existing = Array.isArray(settings.permissions.allow)
+    ? settings.permissions.allow
+    : [];
+  const ours = buildPermissionAllowList(vaultPath);
+  settings.permissions.allow = Array.from(new Set([...existing, ...ours]));
   writeJSON(settingsPath, settings);
   return settingsPath;
+}
+
+// Pre-empt Claude Code's first-run wizard (theme picker, terminal-setup prompt,
+// onboarding screens) by writing the "already onboarded" flags BEFORE the
+// setup script launches `claude`. The auth/sign-in flow is independent and
+// still happens — we can't bypass that and don't try. Safe to run repeatedly:
+// merges with any existing config rather than overwriting.
+function seedClaudeCodeDefaults(claudeRoot) {
+  const seeded = { onboardingFlags: false, theme: false };
+
+  // ~/.claude.json holds Claude Code's user-state (numStartups, hasCompletedOnboarding,
+  // anonymousId, etc.). Live next to ~/.claude/, not inside it.
+  const userStatePath = join(homedir(), ".claude.json");
+  const userState = readJSON(userStatePath, {});
+  if (!userState.hasCompletedOnboarding) {
+    userState.hasCompletedOnboarding = true;
+    if (!userState.lastOnboardingVersion) userState.lastOnboardingVersion = "1.0.30";
+    seeded.onboardingFlags = true;
+    try {
+      writeFileSync(userStatePath, JSON.stringify(userState, null, 2) + "\n", "utf8");
+    } catch {
+      // best-effort; permission errors here aren't worth blocking the install
+    }
+  }
+
+  // ~/.claude/settings.json holds user-scope settings (theme, permissions, etc.)
+  const settingsPath = join(claudeRoot, "settings.json");
+  const settings = readJSON(settingsPath, {});
+  if (!settings.theme) {
+    settings.theme = "dark";
+    seeded.theme = true;
+    try {
+      writeJSON(settingsPath, settings);
+    } catch {
+      // best-effort
+    }
+  }
+
+  return seeded;
 }
 
 function createVaultClaudeMd(vaultPath, license) {
@@ -696,15 +782,25 @@ async function main() {
   if (rawResult.created) ok("Raw/ inbox + Raw/processed/ created (drop materials in Raw/ to seed the vault)");
   else info("Raw/ inbox already present (left untouched)");
 
-  print(dim("  [4/6] Enabling plugins for this vault"));
+  print(dim("  [4/7] Enabling plugins + permission allowlist for this vault"));
   const settingsPath = enableForVault(vaultPath);
   ok(`Wrote ${settingsPath.replace(homedir(), "~")}`);
+  info("Pre-approved Read/Write/Edit/Bash patterns so /bp-setup runs without permission prompts");
 
-  print(dim("  [5/6] Saving license"));
+  print(dim("  [5/7] Pre-seeding Claude Code defaults"));
+  const seeded = seedClaudeCodeDefaults(claudeRoot);
+  if (seeded.onboardingFlags || seeded.theme) {
+    if (seeded.onboardingFlags) ok("Marked Claude Code onboarding complete (skips theme/terminal wizard on first launch)");
+    if (seeded.theme) ok("Set Claude Code theme to dark");
+  } else {
+    info("Claude Code already configured — left existing settings untouched");
+  }
+
+  print(dim("  [6/7] Saving license"));
   const licensePath = saveLicenseFile(license);
   ok(`License saved to ${licensePath.replace(homedir(), "~")} (chmod 600)`);
 
-  print(dim("  [6/6] Installing Shop OS Chat launcher"));
+  print(dim("  [7/7] Installing Shop OS Chat launcher"));
   const launcherPath = writeChatLauncher(vaultPath);
   ok(`Wrote ${launcherPath.replace(homedir(), "~")}`);
 
