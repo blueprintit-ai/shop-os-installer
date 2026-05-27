@@ -27,7 +27,7 @@ Save it somewhere safe (1Password, a sticky note, a folder in your inbox). You w
 
 If not, sign up at **https://claude.ai** and pick the **Pro** plan (~$20/month from Anthropic, not from us). Pro is the right starting point for Shop OS. As your Shop Brain grows and your team uses it every day, you can upgrade to the **Max** plan (~$100/month) for higher usage limits. Start with Pro.
 
-## Install Shop OS: one command
+## Install Shop OS: One Command
 
 Open Terminal (Mac: press Cmd+Space, type `terminal`, press Enter) or PowerShell (Windows: press the Windows key, type `powershell`, press Enter, then right-click and choose **Run as administrator**).
 
