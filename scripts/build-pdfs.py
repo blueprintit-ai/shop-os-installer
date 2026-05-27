@@ -356,7 +356,8 @@ def annotate_h2_with_section_numbers(html: str) -> str:
     return re.sub(r"<h2>", replace, html)
 
 
-def wrap_in_template(body_html: str, title: str, doc_number: str, subtitle: str) -> str:
+def wrap_in_template(body_html: str, title: str, doc_number: str, subtitle: str, svg_content: str = "") -> str:
+    svg_html = svg_content if svg_content else '<img src="../assets/node-cloud.svg" alt="" />'
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -368,7 +369,7 @@ def wrap_in_template(body_html: str, title: str, doc_number: str, subtitle: str)
 
 <div class="cover">
   <div class="cover-art">
-    <img src="../assets/node-cloud.svg" alt="" />
+    {svg_html}
   </div>
   <div class="cover-meta">
     <span class="wordmark">Blueprint<em>IT</em><span class="wordmark-tag">Schematics for the AI-native business</span></span>
@@ -403,7 +404,11 @@ def md_to_pdf(src_md: Path, out_pdf: Path, title: str, doc_number: str, subtitle
     html_body = render_markdown(raw)
     html_body = annotate_h2_with_section_numbers(html_body)
 
-    full_html = wrap_in_template(html_body, title=title, doc_number=doc_number, subtitle=subtitle)
+    # Inline SVG to avoid path resolution issues in template HTML
+    svg_file = ROOT / "assets" / "node-cloud.svg"
+    svg_content = svg_file.read_text(encoding="utf-8") if svg_file.exists() else ""
+
+    full_html = wrap_in_template(html_body, title=title, doc_number=doc_number, subtitle=subtitle, svg_content=svg_content)
     html_path = out_pdf.with_suffix(".html")
     html_path.write_text(full_html, encoding="utf-8")
 
