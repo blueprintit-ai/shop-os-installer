@@ -255,7 +255,7 @@ Blueprint IT &nbsp;·&nbsp; Shop OS Foundation &nbsp;·&nbsp; <a href="https://b
 
 ## Notes for whoever sends this
 
-- **Customize per customer** if you want extra warmth — reference what they ordered, mention your discovery call, etc. The template above is the floor, not the ceiling.
+- **Customize per customer** if you want extra warmth. Reference what they ordered, mention your discovery call, etc. The template above is the floor, not the ceiling.
 - **The license key appears TWICE** in the email by design. Customers lose things; redundancy in two places helps.
 - **The 1-business-hour SLA in the closing matches your [[Context/organization|operator response SLA]].** Don't promise faster.
 - **The "common first-time issues" section is preempting the most likely support tickets.** Add to it as you see real customer questions.
@@ -264,3 +264,5 @@ Blueprint IT &nbsp;·&nbsp; Shop OS Foundation &nbsp;·&nbsp; <a href="https://b
 
 - This file: `Projects/shop-os-installer/welcome-email-template.md` (you can edit anytime)
 - The admin dashboard at `https://shop-os-license-server.glenn-15d.workers.dev/admin` generates a customized version of this email per-customer on the fly (click "Show email template" after issuing a license). That generator is in `Projects/shop-os-license-server/src/admin-html.ts` if you want to tweak the inline version.
+
+<span style="background-color:#F4EFE3; color:#020309; padding:2px 8px; border-radius:3px; font-size:0.85em;">🤖 Blueprint IT Vault Operator, last edited: 2026-05-28T00:00:00Z</span>
