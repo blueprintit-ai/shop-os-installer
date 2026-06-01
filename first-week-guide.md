@@ -10,12 +10,13 @@ tags: [shop-os, customer-onboarding, first-week]
 
 You finished the install and the onboarding interview. The vault is in Obsidian. Now what?
 
-This guide covers the four things you need to know to start running your shop on Shop OS:
+This guide covers the five things you need to know to start running your shop on Shop OS:
 
 1. **How to use Obsidian to browse your vault.** 10 minutes. Read this first.
 2. **How to feed your shop's existing materials into the vault.** Seeding. About an hour the first week.
 3. **How to set up your daily morning briefing.** The `/bp-operator` skill. 5-10 minute setup, then automatic.
 4. **How to keep the vault healthy over time.** The `/bp-optimizer` skill. 15 minutes once a month.
+5. **How to keep your skills current.** One command, a couple of times a year.
 
 You can skip around, but section 1 is worth reading first if you've never used Obsidian.
 
@@ -123,11 +124,11 @@ Shop OS Vault/
 
 Anything readable. Claude Code handles:
 
-- **PDFs** (contracts, price lists, invoices, scans of paper records)
-- **Word docs and spreadsheets** (Excel, .docx)
+- **PDFs** (contracts, price lists, invoices; text-based PDFs convert natively; image-only scans are flagged for manual review)
+- **Excel spreadsheets** (.xlsx) and **Word docs** (.docx), converted natively with no extra software needed
 - **Images** (photos, sketches, screenshots)
 - **Audio recordings** (phone calls, voice memos; gets transcribed first via the `audio-transcriber` skill)
-- **Plain text and Markdown**
+- **Plain text, CSV, and Markdown**
 - **Web pages saved as PDF** (right-click → "Save as PDF" works in most browsers)
 
 ### What Claude does with each type
@@ -269,7 +270,19 @@ The optimizer scans every note in your vault against seven quality frameworks:
 
 ---
 
-## 5. Let your team use the vault through Shop OS Chat
+## 5. Keep your skills current
+
+Blueprint IT ships improvements to the Shop OS skills regularly. Your skills do not update automatically. Run this command in Terminal a couple of times a year (or any time Blueprint IT tells you there is an update):
+
+```
+npx -y --package=@blueprintit/shop-os-install shop-os-update
+```
+
+You can run it from anywhere. It takes under a minute and does not touch your vault, license, or settings. Restart Claude Code after it finishes.
+
+---
+
+## 6. Let your team use the vault through Shop OS Chat
 
 By now, the vault knows a lot about your shop. The next step is letting your team get to that knowledge without pinging you every time. That's what **Shop OS Chat** is for: a simple chat window that anyone in the shop can use to ask vault questions, on the shop computer, without touching Claude Code.
 
@@ -353,6 +366,7 @@ After the first week, your Shop OS vault should have:
 - ✅ A daily briefing arriving at 7am each morning (operator scheduled)
 - ✅ A clean weekly cadence for vault health (optimizer reminder set)
 - ✅ Your team self-serving vault questions through Shop OS Chat
+- ✅ The update command saved somewhere you can find it (`npx -y --package=@blueprintit/shop-os-install shop-os-update`)
 
 From here, the more you use it, the smarter it gets. Drop your customer call notes into the vault as they happen. Drop new supplier docs in `Raw/` as they arrive. Ask Claude Code questions about your shop's history and it will have real answers.
 
