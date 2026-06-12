@@ -370,6 +370,38 @@ After the first week, your Shop OS vault should have:
 
 From here, the more you use it, the smarter it gets. Drop your customer call notes into the vault as they happen. Drop new supplier docs in `Raw/` as they arrive. Ask Claude Code questions about your shop's history and it will have real answers.
 
+## Teach your brain something new with `/grill-me`
+
+Your Shop Brain was built from the onboarding interview. But your business changes. Pricing shifts. You add a new service. You start going after a different type of customer. When that happens, your brain should know.
+
+`/grill-me` is a focused interview skill you can run anytime to teach your brain something it doesn't know yet, or go deeper on something the setup interview only scratched the surface of.
+
+### How it works
+
+Open Claude Code in your vault and type:
+
+```
+/grill-me
+```
+
+Tell it what you want it to understand. Examples:
+
+- "Grill me on our new closet organizer service until you understand it well enough to write about it."
+- "I want to go deeper on our pricing. We changed our model and the brain still has the old version."
+- "We're starting to go after general contractors instead of homeowners. Grill me on what that means for how we talk about the shop."
+
+It asks one question at a time, saves everything as you go, and at the end writes the conclusions into the right place in your vault. By the end of the session, your brain has it.
+
+### When to use it
+
+- Something changed in your business (new service, new pricing, new customer type)
+- The onboarding interview moved on before you'd fully explained something
+- You want to think something through out loud and have the brain capture it
+
+You don't need to prepare anything. Just start talking.
+
+---
+
 ## What's next (when you want more)
 
 When you're ready to go further, ask about these add-ons:

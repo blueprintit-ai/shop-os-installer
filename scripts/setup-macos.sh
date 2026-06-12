@@ -11,12 +11,25 @@ echo "This script will install:"
 echo "  • Homebrew (if needed)"
 echo "  • Node.js"
 echo "  • Git"
+echo "  • Python 3"
 echo "  • Claude Code"
 echo "  • Obsidian"
 echo "  • Shop OS Vault + Installer"
 echo ""
 echo "You'll be prompted for your license key after prerequisites are installed."
 echo ""
+echo "⚠️  Mac will ask for your login password in a moment."
+echo "    This is normal: Homebrew needs it to install developer tools."
+echo "    Type it in (the cursor won't move) and press Enter."
+echo ""
+
+# Pre-collect sudo credentials up front so the password prompt happens
+# at the very start, not mid-install after Homebrew has already printed
+# progress noise. Cached for ~5 minutes, long enough for Homebrew to
+# finish without re-prompting.
+if ! command -v brew &> /dev/null; then
+  sudo -v
+fi
 
 # 1. Check/install Homebrew
 if ! command -v brew &> /dev/null; then
@@ -36,14 +49,27 @@ else
 fi
 
 # 2b. Check/install Git
-# The Shop OS npx installer uses git to refresh the plugin marketplace clone.
-# Git usually comes with Homebrew's Command Line Tools prereq, but we install
-# it explicitly so a fresh Mac without CLT never lands in a "no git" silent fail.
+# The Shop OS npx installer uses git to refresh the plugin marketplace clone
+# (~/.claude/plugins/marketplaces/blueprint-skills). On most Macs git arrives
+# with the Command Line Tools that Homebrew triggers, but we install it
+# explicitly here so a fresh customer never lands in a "no git, silent fail"
+# state.
 if ! command -v git &> /dev/null; then
   echo "📦 Installing Git via Homebrew..."
   brew install git
 else
   echo "✓ Git found"
+fi
+
+# 2c. Check/install Python 3
+# bp-digest uses Python 3 + MarkItDown to read PDFs, Word docs, and spreadsheets
+# dropped into the Raw/ inbox. macOS ships Python 3 on recent versions but we
+# install explicitly so a fresh or stripped machine never silently fails.
+if command -v python3 &> /dev/null; then
+  echo "✓ Python 3 found"
+else
+  echo "📦 Installing Python 3 via Homebrew..."
+  brew install python3
 fi
 
 # 3. Check/install Claude Code
@@ -68,7 +94,7 @@ echo "=========================================="
 echo "✨ Prerequisites complete!"
 echo ""
 
-read -p "Enter your Shop OS license key: " LICENSE_KEY
+read -p "Enter your Shop OS license key: " LICENSE_KEY < /dev/tty
 
 if [ -z "$LICENSE_KEY" ]; then
   echo "✗ No license key provided. Exiting."
@@ -87,7 +113,7 @@ if [ -z "$PARENT_DIR" ]; then
   exit 1
 fi
 
-read -p "Name your vault folder [Shop OS Vault]: " VAULT_NAME
+read -p "Name your vault folder [Shop OS Vault]: " VAULT_NAME < /dev/tty
 VAULT_NAME="${VAULT_NAME:-Shop OS Vault}"
 
 VAULT_PATH="${PARENT_DIR%/}/$VAULT_NAME"
@@ -97,18 +123,19 @@ echo "Installing Shop OS to: $VAULT_PATH"
 echo ""
 
 # 6. Run Shop OS installer with license key and vault path
-npx -y @blueprintit/shop-os-install --license "$LICENSE_KEY" --vault "$VAULT_PATH" --yes
+# Redirect stdin to /dev/tty so npx doesn't drain the curl|bash pipe
+npx -y @blueprintit/shop-os-install@latest --license "$LICENSE_KEY" --vault "$VAULT_PATH" --yes < /dev/tty
 
 echo ""
 echo "=========================================="
 echo "🎉 Setup complete!"
 echo ""
-echo "Launching Claude Code..."
-sleep 2
-open -a "Claude Code"
-
-echo ""
 echo "Next steps:"
-echo "  1. If this is your first time, sign in to Claude Code (you'll be prompted)"
+echo "  1. Sign in to Claude Code if prompted"
 echo "  2. Type /bp-setup at the Claude prompt to personalize your vault"
 echo ""
+echo "Launching Claude Code..."
+sleep 1
+
+cd "$VAULT_PATH"
+exec claude

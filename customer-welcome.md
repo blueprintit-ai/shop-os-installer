@@ -25,10 +25,6 @@ Save it somewhere safe (1Password, a sticky note, a folder in your inbox). You w
 
 If not, sign up at **https://claude.ai** and pick the **Pro** plan (~$20/month from Anthropic, not from us). Pro is the right starting point for Shop OS. As your Shop Brain grows and your team uses it every day, you can upgrade to the **Max** plan (~$100/month) for higher usage limits. Start with Pro.
 
-## Step 0: Set up Claude Code Terminal (first-time only)
-
-If you have never used Claude Code Terminal on this computer, watch this 60-second walkthrough first: **{{VIDEO_URL}}**. It covers signing in with your Claude account through your browser and picking a color theme, so the one-command install below runs end-to-end without stopping for setup screens. If you already use Claude Code on this machine, skip ahead.
-
 ## Install Shop OS: One Command
 
 Open Terminal (Mac: press Cmd+Space, type `terminal`, press Enter) or PowerShell (Windows: press the Windows key, type `powershell`, press Enter, then right-click and choose **Run as administrator**).
@@ -67,7 +63,7 @@ The installer prints `✓ Shop OS installation complete!` and launches Claude Co
 /bp-setup
 ```
 
-This kicks off a 10-minute onboarding interview that asks about your shop name, owner, key staff, services, and daily routines. By the end of the interview, you have a configured Shop OS vault ready to use. We send a follow-up document called "Your First Week with Shop OS" that walks you through what to do next, including how to open the vault in Obsidian to browse and edit notes.
+This kicks off a personalized interview that builds your Shop Brain from scratch. It covers 9 topics: your shop, what you build and who buys it, how jobs flow from estimate to delivery, how you price your work, where customers come from, why they pick you, how you communicate, what you're focused on right now, and the tools you use. Takes about 15-20 minutes. Say **next** to move ahead on any topic, or **done** to wrap up early. By the end, your vault reflects your actual business. We send a follow-up document called "Your First Week with Shop OS" that walks you through what to do next.
 
 ## Letting your team use Shop OS Chat
 

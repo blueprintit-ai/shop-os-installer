@@ -6,7 +6,7 @@ project: shop-os
 tags: [handoff, shop-os, session-state]
 ---
 
-# Shop OS session handoff — 2026-05-25
+# Shop OS session handoff: 2026-05-25
 
 End-of-session snapshot. Read this in the next chat to pick up where we left off without re-reading the entire previous conversation.
 
@@ -76,3 +76,5 @@ Memory will also auto-load the Shop OS infrastructure / URLs / open-loops entrie
 - Customer-facing PDFs use the brand template in `Projects/shop-os-installer/scripts/build-pdfs.py`. Parchment background, monospace section anchors, no em dashes.
 - Foundation = subscription-only. Pro = adds bp-evolver + team-os. Add-on packs = marketing/SEO/ads/sales themed bundles.
 - Customer-facing slash commands use bare form: `/bp-setup`, `/bp-operator`, `/bp-optimizer`, `/bp-digest`. Not the `/obsidian:` prefix form.
+
+<span style="background-color:#F4EFE3; color:#020309; padding:2px 8px; border-radius:3px; font-size:0.85em;">🤖 Blueprint IT Vault Operator, last edited: 2026-05-28T00:00:00Z</span>
