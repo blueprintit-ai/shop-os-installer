@@ -308,6 +308,21 @@ function checkClaudeCode() {
 
 // ---------- license validation ----------
 
+// A Shop OS key is SHOP-XXXX-XXXX-XXXX (Crockford Base32). Normalize common paste
+// artifacts (lowercase, stray spaces, surrounding whitespace) so a perfectly valid
+// key isn't rejected over formatting, and shape-check for instant feedback on an
+// obvious typo. The license server stays authoritative — a shape miss never
+// hard-blocks an automated --license run.
+function normalizeLicenseKey(raw) {
+  return String(raw || "").trim().toUpperCase().replace(/\s+/g, "");
+}
+
+const LICENSE_KEY_SHAPE = /^SHOP-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/;
+
+function looksLikeLicenseKey(key) {
+  return LICENSE_KEY_SHAPE.test(key);
+}
+
 async function validateLicense(key) {
   const url = `${LICENSE_SERVER}/validate?key=${encodeURIComponent(key)}`;
   let resp;
@@ -453,6 +468,52 @@ async function refreshMarketplaceClone(mp, installLocation) {
   } catch {
     return false;
   }
+}
+
+// Post-install smoke test. A landed clone (guaranteed by ensureMarketplaces) is
+// not the same as the manifest actually listing the plugin Claude Code resolves
+// on launch. This catches a download that succeeded but doesn't contain the
+// plugin behind /bp-setup — so the customer learns now, not when a slash command
+// is mysteriously missing. Returns a list of problems ([] = all good).
+function verifyInstall(claudeRoot) {
+  const problems = [];
+  for (const id of PLUGINS_TO_ENABLE) {
+    const [pluginName, marketplaceName] = id.split("@");
+    if (!pluginName || !marketplaceName) continue;
+    const manifestPath = join(
+      claudeRoot,
+      "plugins",
+      "marketplaces",
+      marketplaceName,
+      ".claude-plugin",
+      "marketplace.json",
+    );
+    if (!existsSync(manifestPath)) {
+      // Non-fatal: clone landed but manifest absent (unexpected layout) — Claude
+      // Code may still cope, so warn rather than block.
+      problems.push({ id, reason: `manifest missing in ${marketplaceName}`, fatal: false });
+      continue;
+    }
+    let manifest;
+    try {
+      manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    } catch {
+      problems.push({ id, reason: `manifest in ${marketplaceName} could not be read`, fatal: false });
+      continue;
+    }
+    const names = Array.isArray(manifest.plugins)
+      ? manifest.plugins.map((p) => p && p.name)
+      : [];
+    if (!names.includes(pluginName)) {
+      // Fatal: the manifest parsed fine and definitively does not list the plugin.
+      problems.push({
+        id,
+        reason: `plugin "${pluginName}" not found in the ${marketplaceName} marketplace`,
+        fatal: true,
+      });
+    }
+  }
+  return problems;
 }
 
 function ensurePluginsInstalled(claudeRoot) {
@@ -707,6 +768,9 @@ function writeChatLauncher(vaultPath) {
   let body;
   if (isWindows) {
     body = `@echo off
+:: Shop OS Chat launcher. Double-click to start.
+:: First time, Windows may show "Windows protected your PC" (SmartScreen).
+:: That's expected for a new script. Click "More info" then "Run anyway".
 setlocal
 set "VAULT_PATH=%~dp0"
 :: Strip trailing backslash
@@ -717,7 +781,11 @@ pause
 `;
   } else {
     body = `#!/bin/bash
-# Shop OS Chat launcher — double-click to start.
+# Shop OS Chat launcher. Double-click to start.
+# First time, macOS may say it "cannot be opened because it is from an
+# unidentified developer". That's expected. To allow it: right-click (or
+# Control-click) this file, choose Open, then click Open in the dialog. You
+# only need to do this once.
 VAULT_PATH="$(cd "$(dirname "$0")" && pwd)"
 echo "Starting Shop OS Chat for: $VAULT_PATH"
 npx -y --package=github:blueprintit-ai/shop-os-chat shop-os-chat "$VAULT_PATH"
@@ -729,8 +797,60 @@ read -n 1 -s -r -p ""
   writeFileSync(filePath, body, "utf8");
   if (!isWindows) {
     try { chmodSync(filePath, 0o755); } catch { /* ignore */ }
+    // Best-effort: strip the quarantine flag so the local machine doesn't show
+    // Gatekeeper's "unidentified developer" block on first double-click. (A copy
+    // synced to another Mac via Dropbox/iCloud may re-acquire it there — the
+    // companion help file below covers that case.)
+    try {
+      spawnSync("xattr", ["-dr", "com.apple.quarantine", filePath], { stdio: "ignore" });
+    } catch { /* ignore */ }
   }
+
+  // Companion help note next to the launcher. Terminal output scrolls away, but
+  // a non-technical owner returning days later will find this right beside the
+  // file they're trying to open.
+  writeLauncherHelpNote(vaultPath, isWindows, filename);
+
   return filePath;
+}
+
+function writeLauncherHelpNote(vaultPath, isWindows, launcherName) {
+  const notePath = join(vaultPath, "Open Shop OS Chat - HELP.txt");
+  const macSteps = `The first time you open "${launcherName}", macOS may say it
+"cannot be opened because it is from an unidentified developer".
+This is normal and safe. To open it:
+
+  1. Right-click (or Control-click) "${launcherName}"
+  2. Choose "Open"
+  3. In the dialog that appears, click "Open" again
+
+You only have to do this once. After that, a normal double-click works.`;
+  const winSteps = `The first time you open "${launcherName}", Windows may show
+a blue "Windows protected your PC" screen (SmartScreen).
+This is normal and safe. To open it:
+
+  1. Click "More info"
+  2. Click "Run anyway"
+
+You only have to do this once.`;
+  const content = `HOW TO OPEN SHOP OS CHAT
+========================
+
+Shop OS Chat lets your team chat with this vault (read-only).
+Double-click "${launcherName}" in this folder to start it.
+
+${isWindows ? winSteps : macSteps}
+
+The first launch downloads the chat app (about 20 seconds). After that it
+starts quickly. To stop it, close the window.
+
+Need help? Reply to your Shop OS welcome email.
+`;
+  try {
+    writeFileSync(notePath, content, "utf8");
+  } catch {
+    // best-effort; a failed help note must not fail the install
+  }
 }
 
 function expandTilde(p) {
@@ -877,9 +997,24 @@ async function main() {
   // License entry: 1 attempt if --license flag given, else up to 3 interactive attempts.
   const maxAttempts = args.license ? 1 : 3;
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-    const key = args.license || (await ask(rl, "License key"));
-    if (!key) fail("No license key provided.");
+    const rawKey = args.license || (await ask(rl, "License key"));
+    if (!rawKey) fail("No license key provided.");
+    const key = normalizeLicenseKey(rawKey);
     currentLicenseKey = key;
+
+    // Instant feedback on an obviously-malformed key, saving a server round-trip
+    // on a typo. Interactive only — an automated --license run still defers to
+    // the server so a future format change can't break it.
+    if (!args.license && !looksLikeLicenseKey(key)) {
+      warn(`That doesn't look like a Shop OS key. The format is ${bold("SHOP-XXXX-XXXX-XXXX")}.`);
+      if (attempt < maxAttempts) {
+        print("  " + dim("Check your welcome email for the exact key, then try again."));
+        continue;
+      }
+      print("");
+      fail("No valid license key entered. Reply to your welcome email for help: " + SUPPORT_URL);
+    }
+
     print("  " + dim("Validating against license server..."));
     const result = await validateLicense(key);
     if (result.ok) {
@@ -982,6 +1117,25 @@ async function main() {
     for (const name of mpResult.added) ok(`Added marketplace: ${name}`);
   }
 
+  // Smoke test the downloaded marketplaces before scaffolding the vault, so a bad
+  // download fails fast (nothing to clean up) instead of mid-way through.
+  currentStep = "verify_plugins";
+  const problems = verifyInstall(claudeRoot);
+  if (problems.length === 0) {
+    ok("Verified required plugins are present in their marketplaces");
+  } else {
+    for (const p of problems) warn(`${p.id}: ${p.reason}`);
+    if (problems.some((p) => p.fatal)) {
+      fail(
+        "Required Shop OS skills are missing from the downloaded marketplaces.\n\n" +
+          "  The download landed but does not contain the plugin behind /bp-setup,\n" +
+          "  usually a partial or interrupted clone. Re-run the installer — nothing\n" +
+          "  was finalized, so re-running is safe.",
+      );
+    }
+    info("Marketplaces downloaded but couldn't be fully verified. If /bp-setup is missing on first launch, re-run this installer.");
+  }
+
   currentStep = "plugins";
   print(dim("  [2/7] Enabling plugins for installation"));
   const pluginsResult = ensurePluginsInstalled(claudeRoot);
@@ -1051,6 +1205,8 @@ async function main() {
   print(`  5. To let your team chat with the vault (read-only),`);
   print(`     double-click ${cyan("Shop OS Chat.command")} (Mac) or ${cyan("Shop OS Chat.bat")} (Windows)`);
   print(`     in your vault folder. First launch downloads the chat (~20 seconds).`);
+  print(`     ${dim("On first open your OS may show a security prompt (Mac: right-click >")}`);
+  print(`     ${dim('Open; Windows: More info > Run anyway). See "Open Shop OS Chat - HELP.txt".')}`);
   print("");
   print(dim(`Support: ${SUPPORT_URL}`));
   print("");
