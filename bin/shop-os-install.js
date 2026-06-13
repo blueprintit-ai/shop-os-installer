@@ -73,12 +73,85 @@ const cyan = (s) => c("36", s);
 
 const print = (msg = "") => stdout.write(msg + "\n");
 const warn = (msg) => stderr.write(yellow("! ") + msg + "\n");
+// fail() throws instead of exiting so every failure funnels through main()'s
+// catch, which logs telemetry before exiting. `handled` marks an expected,
+// already-worded failure (vs. an unexpected crash) so the catch doesn't prefix
+// it with "Unexpected error:".
+class InstallError extends Error {
+  constructor(msg) {
+    super(msg);
+    this.handled = true;
+  }
+}
 const fail = (msg) => {
-  stderr.write(red("✗ ") + msg + "\n");
-  exit(1);
+  throw new InstallError(msg);
 };
 const ok = (msg) => print("  " + green("✓") + " " + msg);
 const info = (msg) => print("  " + dim("·") + " " + msg);
+
+// ---------- telemetry + resilience ----------
+
+// Updated as the install progresses so an error log pinpoints where it broke.
+// Mirrors the step names the PowerShell/bash wrappers send to /install-log, so
+// the admin install-logs view reads consistently across the whole funnel.
+let currentStep = "preflight";
+let currentLicenseKey = "unknown";
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// Best-effort install telemetry. Never throws and never blocks the install for
+// more than ~5s — the wrappers log the outer steps, this fills in the npx-internal
+// steps that were previously invisible (license rejection, clone failure, etc.).
+async function sendInstallLog(status, errorMessage) {
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 5000);
+    const payload = {
+      license_key: currentLicenseKey || "unknown",
+      status,
+      step: currentStep,
+      // The endpoint stores `machine` verbatim; tuck source/version here so they
+      // persist (top-level extras are dropped server-side).
+      machine: {
+        platform: process.platform,
+        node: process.version,
+        source: "npx",
+        version: VERSION,
+      },
+    };
+    if (errorMessage) payload.error_message = String(errorMessage).slice(0, 1000);
+    await fetch(`${LICENSE_SERVER}/install-log`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "user-agent": `shop-os-installer/${VERSION}`,
+      },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+  } catch {
+    // best-effort: telemetry must never affect the install outcome
+  }
+}
+
+// Retry an async operation that may fail on a transient network blip. Definitive
+// failures (caller throws after the last attempt) propagate to the caller.
+async function withRetry(fn, { attempts = 2, delayMs = 1500, label = "Operation" } = {}) {
+  let lastErr;
+  for (let i = 1; i <= attempts; i++) {
+    try {
+      return await fn();
+    } catch (e) {
+      lastErr = e;
+      if (i < attempts) {
+        warn(`${label} failed (attempt ${i}/${attempts}) — retrying in ${Math.round(delayMs / 1000)}s...`);
+        await sleep(delayMs);
+      }
+    }
+  }
+  throw lastErr;
+}
 
 function banner() {
   const lines = [
@@ -127,6 +200,44 @@ function getClaudeRoot() {
   return join(homedir(), ".claude");
 }
 
+// Probe a host for reachability. ANY HTTP response (even 404/403) means the host
+// is reachable — DNS, TCP, and TLS all worked. Only a thrown error (offline,
+// DNS failure, blocked by firewall/proxy, timeout) counts as unreachable.
+async function isReachable(url) {
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 8000);
+    await fetch(url, { method: "GET", redirect: "manual", signal: controller.signal });
+    clearTimeout(timer);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// Catch offline / proxy / firewall problems up front with a clear message, rather
+// than letting them surface mid-install as a cryptic git-clone or fetch failure.
+// Shops behind corporate/guest networks frequently block raw GitHub access.
+async function checkConnectivity() {
+  currentStep = "connectivity_check";
+  const targets = [
+    { name: "GitHub (github.com)", url: "https://github.com" },
+    { name: "Shop OS license server", url: LICENSE_SERVER },
+  ];
+  for (const t of targets) {
+    if (!(await isReachable(t.url))) {
+      fail(
+        `Can't reach ${t.name}.\n\n` +
+          `  Shop OS needs internet access to ${t.url}\n\n` +
+          `  Check your Wi-Fi/connection. If you're on a work or guest network,\n` +
+          `  it may block GitHub — try a home/phone hotspot, or ask IT to allow\n` +
+          `  github.com and *.workers.dev. Then re-run the installer.`,
+      );
+    }
+  }
+  ok("Internet connectivity confirmed");
+}
+
 function checkClaudeCode() {
   // Detect by binary on PATH, not by the ~/.claude directory: when Claude Code
   // is installed via `npm install -g @anthropic-ai/claude-code` (which the
@@ -141,6 +252,7 @@ function checkClaudeCode() {
   if (existsSync(localBin) && !(process.env.PATH || "").split(delimiter).includes(localBin)) {
     process.env.PATH = localBin + delimiter + (process.env.PATH || "");
   }
+  currentStep = "claude_check";
   const probe = spawnSync(
     process.platform === "win32" ? "where" : "which",
     ["claude"],
@@ -153,6 +265,7 @@ function checkClaudeCode() {
     // shell: true is REQUIRED on Windows — npm is npm.cmd (a batch file), and
     // spawnSync can't execute it without a shell (ENOENT otherwise). stdio
     // inherit so the customer sees npm's progress instead of a frozen prompt.
+    currentStep = "claude_autoinstall";
     print("");
     print(yellow("Claude Code not found. Auto-installing via npm..."));
     const npmInstall = spawnSync("npm", ["install", "-g", "@anthropic-ai/claude-code"], {
@@ -160,14 +273,12 @@ function checkClaudeCode() {
       shell: true,
     });
     if (npmInstall.status !== 0) {
-      print("");
-      print(red("Claude Code auto-install failed."));
-      print("");
-      print("Shop OS runs on top of Claude Code. Install it manually at:");
-      print("  " + cyan("https://claude.ai/code"));
-      print("");
-      print("Then re-run this installer.");
-      exit(1);
+      fail(
+        "Claude Code auto-install failed.\n\n" +
+          "  Shop OS runs on top of Claude Code. Install it manually at:\n" +
+          "    https://claude.ai/code\n\n" +
+          "  Then re-run this installer.",
+      );
     }
     // Verify the install by checking PATH again (may need a refresh on Windows).
     const verify = spawnSync(
@@ -176,14 +287,13 @@ function checkClaudeCode() {
       { stdio: "ignore", shell: false },
     );
     if (verify.status !== 0) {
-      print("");
-      print(red("Claude Code installed but `claude` is not on PATH."));
-      print("");
-      print("This may be a PATH refresh issue. Please:");
-      print("  1. Close this terminal");
-      print("  2. Open a new terminal");
-      print("  3. Re-run the installer");
-      exit(1);
+      fail(
+        "Claude Code installed but 'claude' is not on PATH yet.\n\n" +
+          "  This is a PATH refresh issue. Please:\n" +
+          "    1. Close this terminal\n" +
+          "    2. Open a new terminal\n" +
+          "    3. Re-run the installer",
+      );
     }
     ok("Claude Code installed and verified");
   }
@@ -202,7 +312,13 @@ async function validateLicense(key) {
   const url = `${LICENSE_SERVER}/validate?key=${encodeURIComponent(key)}`;
   let resp;
   try {
-    resp = await fetch(url, { headers: { "user-agent": `shop-os-installer/${VERSION}` } });
+    // Retry only the network call — a transient blip shouldn't reject a valid
+    // key. An HTTP error response (handled below) is a definitive answer and is
+    // NOT retried.
+    resp = await withRetry(
+      () => fetch(url, { headers: { "user-agent": `shop-os-installer/${VERSION}` } }),
+      { attempts: 3, delayMs: 1500, label: "License server request" },
+    );
   } catch (e) {
     return { ok: false, error: `network: ${e.message}` };
   }
@@ -235,7 +351,7 @@ function writeJSON(path, obj) {
   writeFileSync(path, JSON.stringify(obj, null, 2) + "\n", "utf8");
 }
 
-function ensureMarketplaces(claudeRoot) {
+async function ensureMarketplaces(claudeRoot) {
   // Always (re-)register marketplaces and refresh the on-disk clone to the
   // latest origin/main. Claude Code does NOT auto-pull marketplace clones, so
   // a clone left at an old commit (e.g. the 5/20 rebrand snapshot) keeps
@@ -249,6 +365,7 @@ function ensureMarketplaces(claudeRoot) {
   const path = join(claudeRoot, "plugins", "known_marketplaces.json");
   const known = readJSON(path, {});
   const added = [];
+  const failed = [];
   for (const mp of MARKETPLACES) {
     const installLocation = join(claudeRoot, "plugins", "marketplaces", mp.name);
     if (!known[mp.name]) added.push(mp.name);
@@ -257,35 +374,53 @@ function ensureMarketplaces(claudeRoot) {
       installLocation,
       lastUpdated: new Date().toISOString(),
     };
-    refreshMarketplaceClone(mp, installLocation);
+    const success = await refreshMarketplaceClone(mp, installLocation);
+    if (!success) failed.push(mp);
   }
   writeJSON(path, known);
+
+  // A failed clone is the difference between a working vault and a "successful"
+  // install where /bp-setup and the obsidian plugin simply don't exist. Fail
+  // loudly instead of reporting a false success.
+  if (failed.length > 0) {
+    const names = failed.map((m) => m.source.repo).join(", ");
+    fail(
+      `Could not download the Shop OS skills from GitHub (${names}).\n\n` +
+        `  The repository failed to clone after retries — usually a dropped\n` +
+        `  connection, or a network that blocks github.com.\n\n` +
+        `  Check your connection (a work/guest network may block GitHub — try a\n` +
+        `  home network or phone hotspot) and re-run the installer. Nothing was\n` +
+        `  finalized, so re-running is safe.`,
+    );
+  }
   return { added, total: MARKETPLACES.length };
 }
 
-function refreshMarketplaceClone(mp, installLocation) {
+// Returns true if the marketplace clone is present and up to date, false if it
+// could not be obtained. Never throws — the caller decides whether a miss is fatal.
+async function refreshMarketplaceClone(mp, installLocation) {
   // GitHub HTTPS URL — same form Claude Code uses internally.
   const repoUrl = `https://github.com/${mp.source.repo}.git`;
 
   // If a git checkout exists, fast-forward it to origin/main.
   if (existsSync(join(installLocation, ".git"))) {
-    const fetch = spawnSync("git", ["fetch", "origin", "main", "--depth=1"], {
+    const fetched = spawnSync("git", ["fetch", "origin", "main", "--depth=1"], {
       cwd: installLocation,
       stdio: "ignore",
     });
-    if (fetch.status === 0) {
+    if (fetched.status === 0) {
       const reset = spawnSync("git", ["reset", "--hard", "FETCH_HEAD"], {
         cwd: installLocation,
         stdio: "ignore",
       });
-      if (reset.status === 0) return;
+      if (reset.status === 0) return true;
     }
     // Fetch/reset failed — fall through to wipe + fresh clone.
   }
 
   // Wipe anything in the install location before cloning fresh. Best-effort:
   // locked files on Windows may block removal, in which case clone below will
-  // also fail and the customer falls back to whatever they had.
+  // also fail and we report that to the caller.
   if (existsSync(installLocation)) {
     try {
       rmSync(installLocation, { recursive: true, force: true });
@@ -295,7 +430,29 @@ function refreshMarketplaceClone(mp, installLocation) {
   }
 
   mkdirSync(dirname(installLocation), { recursive: true });
-  spawnSync("git", ["clone", "--depth=1", repoUrl, installLocation], { stdio: "ignore" });
+
+  // Clone with one retry on a transient failure. A clone is "successful" only if
+  // git exits 0 AND the .git directory actually landed — guards against a partial
+  // clone that exits non-zero but leaves a husk directory behind.
+  try {
+    await withRetry(
+      () => {
+        const clone = spawnSync("git", ["clone", "--depth=1", repoUrl, installLocation], {
+          stdio: "ignore",
+        });
+        if (clone.status !== 0 || !existsSync(join(installLocation, ".git"))) {
+          // Clean up a partial clone so the retry starts fresh.
+          try { rmSync(installLocation, { recursive: true, force: true }); } catch { /* best-effort */ }
+          throw new Error(`git clone exited ${clone.status}`);
+        }
+        return true;
+      },
+      { attempts: 2, delayMs: 2000, label: `Cloning ${mp.source.repo}` },
+    );
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function ensurePluginsInstalled(claudeRoot) {
@@ -710,16 +867,19 @@ async function main() {
   ok(`Node ${nodeVersion}`);
   const claudeRoot = checkClaudeCode();
   ok(`Claude Code detected at ${claudeRoot}`);
+  await checkConnectivity();
   print("");
 
   const rl = createInterface({ input: stdin, output: stdout });
 
   let license;
+  currentStep = "license_validation";
   // License entry: 1 attempt if --license flag given, else up to 3 interactive attempts.
   const maxAttempts = args.license ? 1 : 3;
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     const key = args.license || (await ask(rl, "License key"));
     if (!key) fail("No license key provided.");
+    currentLicenseKey = key;
     print("  " + dim("Validating against license server..."));
     const result = await validateLicense(key);
     if (result.ok) {
@@ -813,15 +973,17 @@ async function main() {
   // Step-by-step install
   print(bold("Installing Shop OS"));
 
-  print(dim("  [1/6] Registering plugin marketplaces"));
-  const mpResult = ensureMarketplaces(claudeRoot);
+  currentStep = "marketplaces";
+  print(dim("  [1/7] Registering plugin marketplaces"));
+  const mpResult = await ensureMarketplaces(claudeRoot);
   if (mpResult.added.length === 0) {
     info(`All ${mpResult.total} marketplaces already registered`);
   } else {
     for (const name of mpResult.added) ok(`Added marketplace: ${name}`);
   }
 
-  print(dim("  [2/6] Enabling plugins for installation"));
+  currentStep = "plugins";
+  print(dim("  [2/7] Enabling plugins for installation"));
   const pluginsResult = ensurePluginsInstalled(claudeRoot);
   if (pluginsResult.queued.length === 0) {
     info("All required plugins already queued");
@@ -830,7 +992,8 @@ async function main() {
     info("Claude Code will sync the actual plugin files from the marketplaces on next launch.");
   }
 
-  print(dim(`  [3/6] ${isExisting ? "Configuring" : "Creating"} vault at ${vaultPath}`));
+  currentStep = "vault_create";
+  print(dim(`  [3/7] ${isExisting ? "Configuring" : "Creating"} vault at ${vaultPath}`));
   if (!existsSync(vaultPath)) {
     mkdirSync(vaultPath, { recursive: true });
     ok("Vault directory created");
@@ -847,11 +1010,13 @@ async function main() {
   if (rawResult.created) ok("Raw/ inbox + Raw/processed/ created (drop materials in Raw/ to seed the vault)");
   else info("Raw/ inbox already present (left untouched)");
 
+  currentStep = "vault_settings";
   print(dim("  [4/7] Enabling plugins + permission allowlist for this vault"));
   const settingsPath = enableForVault(vaultPath);
   ok(`Wrote ${settingsPath.replace(homedir(), "~")}`);
   info("Pre-approved Read/Write/Edit/Bash patterns so /bp-setup runs without permission prompts");
 
+  currentStep = "seed_defaults";
   print(dim("  [5/7] Pre-seeding Claude Code defaults"));
   const seeded = seedClaudeCodeDefaults(claudeRoot);
   if (seeded.onboardingFlags || seeded.theme) {
@@ -861,13 +1026,17 @@ async function main() {
     info("Claude Code already configured — left existing settings untouched");
   }
 
+  currentStep = "save_license";
   print(dim("  [6/7] Saving license"));
   const licensePath = saveLicenseFile(license);
   ok(`License saved to ${licensePath.replace(homedir(), "~")} (chmod 600)`);
 
+  currentStep = "launcher";
   print(dim("  [7/7] Installing Shop OS Chat launcher"));
   const launcherPath = writeChatLauncher(vaultPath);
   ok(`Wrote ${launcherPath.replace(homedir(), "~")}`);
+
+  currentStep = "complete";
 
   print("");
   print(green(bold("✓ Shop OS installation complete!")));
@@ -887,7 +1056,17 @@ async function main() {
   print("");
 }
 
-main().catch((err) => {
-  print("");
-  fail(`Unexpected error: ${err.message}`);
-});
+main()
+  .then(async () => {
+    // currentStep is "complete" once main() returns successfully.
+    await sendInstallLog("success");
+  })
+  .catch(async (err) => {
+    await sendInstallLog("error", err.message);
+    print("");
+    // InstallError messages are already worded for the customer; anything else is
+    // an unexpected crash, so label it as such.
+    const msg = err && err.handled ? err.message : `Unexpected error: ${err && err.message}`;
+    stderr.write(red("✗ ") + msg + "\n");
+    exit(1);
+  });
