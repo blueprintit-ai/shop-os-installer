@@ -20,7 +20,7 @@
 import { createInterface } from "node:readline/promises";
 import { stdin, stdout, stderr, exit } from "node:process";
 import { homedir } from "node:os";
-import { join, dirname, resolve } from "node:path";
+import { join, dirname, resolve, delimiter } from "node:path";
 import { spawnSync } from "node:child_process";
 import {
   existsSync,
@@ -34,6 +34,15 @@ import {
 const LICENSE_SERVER = "https://shop-os-license-server.glenn-15d.workers.dev";
 const SUPPORT_URL = "https://blueprintit.ai/shop-os/support";
 const DOCS_URL = "https://blueprintit.ai/shop-os/docs";
+
+// Read version from package.json so the user-agent never drifts from the
+// published version. Falls back to "unknown" if the file can't be read.
+let VERSION = "unknown";
+try {
+  VERSION = JSON.parse(
+    readFileSync(new URL("../package.json", import.meta.url), "utf8"),
+  ).version;
+} catch { /* keep "unknown" */ }
 
 const MARKETPLACES = [
   {
@@ -124,21 +133,59 @@ function checkClaudeCode() {
   // setup scripts now do), the .claude directory isn't created until the user
   // launches `claude` for the first time. A binary check correctly identifies
   // installs from npm, the official .ps1/.sh installer, or the desktop app.
+  //
+  // The native installer drops `claude` in ~/.local/bin, which a fresh shell may
+  // not have on PATH yet. Prepend it before probing so a real install is never
+  // mistaken for missing (the exact failure that stalled early installs).
+  const localBin = join(homedir(), ".local", "bin");
+  if (existsSync(localBin) && !(process.env.PATH || "").split(delimiter).includes(localBin)) {
+    process.env.PATH = localBin + delimiter + (process.env.PATH || "");
+  }
   const probe = spawnSync(
     process.platform === "win32" ? "where" : "which",
     ["claude"],
     { stdio: "ignore", shell: false },
   );
-  if (probe.status !== 0) {
+  if (probe.status === 0) {
+    ok("Claude Code found");
+  } else {
+    // Claude Code not in PATH. Try auto-installing via npm.
+    // shell: true is REQUIRED on Windows — npm is npm.cmd (a batch file), and
+    // spawnSync can't execute it without a shell (ENOENT otherwise). stdio
+    // inherit so the customer sees npm's progress instead of a frozen prompt.
     print("");
-    print(red("Claude Code is not installed."));
-    print("");
-    print("Shop OS runs on top of Claude Code. Install it first at:");
-    print("  " + cyan("https://claude.ai/code"));
-    print("");
-    print("Once Claude Code is installed and you have signed in once,");
-    print("re-run this installer.");
-    exit(1);
+    print(yellow("Claude Code not found. Auto-installing via npm..."));
+    const npmInstall = spawnSync("npm", ["install", "-g", "@anthropic-ai/claude-code"], {
+      stdio: "inherit",
+      shell: true,
+    });
+    if (npmInstall.status !== 0) {
+      print("");
+      print(red("Claude Code auto-install failed."));
+      print("");
+      print("Shop OS runs on top of Claude Code. Install it manually at:");
+      print("  " + cyan("https://claude.ai/code"));
+      print("");
+      print("Then re-run this installer.");
+      exit(1);
+    }
+    // Verify the install by checking PATH again (may need a refresh on Windows).
+    const verify = spawnSync(
+      process.platform === "win32" ? "where" : "which",
+      ["claude"],
+      { stdio: "ignore", shell: false },
+    );
+    if (verify.status !== 0) {
+      print("");
+      print(red("Claude Code installed but `claude` is not on PATH."));
+      print("");
+      print("This may be a PATH refresh issue. Please:");
+      print("  1. Close this terminal");
+      print("  2. Open a new terminal");
+      print("  3. Re-run the installer");
+      exit(1);
+    }
+    ok("Claude Code installed and verified");
   }
   // Stage ~/.claude so downstream marketplace and plugin writes succeed even
   // if the user hasn't launched `claude` yet to seed the dir themselves.
@@ -155,7 +202,7 @@ async function validateLicense(key) {
   const url = `${LICENSE_SERVER}/validate?key=${encodeURIComponent(key)}`;
   let resp;
   try {
-    resp = await fetch(url, { headers: { "user-agent": "shop-os-installer/0.5.3" } });
+    resp = await fetch(url, { headers: { "user-agent": `shop-os-installer/${VERSION}` } });
   } catch (e) {
     return { ok: false, error: `network: ${e.message}` };
   }

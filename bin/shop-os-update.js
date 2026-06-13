@@ -13,7 +13,7 @@
  */
 
 import { homedir } from "node:os";
-import { join, dirname } from "node:path";
+import { join, dirname, delimiter } from "node:path";
 import { spawnSync } from "node:child_process";
 import {
   existsSync,
@@ -69,10 +69,22 @@ function banner() {
   ].forEach((l) => print(l));
 }
 
+function ensureLocalBinOnPath() {
+  // The Claude native installer drops `claude` in ~/.local/bin (all platforms).
+  // A fresh shell may not have that on PATH yet, which would make a real install
+  // look missing. Prepend it before probing so detection never false-fails.
+  const localBin = join(homedir(), ".local", "bin");
+  const current = process.env.PATH || "";
+  if (existsSync(localBin) && !current.split(delimiter).includes(localBin)) {
+    process.env.PATH = localBin + delimiter + current;
+  }
+}
+
 function preflight() {
   const major = Number(process.versions.node.split(".")[0]);
   if (major < 18) fail(`Node.js 18+ required. You have ${process.version}.`);
 
+  ensureLocalBinOnPath();
   const probe = spawnSync(
     process.platform === "win32" ? "where" : "which",
     ["claude"],
