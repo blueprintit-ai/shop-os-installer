@@ -23,6 +23,7 @@ import { homedir } from "node:os";
 import { join, dirname, resolve, delimiter } from "node:path";
 import { spawnSync } from "node:child_process";
 import {
+  cpSync,
   existsSync,
   mkdirSync,
   readFileSync,
@@ -516,65 +517,125 @@ function verifyInstall(claudeRoot) {
   return problems;
 }
 
-function ensurePluginsInstalled(claudeRoot) {
-  // Always reset the Shop OS-required plugin entries to a pending user-scope
-  // record. A previously-installed pinned entry (e.g. obsidian 3.8.0 from an
-  // earlier beta) would otherwise prevent Claude Code from picking up the
-  // marketplace's current version. Pending status forces Claude Code to
-  // re-resolve the plugin against the (just-refreshed) marketplace clone on
-  // its next launch.
+function ensurePluginsInstalled(claudeRoot, vaultPath) {
+  // Always reset and directly install the Shop OS-required plugins from the
+  // (just-refreshed) marketplace clones. Previous versions wrote a
+  // "version: pending / installPath: null" stub and assumed Claude Code would
+  // sync the files on next launch — but Claude Code does not resolve pending
+  // entries on startup, so skills were silently missing on new installs.
   //
-  // This wipes any project-scope variants of these specific plugin ids — that's
-  // intentional. Shop OS is meant to be enabled at user scope so the same
-  // plugin set works across every vault the operator runs.
+  // We now copy the plugin directory from the marketplace clone straight into
+  // the plugin cache and write the real installPath + version. If the copy
+  // fails for any reason (locked file, missing source) we fall back to the
+  // pending stub so the install still completes.
   //
-  // We still report whether entries were newly created vs pre-existing so the
-  // customer-facing install output matches the v0.4.0 conventions — the
-  // forced-reset is intentionally invisible.
+  // The entry is written at project scope and pinned to this vault, so the Shop
+  // OS plugin set is active in the customer's vault without being enabled in
+  // every unrelated project they happen to open Claude Code in. Any previous
+  // entry for these ids is replaced outright.
   const path = join(claudeRoot, "plugins", "installed_plugins.json");
   const existing = readJSON(path, { version: 2, plugins: {} });
   if (!existing.plugins) existing.plugins = {};
   const installedAt = new Date().toISOString();
   const queued = [];
+  const pending = [];
+
   for (const id of PLUGINS_TO_ENABLE) {
     if (!existing.plugins[id]) queued.push(id);
 
-    // Wipe the plugin's per-version cache directory so Claude Code reinstalls
-    // from the (just-refreshed) marketplace clone instead of loading a stale
-    // pinned version. The cache layout is cache/<marketplace>/<plugin>/<ver>/,
-    // so removing the whole /<plugin>/ subtree clears every cached version.
-    // Other plugins inside cache/<marketplace>/ are left alone.
     const [pluginName, marketplaceName] = id.split("@");
+
+    // Wipe the per-version cache so we don't load a stale pinned version.
     if (pluginName && marketplaceName) {
-      const pluginCacheDir = join(
-        claudeRoot,
-        "plugins",
-        "cache",
-        marketplaceName,
-        pluginName,
-      );
+      const pluginCacheDir = join(claudeRoot, "plugins", "cache", marketplaceName, pluginName);
       if (existsSync(pluginCacheDir)) {
         try {
           rmSync(pluginCacheDir, { recursive: true, force: true });
         } catch {
-          // Best-effort: locked file on Windows leaves the cache in place.
+          // Best-effort: locked file on Windows may leave the cache in place.
         }
       }
     }
 
-    existing.plugins[id] = [
-      {
-        scope: "user",
-        installPath: null, // filled in by Claude Code on next marketplace sync
-        version: "pending",
-        installedAt,
-        lastUpdated: installedAt,
-        gitCommitSha: "pending-sync",
-      },
-    ];
+    // Try to install the plugin directly from the marketplace clone so it is
+    // immediately usable when Claude Code starts (no sync required).
+    let installed = false;
+    if (pluginName && marketplaceName) {
+      const marketplaceDir = join(claudeRoot, "plugins", "marketplaces", marketplaceName);
+      const pluginSourceDir = join(marketplaceDir, "plugins", pluginName);
+
+      if (existsSync(join(pluginSourceDir, ".claude-plugin"))) {
+        // Read version from the plugin manifest.
+        let version = "unknown";
+        try {
+          const pluginJson = JSON.parse(
+            readFileSync(join(pluginSourceDir, ".claude-plugin", "plugin.json"), "utf8"),
+          );
+          version = pluginJson.version || "unknown";
+        } catch { /* keep "unknown" */ }
+
+        // Resolve the HEAD commit SHA of the marketplace clone.
+        let gitCommitSha = "pending-sync";
+        const gitResult = spawnSync("git", ["rev-parse", "HEAD"], {
+          cwd: marketplaceDir,
+          stdio: ["ignore", "pipe", "ignore"],
+          encoding: "utf8",
+        });
+        if (gitResult.status === 0 && gitResult.stdout) {
+          gitCommitSha = gitResult.stdout.trim();
+        }
+
+        // Copy plugin files from the marketplace clone into the versioned cache.
+        const installPath = join(
+          claudeRoot, "plugins", "cache", marketplaceName, pluginName, version,
+        );
+        try {
+          mkdirSync(join(claudeRoot, "plugins", "cache", marketplaceName, pluginName), {
+            recursive: true,
+          });
+          cpSync(pluginSourceDir, installPath, { recursive: true });
+
+          existing.plugins[id] = [
+            {
+              scope: "project",
+              projectPath: vaultPath,
+              installPath,
+              version,
+              installedAt,
+              lastUpdated: installedAt,
+              gitCommitSha,
+            },
+          ];
+          installed = true;
+        } catch {
+          // Fall through to pending stub — install still completes.
+        }
+      }
+    }
+
+    // Fallback: write a project-scoped pending stub so Claude Code can attempt
+    // its own sync on next launch while still associating the plugin with this
+    // vault. This is the pre-0.5.12 behaviour and is known to leave skills
+    // missing, so the id is reported back to main() and surfaced to the customer
+    // rather than failing silently the way it used to.
+    if (!installed) {
+      pending.push(id);
+      existing.plugins[id] = [
+        {
+          scope: "project",
+          projectPath: vaultPath,
+          installPath: null,
+          version: "pending",
+          installedAt,
+          lastUpdated: installedAt,
+          gitCommitSha: "pending-sync",
+        },
+      ];
+    }
   }
+
   writeJSON(path, existing);
-  return { queued, total: PLUGINS_TO_ENABLE.length };
+  return { queued, pending, total: PLUGINS_TO_ENABLE.length };
 }
 
 // Vault-scoped permission allowlist. Non-technical Shop OS customers were hitting
@@ -1137,13 +1198,21 @@ async function main() {
   }
 
   currentStep = "plugins";
-  print(dim("  [2/7] Enabling plugins for installation"));
-  const pluginsResult = ensurePluginsInstalled(claudeRoot);
+  print(dim("  [2/7] Installing plugins from marketplaces"));
+  const pluginsResult = ensurePluginsInstalled(claudeRoot, vaultPath);
   if (pluginsResult.queued.length === 0) {
-    info("All required plugins already queued");
+    info("All required plugins already installed");
   } else {
-    for (const id of pluginsResult.queued) ok(`Queued plugin: ${id}`);
-    info("Claude Code will sync the actual plugin files from the marketplaces on next launch.");
+    for (const id of pluginsResult.queued) ok(`Installed plugin: ${id}`);
+  }
+  // A fallback to the pending stub is exactly the failure this release fixes, so
+  // say it out loud. verifyInstall() runs before this step and only inspects the
+  // marketplace manifest, so it cannot catch a failed copy.
+  if (pluginsResult.pending.length > 0) {
+    for (const id of pluginsResult.pending) {
+      warn(`Could not copy plugin files for ${id} — left for Claude Code to sync.`);
+    }
+    info("If a /bp command is missing on first launch, re-run this installer.");
   }
 
   currentStep = "vault_create";

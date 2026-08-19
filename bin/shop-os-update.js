@@ -16,6 +16,7 @@ import { homedir } from "node:os";
 import { join, dirname, delimiter } from "node:path";
 import { spawnSync } from "node:child_process";
 import {
+  cpSync,
   existsSync,
   mkdirSync,
   readFileSync,
@@ -145,27 +146,78 @@ function wipePluginCache(claudeRoot) {
   }
 }
 
-function resetPluginEntry(claudeRoot) {
+function reinstallPlugin(claudeRoot) {
   const pluginsPath = join(claudeRoot, "plugins", "installed_plugins.json");
   const data = readJSON(pluginsPath, { version: 2, plugins: {} });
   if (!data.plugins) data.plugins = {};
 
   const id = "obsidian@blueprint-skills";
+  const pluginName = "obsidian";
+  const marketplaceName = "blueprint-skills";
   const now = new Date().toISOString();
+  const originalInstalledAt = data.plugins[id]?.[0]?.installedAt ?? now;
 
-  data.plugins[id] = [
-    {
-      scope: "user",
-      installPath: null,
-      version: "pending",
-      installedAt: data.plugins[id]?.[0]?.installedAt ?? now,
-      lastUpdated: now,
-      gitCommitSha: "pending-sync",
-    },
-  ];
+  const marketplaceDir = join(claudeRoot, "plugins", "marketplaces", marketplaceName);
+  const pluginSourceDir = join(marketplaceDir, "plugins", pluginName);
 
+  if (existsSync(join(pluginSourceDir, ".claude-plugin"))) {
+    let version = "unknown";
+    try {
+      const pj = JSON.parse(readFileSync(join(pluginSourceDir, ".claude-plugin", "plugin.json"), "utf8"));
+      version = pj.version || "unknown";
+    } catch { /* keep "unknown" */ }
+
+    let gitCommitSha = "pending-sync";
+    const gitResult = spawnSync("git", ["rev-parse", "HEAD"], {
+      cwd: marketplaceDir,
+      stdio: ["ignore", "pipe", "ignore"],
+      encoding: "utf8",
+    });
+    if (gitResult.status === 0 && gitResult.stdout) {
+      gitCommitSha = gitResult.stdout.trim();
+    }
+
+    const installPath = join(claudeRoot, "plugins", "cache", marketplaceName, pluginName, version);
+    try {
+      mkdirSync(join(claudeRoot, "plugins", "cache", marketplaceName, pluginName), { recursive: true });
+      cpSync(pluginSourceDir, installPath, { recursive: true });
+
+      // Preserve the existing scope/projectPath so the update doesn't break the
+      // vault association Claude Code set up on the original install.
+      const existingEntry = data.plugins[id]?.[0];
+      const entry = {
+        scope: existingEntry?.scope || "user",
+        installPath,
+        version,
+        installedAt: originalInstalledAt,
+        lastUpdated: now,
+        gitCommitSha,
+      };
+      if (existingEntry?.projectPath) entry.projectPath = existingEntry.projectPath;
+
+      data.plugins[id] = [entry];
+      writeJSON(pluginsPath, data);
+      ok(`Plugin installed (v${version})`);
+      return;
+    } catch {
+      // Fall through to pending stub.
+    }
+  }
+
+  // Fallback: preserve existing scope/projectPath while marking for re-sync.
+  const existingEntry = data.plugins[id]?.[0];
+  const fallbackEntry = {
+    scope: existingEntry?.scope || "user",
+    installPath: null,
+    version: "pending",
+    installedAt: originalInstalledAt,
+    lastUpdated: now,
+    gitCommitSha: "pending-sync",
+  };
+  if (existingEntry?.projectPath) fallbackEntry.projectPath = existingEntry.projectPath;
+  data.plugins[id] = [fallbackEntry];
   writeJSON(pluginsPath, data);
-  ok("Plugin marked for re-install on next Claude Code launch");
+  warn("Could not copy plugin files directly — marked for re-install on next Claude Code launch.");
 }
 
 banner();
@@ -180,8 +232,8 @@ print(dim("  [2/3] Clearing plugin cache"));
 wipePluginCache(claudeRoot);
 
 print("");
-print(dim("  [3/3] Resetting plugin entry"));
-resetPluginEntry(claudeRoot);
+print(dim("  [3/3] Installing updated plugin"));
+reinstallPlugin(claudeRoot);
 
 print("");
 print(green("  ✓ Update complete."));
