@@ -1,7 +1,7 @@
 {
   "name": "@blueprintit/shop-os-install",
-  "version": "0.5.12",
-  "description": "One-command installer for Shop OS — Blueprint IT's AI Operating System for small businesses.",
+  "version": "0.5.13",
+  "description": "One-command installer for Shop OS \u2014 Blueprint IT's AI Operating System for small businesses.",
   "type": "module",
   "bin": {
     "shop-os-install": "bin/shop-os-install.js",
