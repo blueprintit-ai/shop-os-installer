@@ -36,10 +36,13 @@ Open Terminal (Mac: press Cmd+Space, type `terminal`, press Enter) or PowerShell
 
 **Windows** (in PowerShell as Administrator), copy and paste this line:
 ```powershell
-&([scriptblock]::Create((iwr 'https://shop-os-license-server.glenn-15d.workers.dev/installer-windows.ps1').Content))
+&([scriptblock]::Create((iwr -UseBasicParsing 'https://shop-os-license-server.glenn-15d.workers.dev/installer-windows.ps1').Content))
 ```
 
-> **Heads up, Mac users:** you will be asked for your Mac login password near the start. That is Homebrew installing developer tools. Type your password (the cursor will not move, that is normal) and press Enter.
+> **Heads up, Mac users. Two things Terminal does that look alarming and are not:**
+>
+> 1. **"Possible Malware, Paste Blocked."** Recent versions of macOS warn whenever anything is pasted into Terminal. It is a blanket warning about the act of pasting, not about this command. Click **Paste Anyway**, then press Enter.
+> 2. **Your password will look like it isn't typing.** You will be asked for your Mac login password near the start, so Homebrew can install developer tools. Terminal deliberately shows nothing as you type: no dots, no cursor movement. Type it anyway and press Enter.
 
 The script will:
 
