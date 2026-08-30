@@ -467,7 +467,7 @@ function Invoke-ShopOSInstall {
 
   # 6. Run Shop OS installer with license key and vault path
   $global:ShopOS_CurrentStep = "npx_installer"
-  & npx -y @blueprintit/shop-os-install@latest --license "$($global:ShopOS_LicenseKey)" --vault "$vaultPath" --yes
+  & npx -y @blueprintitai/shop-os-install@latest --license "$($global:ShopOS_LicenseKey)" --vault "$vaultPath" --yes
   $npxCode = $LASTEXITCODE
 
   # The installer prints its own customer-facing reason before exiting non-zero

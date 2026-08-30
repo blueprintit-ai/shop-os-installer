@@ -6,10 +6,10 @@
  * Safe to run at any time — does not touch your vault or license.
  *
  * Mac / Linux:
- *   npx -y --package=@blueprintit/shop-os-install shop-os-update
+ *   npx -y --package=@blueprintitai/shop-os-install shop-os-update
  *
  * Windows (PowerShell):
- *   npx -y --package=@blueprintit/shop-os-install shop-os-update
+ *   npx -y --package=@blueprintitai/shop-os-install shop-os-update
  */
 
 import { homedir } from "node:os";

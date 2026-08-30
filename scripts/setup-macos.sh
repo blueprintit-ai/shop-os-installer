@@ -189,7 +189,7 @@ echo ""
 
 # 6. Run Shop OS installer with license key and vault path
 # Redirect stdin to /dev/tty so npx doesn't drain the curl|bash pipe
-npx -y @blueprintit/shop-os-install@latest --license "$LICENSE_KEY" --vault "$VAULT_PATH" --yes < /dev/tty
+npx -y @blueprintitai/shop-os-install@latest --license "$LICENSE_KEY" --vault "$VAULT_PATH" --yes < /dev/tty
 
 echo ""
 echo "=========================================="

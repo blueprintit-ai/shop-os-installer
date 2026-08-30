@@ -107,24 +107,24 @@ Install prerequisites by hand, open a NEW terminal after each, then run the inst
 Installer, interactive:
 
 ```
-npx -y @blueprintit/shop-os-install@latest
+npx -y @blueprintitai/shop-os-install@latest
 ```
 
 No prompts:
 
 ```sh
 # Mac
-npx -y @blueprintit/shop-os-install@latest --license SHOP-XXXX-XXXX-XXXX --vault "$HOME/Shop OS Vault" --yes
+npx -y @blueprintitai/shop-os-install@latest --license SHOP-XXXX-XXXX-XXXX --vault "$HOME/Shop OS Vault" --yes
 ```
 
 ```powershell
 # Windows
-npx -y @blueprintit/shop-os-install@latest --license SHOP-XXXX-XXXX-XXXX --vault "$env:USERPROFILE\Shop OS Vault" --yes
+npx -y @blueprintitai/shop-os-install@latest --license SHOP-XXXX-XXXX-XXXX --vault "$env:USERPROFILE\Shop OS Vault" --yes
 ```
 
 `--existing` adds Shop OS to a vault they already have. Then do steps 4 and 5 by hand.
 
-Update skills later: `npx -y --package=@blueprintit/shop-os-install shop-os-update`
+Update skills later: `npx -y --package=@blueprintitai/shop-os-install shop-os-update`
 
 ## Direct downloads
 
@@ -135,7 +135,7 @@ Update skills later: `npx -y --package=@blueprintit/shop-os-install shop-os-upda
 - Claude Code: https://claude.ai/code , docs https://code.claude.com/docs/en/setup
 - Obsidian: https://obsidian.md/download
 - WinGet / App Installer: https://apps.microsoft.com/detail/9NBLGGH4NNS1 , https://github.com/microsoft/winget-cli/releases
-- Installer package: https://www.npmjs.com/package/@blueprintit/shop-os-install , source https://github.com/blueprintit-ai/shop-os-installer
+- Installer package: https://www.npmjs.com/package/@blueprintitai/shop-os-install , source https://github.com/blueprintit-ai/shop-os-installer
 
 ## Errors and fixes
 

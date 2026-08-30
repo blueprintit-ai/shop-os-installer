@@ -1,4 +1,4 @@
-# @blueprintit/shop-os-install
+# @blueprintitai/shop-os-install
 
 One-command installer for **Shop OS**: Blueprint IT's AI Operating System for small businesses.
 
@@ -29,7 +29,7 @@ This installs Node.js, Claude Code, Obsidian, and Shop OS in one go. You'll be p
 If you prefer to install prerequisites yourself, run:
 
 ```sh
-npx @blueprintit/shop-os-install
+npx @blueprintitai/shop-os-install
 ```
 
 The installer (run directly or via the setup scripts above):
@@ -88,7 +88,7 @@ npm publish --access public
 After publish, the install command works for any customer worldwide:
 
 ```sh
-npx @blueprintit/shop-os-install
+npx @blueprintitai/shop-os-install
 ```
 
 `npx` always fetches the latest published version, so customers get bug fixes automatically.

@@ -1051,7 +1051,7 @@ function parseArgs(argv) {
 
 function printHelp() {
   print("");
-  print(bold("Usage:") + "  npx @blueprintit/shop-os-install [options]");
+  print(bold("Usage:") + "  npx @blueprintitai/shop-os-install [options]");
   print("");
   print(bold("Options:"));
   print(`  --license <KEY>   License key (skips interactive prompt)`);

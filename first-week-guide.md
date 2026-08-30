@@ -275,7 +275,7 @@ The optimizer scans every note in your vault against seven quality frameworks:
 Blueprint IT ships improvements to the Shop OS skills regularly. Your skills do not update automatically. Run this command in Terminal a couple of times a year (or any time Blueprint IT tells you there is an update):
 
 ```
-npx -y --package=@blueprintit/shop-os-install shop-os-update
+npx -y --package=@blueprintitai/shop-os-install shop-os-update
 ```
 
 You can run it from anywhere. It takes under a minute and does not touch your vault, license, or settings. Restart Claude Code after it finishes.
@@ -366,7 +366,7 @@ After the first week, your Shop OS vault should have:
 - ✅ A daily briefing arriving at 7am each morning (operator scheduled)
 - ✅ A clean weekly cadence for vault health (optimizer reminder set)
 - ✅ Your team self-serving vault questions through Shop OS Chat
-- ✅ The update command saved somewhere you can find it (`npx -y --package=@blueprintit/shop-os-install shop-os-update`)
+- ✅ The update command saved somewhere you can find it (`npx -y --package=@blueprintitai/shop-os-install shop-os-update`)
 
 From here, the more you use it, the smarter it gets. Drop your customer call notes into the vault as they happen. Drop new supplier docs in `Raw/` as they arrive. Ask Claude Code questions about your shop's history and it will have real answers.
 

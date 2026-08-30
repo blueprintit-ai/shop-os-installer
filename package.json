@@ -1,5 +1,5 @@
 {
-  "name": "@blueprintit/shop-os-install",
+  "name": "@blueprintitai/shop-os-install",
   "version": "0.5.15",
   "description": "One-command installer for Shop OS \u2014 Blueprint IT's AI Operating System for small businesses.",
   "type": "module",
