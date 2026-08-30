@@ -125,6 +125,21 @@ else
   fi
 fi
 
+# Persist ~/.local/bin on PATH so `claude` works in every NEW Terminal window,
+# not just this script's session (which prepended it above). The official
+# installer usually does this, but not on every shell setup. Idempotent: only
+# appends when the profile doesn't already put .local/bin on PATH.
+if [ -x "$HOME/.local/bin/claude" ]; then
+  PROFILE_FILE="$HOME/.zprofile"
+  case "${SHELL:-}" in
+    */bash) PROFILE_FILE="$HOME/.bash_profile" ;;
+  esac
+  if ! grep -qs '\.local/bin' "$PROFILE_FILE"; then
+    printf '\n# Added by Shop OS setup: Claude Code lives in ~/.local/bin\nexport PATH="$HOME/.local/bin:$PATH"\n' >> "$PROFILE_FILE"
+    echo "✓ Added ~/.local/bin to PATH in ${PROFILE_FILE/#$HOME/~} (so 'claude' works in new Terminal windows)"
+  fi
+fi
+
 # 4. Check/install Obsidian
 if ! command -v obsidian &> /dev/null && ! [ -d /Applications/Obsidian.app ]; then
   echo "📦 Installing Obsidian via Homebrew..."
