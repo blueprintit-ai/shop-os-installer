@@ -159,7 +159,15 @@ echo "=========================================="
 echo "✨ Prerequisites complete!"
 echo ""
 
-read -p "Enter your Shop OS license key: " LICENSE_KEY < /dev/tty
+# A personalized self-installer (Install Shop OS.command from the welcome
+# email) bakes the customer's key into SHOPOS_LICENSE_KEY so nothing has to
+# be typed. Interactive prompt stays as the fallback.
+if [ -n "${SHOPOS_LICENSE_KEY:-}" ]; then
+  LICENSE_KEY="$SHOPOS_LICENSE_KEY"
+  echo "✓ License key loaded from your personalized installer"
+else
+  read -p "Enter your Shop OS license key: " LICENSE_KEY < /dev/tty
+fi
 
 if [ -z "$LICENSE_KEY" ]; then
   echo "✗ No license key provided. Exiting."

@@ -418,7 +418,15 @@ function Invoke-ShopOSInstall {
   Write-Host "✨ Prerequisites complete!" -ForegroundColor Green
   Write-Host ""
 
-  $enteredKey = Read-Host "Enter your Shop OS license key"
+  # A personalized self-installer (Install Shop OS.bat from the welcome email)
+  # bakes the customer's key into SHOPOS_LICENSE_KEY so nothing has to be
+  # typed. Interactive prompt stays as the fallback.
+  if (-not [string]::IsNullOrWhiteSpace($env:SHOPOS_LICENSE_KEY)) {
+    $enteredKey = $env:SHOPOS_LICENSE_KEY
+    Write-Host "✓ License key loaded from your personalized installer" -ForegroundColor Green
+  } else {
+    $enteredKey = Read-Host "Enter your Shop OS license key"
+  }
   if ([string]::IsNullOrWhiteSpace($enteredKey)) {
     throw "No license key provided."
   }
