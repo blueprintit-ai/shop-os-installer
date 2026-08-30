@@ -90,6 +90,12 @@ Until installer 0.5.14 is on npm, published 0.5.12 silently skips superpowers. F
 claude plugin install superpowers@claude-plugins-official --scope project
 ```
 
+## Self Install (customer-driven, since 2026-08-30)
+
+The welcome email includes an optional personal install page:
+`https://shop-os-license-server.glenn-15d.workers.dev/install?key=SHOP-...`
+It serves `Install Shop OS.bat` (Windows) / `Install Shop OS.command` (Mac) with the customer's key baked in (SHOPOS_LICENSE_KEY): download, double-click, one security prompt, done. Booking stays recommended; a self-install does not consume the setup/training hour. If a customer calls stuck mid-self-install, the state is identical to our scripted path: re-running is safe, and install logs show where it stopped.
+
 ## Manual path (script can't run)
 
 Install prerequisites by hand, open a NEW terminal after each, then run the installer.
