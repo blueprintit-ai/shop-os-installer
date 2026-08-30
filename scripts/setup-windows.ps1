@@ -451,6 +451,15 @@ function Invoke-ShopOSInstall {
   # 6. Run Shop OS installer with license key and vault path
   $global:ShopOS_CurrentStep = "npx_installer"
   & npx -y @blueprintit/shop-os-install@latest --license "$($global:ShopOS_LicenseKey)" --vault "$vaultPath" --yes
+  $npxCode = $LASTEXITCODE
+
+  # The installer prints its own customer-facing reason before exiting non-zero
+  # (rejected license, GitHub unreachable, ...). Without this check a failed run
+  # fell through to a misleading "vault folder not found / check Dropbox" error,
+  # or, when the folder already existed, to a false "Setup complete".
+  if ($npxCode -ne 0) {
+    throw "Shop OS installer did not complete (exit code $npxCode).`n`n  See the message above for the reason, fix it, then run this setup again.`n  Nothing was finalized, so re-running is safe."
+  }
 
   # Poll for the vault folder to exist. PowerShell's & operator on npx.cmd can
   # return before its grandchildren (cmd.exe -> node.exe) finish writing files,

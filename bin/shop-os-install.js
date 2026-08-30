@@ -539,6 +539,7 @@ function ensurePluginsInstalled(claudeRoot, vaultPath) {
   const installedAt = new Date().toISOString();
   const queued = [];
   const pending = [];
+  const installedViaCli = [];
 
   for (const id of PLUGINS_TO_ENABLE) {
     if (!existing.plugins[id]) queued.push(id);
@@ -613,29 +614,35 @@ function ensurePluginsInstalled(claudeRoot, vaultPath) {
       }
     }
 
-    // Fallback: write a project-scoped pending stub so Claude Code can attempt
-    // its own sync on next launch while still associating the plugin with this
-    // vault. This is the pre-0.5.12 behaviour and is known to leave skills
-    // missing, so the id is reported back to main() and surfaced to the customer
-    // rather than failing silently the way it used to.
-    if (!installed) {
-      pending.push(id);
-      existing.plugins[id] = [
-        {
-          scope: "project",
-          projectPath: vaultPath,
-          installPath: null,
-          version: "pending",
-          installedAt,
-          lastUpdated: installedAt,
-          gitCommitSha: "pending-sync",
-        },
-      ];
-    }
+    if (!installed) pending.push(id);
   }
 
   writeJSON(path, existing);
-  return { queued, pending, total: PLUGINS_TO_ENABLE.length };
+
+  // Plugins that aren't shipped as a directory inside the marketplace clone
+  // (superpowers is sourced from an external git URL) can't be copied. Hand
+  // those to Claude Code's own CLI, which resolves the source, populates the
+  // cache and records the project-scoped entry itself. Claude Code DELETES a
+  // "pending" stub on launch rather than resolving it, so this is the only
+  // path that actually lands the skills. Runs inside the vault so --scope
+  // project pins the entry to it. Works without being signed in.
+  const stillPending = [];
+  for (const id of pending) {
+    const cli = spawnSync("claude", ["plugin", "install", id, "--scope", "project"], {
+      cwd: vaultPath,
+      stdio: "ignore",
+      shell: process.platform === "win32",
+      timeout: 180000,
+    });
+    const after = readJSON(path, { plugins: {} });
+    const entry = Array.isArray(after.plugins?.[id]) ? after.plugins[id][0] : null;
+    if (cli.status === 0 && entry && entry.installPath && existsSync(entry.installPath)) {
+      installedViaCli.push(id);
+    } else {
+      stillPending.push(id);
+    }
+  }
+  return { queued, installedViaCli, pending: stillPending, total: PLUGINS_TO_ENABLE.length };
 }
 
 // Vault-scoped permission allowlist. Non-technical Shop OS customers were hitting
@@ -654,9 +661,13 @@ function buildPermissionAllowList(vaultPath) {
     "Glob",
     "Grep",
     // Write-side: scope to the vault directory so Claude can't be coaxed into
-    // writing outside it.
-    `Write(${vaultPath}/**)`,
-    `Edit(${vaultPath}/**)`,
+    // writing outside it. A single leading slash is relative to the settings
+    // source (this vault's .claude/settings.json), which is exactly the vault
+    // root, and it works on Windows too. An embedded absolute path does NOT:
+    // Claude Code treats "/Users/x/vault/**" as vault-relative (needs "//"),
+    // and normalizes "C:\..." to "/c/..." before matching.
+    "Write(/**)",
+    "Edit(/**)",
     // Bash: bp-setup creates directories, chmods hooks, finds reference files.
     // Restrict to the specific subcommands the skill actually invokes.
     "Bash(mkdir:*)",
@@ -1169,6 +1180,11 @@ async function main() {
   // Step-by-step install
   print(bold("Installing Shop OS"));
 
+  // The vault directory has to exist before the plugin step: `claude plugin
+  // install --scope project` runs inside it. Step [3/7] reports on it below.
+  const vaultExistedBefore = existsSync(vaultPath);
+  mkdirSync(vaultPath, { recursive: true });
+
   currentStep = "marketplaces";
   print(dim("  [1/7] Registering plugin marketplaces"));
   const mpResult = await ensureMarketplaces(claudeRoot);
@@ -1200,25 +1216,24 @@ async function main() {
   currentStep = "plugins";
   print(dim("  [2/7] Installing plugins from marketplaces"));
   const pluginsResult = ensurePluginsInstalled(claudeRoot, vaultPath);
-  if (pluginsResult.queued.length === 0) {
-    info("All required plugins already installed");
-  } else {
-    for (const id of pluginsResult.queued) ok(`Installed plugin: ${id}`);
+  for (const id of PLUGINS_TO_ENABLE) {
+    if (pluginsResult.pending.includes(id)) continue;
+    const via = pluginsResult.installedViaCli.includes(id) ? " (via Claude Code)" : "";
+    ok(`Installed plugin: ${id}${via}`);
   }
-  // A fallback to the pending stub is exactly the failure this release fixes, so
-  // say it out loud. verifyInstall() runs before this step and only inspects the
-  // marketplace manifest, so it cannot catch a failed copy.
+  // verifyInstall() only inspects the marketplace manifest, so a plugin that
+  // neither copied nor installed through the CLI has to be called out here.
   if (pluginsResult.pending.length > 0) {
     for (const id of pluginsResult.pending) {
-      warn(`Could not copy plugin files for ${id} — left for Claude Code to sync.`);
+      warn(`Could not install ${id}.`);
     }
-    info("If a /bp command is missing on first launch, re-run this installer.");
+    info(`After signing in to Claude Code, run: claude plugin install ${pluginsResult.pending[0]} --scope project`);
+    info("(inside the vault folder), or re-run this installer.");
   }
 
   currentStep = "vault_create";
   print(dim(`  [3/7] ${isExisting ? "Configuring" : "Creating"} vault at ${vaultPath}`));
-  if (!existsSync(vaultPath)) {
-    mkdirSync(vaultPath, { recursive: true });
+  if (!vaultExistedBefore) {
     ok("Vault directory created");
   } else {
     info(`Vault directory ${isExisting ? "found" : "already exists"}`);

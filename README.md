@@ -2,9 +2,9 @@
 
 One-command installer for **Shop OS**: Blueprint IT's AI Operating System for small businesses.
 
-## Quick Install (Recommended)
+## Setup scripts (run on the onboarding call)
 
-Download and run **one** of these setup scripts. Everything installs automatically:
+Run **one** of these on the customer's machine. Everything installs automatically:
 
 **Mac** (in Terminal):
 ```sh
@@ -45,36 +45,14 @@ The installer (run directly or via the setup scripts above):
 
 Zero npm dependencies. Uses only Node 18+ built-ins (`fetch`, `readline`, `fs`).
 
-## Customer-facing install email template
+## How customers get installed
 
-```
-Subject: Welcome to Shop OS: your license key inside
-
-Hi [Customer],
-
-Welcome to Shop OS. Your license key is:
-
-    SHOP-XXXX-YYYY-ZZZZ
-
-To install, open Terminal (Mac) or PowerShell (Windows) and paste this one command:
-
-Mac (Terminal):
-    curl -fsSL https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-macos.sh | bash
-
-Windows (PowerShell, run as Administrator):
-    irm https://raw.githubusercontent.com/blueprintit-ai/shop-os-installer/main/scripts/setup-windows.ps1 | iex
-
-The script installs everything (Node.js, Claude Code, Obsidian, and Shop OS) automatically.
-When prompted, paste your license key above. Total time: ~5 minutes depending on your internet speed.
-
-Need help? Reply to this email.
-
-Blueprint IT
-```
-
-<span style="background-color:#F4EFE3; color:#020309; padding:2px 8px; border-radius:3px; font-size:0.85em;">🤖 Blueprint IT Vault Operator, last edited: 2026-05-26T14:08:59Z</span>
-
-(The admin dashboard at `/admin` generates this template per-customer on the fly.)
+Shop OS Foundation is set up **with** the customer on a one-hour screen-share
+(30 min setup + 30 min training), booked from the welcome email. The welcome
+email deliberately contains **no install commands**: Blueprint IT runs the
+setup script above on the call and enters the license key. See
+`welcome-email-template.md` (source of truth:
+`Projects/shop-os-license-server/src/email/welcome-template.ts`).
 
 ## Local development
 

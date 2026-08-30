@@ -28,14 +28,32 @@ echo ""
 # progress noise. Cached for ~5 minutes, long enough for Homebrew to
 # finish without re-prompting.
 if ! command -v brew &> /dev/null; then
-  sudo -v
+  if ! sudo -v; then
+    echo ""
+    echo "✗ This Mac account can't run administrator commands (sudo)."
+    echo "  Homebrew needs an administrator account to install developer tools."
+    echo "  Log in as an administrator (or have whoever manages this Mac join),"
+    echo "  then run this setup again."
+    exit 1
+  fi
 fi
 
 # 1. Check/install Homebrew
 if ! command -v brew &> /dev/null; then
   echo "📦 Installing Homebrew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  eval "$(/opt/homebrew/bin/brew shellenv)"
+  # Apple Silicon installs to /opt/homebrew, Intel to /usr/local. Put whichever
+  # landed on PATH for the rest of this script.
+  if [ -x /opt/homebrew/bin/brew ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [ -x /usr/local/bin/brew ]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+  fi
+  if ! command -v brew &> /dev/null; then
+    echo "✗ Homebrew installation failed."
+    echo "  Install it from https://brew.sh, then re-run this script."
+    exit 1
+  fi
 else
   echo "✓ Homebrew found"
 fi
