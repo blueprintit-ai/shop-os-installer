@@ -596,10 +596,14 @@ function ensurePluginsInstalled(claudeRoot, vaultPath) {
           });
           cpSync(pluginSourceDir, installPath, { recursive: true });
 
+          // User scope, not project scope: project-scoped plugins only load when
+          // the session's working directory is exactly the vault, which breaks
+          // IDE extensions (VS Code, Antigravity, Cursor) and any terminal that
+          // wasn't cd'd into the vault first. Shop OS machines are single-purpose
+          // enough that machine-wide availability is the right default.
           existing.plugins[id] = [
             {
-              scope: "project",
-              projectPath: vaultPath,
+              scope: "user",
               installPath,
               version,
               installedAt,
@@ -622,13 +626,13 @@ function ensurePluginsInstalled(claudeRoot, vaultPath) {
   // Plugins that aren't shipped as a directory inside the marketplace clone
   // (superpowers is sourced from an external git URL) can't be copied. Hand
   // those to Claude Code's own CLI, which resolves the source, populates the
-  // cache and records the project-scoped entry itself. Claude Code DELETES a
-  // "pending" stub on launch rather than resolving it, so this is the only
-  // path that actually lands the skills. Runs inside the vault so --scope
-  // project pins the entry to it. Works without being signed in.
+  // cache and records the entry itself. Claude Code DELETES a "pending" stub
+  // on launch rather than resolving it, so this is the only path that actually
+  // lands the skills. User scope so the plugins work in every session on the
+  // machine (see above). Works without being signed in.
   const stillPending = [];
   for (const id of pending) {
-    const cli = spawnSync("claude", ["plugin", "install", id, "--scope", "project"], {
+    const cli = spawnSync("claude", ["plugin", "install", id, "--scope", "user"], {
       cwd: vaultPath,
       stdio: "ignore",
       shell: process.platform === "win32",
@@ -686,6 +690,21 @@ function buildPermissionAllowList(vaultPath) {
     // Plan tool: surfaced by some Superpowers skills, no need to prompt.
     "TodoWrite",
   ];
+}
+
+// Enable the Shop OS plugins in the user-level settings so every Claude Code
+// session on the machine gets the /bp commands: terminal in any directory, and
+// IDE extensions (VS Code, Antigravity, Cursor) whose sessions don't start in
+// the vault. Merges; never removes anything already enabled.
+function enableForUser(claudeRoot) {
+  const settingsPath = join(claudeRoot, "settings.json");
+  const settings = readJSON(settingsPath, {});
+  if (!settings.enabledPlugins) settings.enabledPlugins = {};
+  for (const id of PLUGINS_TO_ENABLE) {
+    settings.enabledPlugins[id] = true;
+  }
+  writeJSON(settingsPath, settings);
+  return settingsPath;
 }
 
 function enableForVault(vaultPath) {
@@ -1253,6 +1272,9 @@ async function main() {
   const settingsPath = enableForVault(vaultPath);
   ok(`Wrote ${settingsPath.replace(homedir(), "~")}`);
   info("Pre-approved Read/Write/Edit/Bash patterns so /bp-setup runs without permission prompts");
+  const userSettingsPath = enableForUser(claudeRoot);
+  ok(`Enabled Shop OS plugins machine-wide in ${userSettingsPath.replace(homedir(), "~")}`);
+  info("/bp commands work in any folder and in IDE extensions, not just the vault");
 
   currentStep = "seed_defaults";
   print(dim("  [5/7] Pre-seeding Claude Code defaults"));

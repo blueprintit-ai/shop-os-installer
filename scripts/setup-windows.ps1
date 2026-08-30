@@ -14,6 +14,23 @@ try {
   Write-Host "⚠️  Could not set execution policy (may be GPO-locked). Continuing..." -ForegroundColor Yellow
 }
 
+# Also persist RemoteSigned for this user. When Claude Code is installed through
+# npm, `claude` resolves to a claude.ps1 shim, and the default Restricted policy
+# blocks it in every NEW PowerShell window after this one (the Bypass above dies
+# with this process). RemoteSigned is the standard developer setting: local
+# scripts run, downloaded ones must be signed. Skip silently if GPO pins it or
+# the user already runs something at least as permissive.
+try {
+  $current = Get-ExecutionPolicy -Scope CurrentUser
+  if ($current -in @("Undefined", "Restricted", "AllSigned")) {
+    Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
+    Write-Host "✓ Execution policy set to RemoteSigned for this user (so 'claude' works in new windows)" -ForegroundColor Green
+  }
+} catch {
+  Write-Host "⚠️  Could not persist execution policy for this user (may be GPO-locked)." -ForegroundColor Yellow
+  Write-Host "    If 'claude' is blocked in a new window later, run: claude.cmd" -ForegroundColor Yellow
+}
+
 # Helper functions must be defined at the top level so they survive into
 # nested scriptblocks (e.g. the Claude Code installer).
 function Check-Command {
