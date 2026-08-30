@@ -188,8 +188,16 @@ echo "Installing Shop OS to: $VAULT_PATH"
 echo ""
 
 # 6. Run Shop OS installer with license key and vault path
-# Redirect stdin to /dev/tty so npx doesn't drain the curl|bash pipe
-npx -y @blueprintitai/shop-os-install@latest --license "$LICENSE_KEY" --vault "$VAULT_PATH" --yes < /dev/tty
+# Redirect stdin to /dev/tty so npx doesn't drain the curl|bash pipe.
+# Prefer the npm registry copy; fall back to installing straight from the
+# GitHub repo when the registry copy is unavailable (e.g. registry outage or
+# a package hold), so the install never depends on npm being reachable.
+if npm view @blueprintitai/shop-os-install version >/dev/null 2>&1; then
+  npx -y @blueprintitai/shop-os-install@latest --license "$LICENSE_KEY" --vault "$VAULT_PATH" --yes < /dev/tty
+else
+  echo "npm registry copy unavailable — installing from GitHub instead"
+  npx -y --package=github:blueprintit-ai/shop-os-installer shop-os-install --license "$LICENSE_KEY" --vault "$VAULT_PATH" --yes < /dev/tty
+fi
 
 echo ""
 echo "=========================================="

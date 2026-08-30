@@ -465,9 +465,18 @@ function Invoke-ShopOSInstall {
     throw "npx not found after Node.js installation.`n`n  Node.js was installed but this terminal cannot see it yet.`n`n  Please close this window, open a new PowerShell, and run the`n  installer command again. Node.js will already be installed."
   }
 
-  # 6. Run Shop OS installer with license key and vault path
+  # 6. Run Shop OS installer with license key and vault path.
+  # Prefer the npm registry copy; fall back to installing straight from the
+  # GitHub repo when the registry copy is unavailable (registry outage or a
+  # package hold), so the install never depends on npm being reachable.
   $global:ShopOS_CurrentStep = "npx_installer"
-  & npx -y @blueprintitai/shop-os-install@latest --license "$($global:ShopOS_LicenseKey)" --vault "$vaultPath" --yes
+  & npm view @blueprintitai/shop-os-install version *> $null
+  if ($LASTEXITCODE -eq 0) {
+    & npx -y @blueprintitai/shop-os-install@latest --license "$($global:ShopOS_LicenseKey)" --vault "$vaultPath" --yes
+  } else {
+    Write-Host "  npm registry copy unavailable - installing from GitHub instead" -ForegroundColor DarkGray
+    & npx -y --package=github:blueprintit-ai/shop-os-installer shop-os-install --license "$($global:ShopOS_LicenseKey)" --vault "$vaultPath" --yes
+  }
   $npxCode = $LASTEXITCODE
 
   # The installer prints its own customer-facing reason before exiting non-zero
