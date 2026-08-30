@@ -162,7 +162,7 @@ Update skills later: `npx -y --package=@blueprintitai/shop-os-install shop-os-up
 - Both /bp-setup unknown on first launch: exit and reopen Claude Code in the vault; re-run installer if still missing.
 - Both permission prompts on every write in /bp-setup: re-run installer (rewrites the vault allowlist), or `claude --permission-mode acceptEdits` for the session.
 
-Install logs for every run: admin dashboard > Install logs.
+Install logs for every run: admin dashboard > Install logs. Since 2026-08-30 the log stream also shows the self-install funnel per key (page_view, download, success/error, bp_setup_complete), the install page flips to a success banner when an install reports in, and any install error with no success within 30 minutes emails glenn@ automatically (cron sweep every 15 min; dedupe per error).
 
 ## Links
 
