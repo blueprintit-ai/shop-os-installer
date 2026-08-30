@@ -1,0 +1,30 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Bash syntax (setup-macos.sh)
+        run: bash -n scripts/setup-macos.sh
+      - name: Node syntax (installer bins)
+        run: |
+          node --check bin/shop-os-install.js
+          node --check bin/shop-os-update.js
+      - name: PowerShell parse (setup-windows.ps1)
+        shell: pwsh
+        run: |
+          $t=$null;$e=$null
+          [System.Management.Automation.Language.Parser]::ParseFile("$PWD/scripts/setup-windows.ps1",[ref]$t,[ref]$e)|Out-Null
+          if($e.Count){$e|%{Write-Error "PARSE: $($_.Message) line $($_.Extent.StartLineNumber)"};exit 1}
+          "parse ok"
+      - name: Windows install-decision regression tests
+        shell: pwsh
+        run: pwsh -NoProfile -File test/setup-windows.tests.ps1
