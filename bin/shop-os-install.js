@@ -351,6 +351,25 @@ async function validateLicense(key) {
   return { ok: true, license: body };
 }
 
+// Fire-and-forget activation ping. GET /refresh bumps the license record's
+// last_seen and activations counter, so the admin dashboard's activations
+// column counts completed installs. Best-effort by design: not awaited at the
+// call site, 5s abort, and any failure is swallowed — the install outcome must
+// never depend on it.
+async function bumpActivation(key) {
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 5000);
+    await fetch(`${LICENSE_SERVER}/refresh?key=${encodeURIComponent(key)}`, {
+      headers: { "user-agent": `shop-os-installer/${VERSION}` },
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+  } catch {
+    // best-effort only
+  }
+}
+
 // ---------- claude code config ----------
 
 function readJSON(path, fallback) {
@@ -1110,6 +1129,8 @@ async function main() {
     const result = await validateLicense(key);
     if (result.ok) {
       license = { ...result.license, key };
+      // Not awaited: completes in the background while marketplaces clone.
+      bumpActivation(key);
       ok(`License valid for ${bold(license.customer)}`);
       info(`Product: ${license.product}`);
       info(`Entitlements: ${license.entitlements.join(", ")}`);
