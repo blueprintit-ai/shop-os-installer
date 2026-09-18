@@ -22,6 +22,8 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
 
 This installs Node.js, Claude Code, Obsidian, and Shop OS in one go. You'll be prompted for your license key and vault location.
 
+> **Known issue**: this exact command trips Windows Defender's `Trojan:Win32/Commando.A!ml` ML classifier on customer machines. See [notes/windows-defender-false-positive.md](notes/windows-defender-false-positive.md) before running this on a customer's onboarding call.
+
 ---
 
 ## Manual Install
