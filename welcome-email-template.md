@@ -5,9 +5,9 @@ status: ready-to-use
 tags: [shop-os, customer-onboarding, email-template]
 ---
 
-# Shop OS Welcome Email Template
+# Blueprint OS Welcome Email Template
 
-Use this when you issue a Shop OS Foundation license by hand. The automated path (Stripe/PayPal purchase) already sends this email from the Worker, so this file is for manual sends and for reading the copy without digging through TypeScript.
+Use this when you issue a Blueprint OS Foundation license by hand. The automated path (Stripe/PayPal purchase) already sends this email from the Worker, so this file is for manual sends and for reading the copy without digging through TypeScript.
 
 **Source of truth:** `Projects/shop-os-license-server/src/email/welcome-template.ts`. Change the copy there and the automated email changes with it. Keep this file in sync when you do.
 
@@ -18,7 +18,7 @@ Replace `{{CUSTOMER_NAME}}`, `{{LICENSE_KEY}}`, `{{BOOKING_URL}}`, and `{{PDF_UR
 ## Subject line
 
 ```
-Welcome to Shop OS, your license key and next steps
+Welcome to Blueprint OS, your license key and next steps
 ```
 
 ## Sender
@@ -39,7 +39,7 @@ Brand, not a person. Reply-to stays `glenn@blueprintit.ai`.
 ```
 Hi {{CUSTOMER_NAME}},
 
-Your Shop OS Foundation license key is below, along with the onboarding
+Your Blueprint OS Foundation license key is below, along with the onboarding
 hour we run together and the short list of things to have ready before
 it.
 
@@ -58,18 +58,18 @@ the attached PDF.
 BOOK YOUR ONBOARDING HOUR
 ────────────────────────────────────────────────────────────
 
-Shop OS is set up with you, not by you. One booking, one hour, two
+Blueprint OS is set up with you, not by you. One booking, one hour, two
 halves:
 
-  First 30 minutes, setup. We get on a screen share and set Shop OS up on
-  your machine: every prerequisite, your license, and your Shop OS Vault
+  First 30 minutes, setup. We get on a screen share and set Blueprint OS up on
+  your machine: every prerequisite, your license, and your Blueprint OS Vault
   in the folder you choose. By the halfway mark you have a working Shop
   Brain.
 
   Second 30 minutes, training. We walk you and whoever else should be in
   the room through running it day to day.
 
-Pick your time here (look for "Shop OS Foundation Setup"):
+Pick your time here (look for "Blueprint OS Foundation Setup"):
 
     {{BOOKING_URL}}
 
@@ -98,7 +98,7 @@ BEFORE THE CALL
 Five minutes of prep, so we spend the call on your business instead of
 on downloads:
 
-  1. A Claude subscription. Shop OS runs on Claude. If you do not have an
+  1. A Claude subscription. Blueprint OS runs on Claude. If you do not have an
      account yet, set one up at https://claude.ai/onboarding and have the
      login handy.
 
@@ -159,10 +159,10 @@ Add `&format=text` for the plain-text rendering. Both require the admin bearer t
 ## Notes for whoever sends this
 
 - **The booking link is the point of this email.** If nothing else lands, they should book the hour. Do not bury it.
-- **Calendly hosts ONE 1-hour event** ("Shop OS Foundation Setup"), not two 30-minute ones. Do not write copy telling customers to book two separate sessions.
+- **Calendly hosts ONE 1-hour event** ("Blueprint OS Foundation Setup"), not two 30-minute ones. Do not write copy telling customers to book two separate sessions.
 - **Customize per customer** if you want extra warmth. Reference what they ordered, mention your discovery call. The template above is the floor, not the ceiling.
 - **The 1-business-hour SLA in the closing matches your [[Context/organization|operator response SLA]].** Do not promise faster.
-- **Self install is a personalized LINK, never raw commands.** Since 2026-08-30 the email offers an optional "Install it yourself" section pointing to `https://shop-os-license-server.glenn-15d.workers.dev/install?key={{LICENSE_KEY}}`, where the customer downloads `Install Shop OS.bat` / `Install Shop OS.command` with their key baked in. Do not paste raw terminal commands into the email. The booking link stays first and stays recommended; self-installing does not use up the included setup and training session.
+- **Self install is a personalized LINK, never raw commands.** Since 2026-08-30 the email offers an optional "Install it yourself" section pointing to `https://shop-os-license-server.glenn-15d.workers.dev/install?key={{LICENSE_KEY}}`, where the customer downloads `Install Blueprint OS.bat` / `Install Blueprint OS.command` with their key baked in. Do not paste raw terminal commands into the email. The booking link stays first and stays recommended; self-installing does not use up the included setup and training session.
 
 ## Where this template lives
 

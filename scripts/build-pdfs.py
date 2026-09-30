@@ -27,8 +27,8 @@ CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
 BRAND_CSS = """
 /* ============================================================
-   Blueprint IT — Shop OS Foundation customer documents.
-   Visual language matches blueprintit.ai/shop-ossi:
+   Blueprint IT — Blueprint OS Foundation customer documents.
+   Visual language matches blueprintit.ai/blueprint-os:
    warm paper base, blueprint grid overlay, cyan + rust accents,
    node-cloud cover banner, "Blueprint IT" wordmark.
 ============================================================ */
@@ -51,7 +51,7 @@ BRAND_CSS = """
   margin: 0.85in 0.75in 1.0in 0.75in;
   background: #f4efe3;
   @bottom-left {
-    content: "Blueprint IT  \\00B7  Shop OS Foundation";
+    content: "Blueprint IT  \\00B7  Blueprint OS Foundation";
     font-family: "SF Mono", Menlo, Consolas, monospace;
     font-size: 7.5pt;
     letter-spacing: 0.1em;
@@ -464,14 +464,14 @@ def main() -> int:
         {
             "src": ROOT / "customer-welcome.md",
             "out": DIST / "shop-os-welcome.pdf",
-            "title": "Welcome to Shop OS",
+            "title": "Welcome to Blueprint OS",
             "doc_number": "DOC § SOS-WELCOME-01",
             "subtitle": "Your license, install steps, and first session",
         },
         {
             "src": ROOT / "first-week-guide.md",
             "out": DIST / "shop-os-first-week-guide.pdf",
-            "title": "Your First Week with Shop OS",
+            "title": "Your First Week with Blueprint OS",
             "doc_number": "DOC § SOS-GUIDE-01",
             "subtitle": "Obsidian basics, seeding, the operator, the optimizer",
         },

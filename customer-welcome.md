@@ -1,15 +1,15 @@
 ---
 type: customer-pdf
 project: shop-os
-audience: Shop OS Foundation customer
+audience: Blueprint OS Foundation customer
 tags: [shop-os, customer-onboarding, onboarding-pack]
 ---
 
-# Welcome to Shop OS
+# Welcome to Blueprint OS
 
-Your Shop OS Foundation license key is below, along with the onboarding hour we run together and everything worth having ready before it.
+Your Blueprint OS Foundation license key is below, along with the onboarding hour we run together and everything worth having ready before it.
 
-Shop OS is set up with you, not by you. One booking, one hour: the first half we install it on your machine, the second half we train you and your team.
+Blueprint OS is set up with you, not by you. One booking, one hour: the first half we install it on your machine, the second half we train you and your team.
 
 ## Your license key
 
@@ -21,17 +21,17 @@ Save it somewhere safe (a password manager, a folder in your inbox). We enter it
 
 ## Your onboarding hour
 
-**First 30 minutes, setup.** We get on a screen share and set Shop OS up on your machine. Every prerequisite, your license, and your Shop OS Vault in the folder you choose. By the halfway mark you have a working Shop Brain.
+**First 30 minutes, setup.** We get on a screen share and set Blueprint OS up on your machine. Every prerequisite, your license, and your Blueprint OS Vault in the folder you choose. By the halfway mark you have a working Shop Brain.
 
 **Second 30 minutes, training.** We walk you and whoever else should be in the room through running it day to day: how to seed context, how to ask it real questions, how to put routines on a schedule.
 
-The booking link is in your welcome email, listed as "Shop OS Foundation Setup". One booking covers both halves. Pick an hour when you will not be pulled onto the floor.
+The booking link is in your welcome email, listed as "Blueprint OS Foundation Setup". One booking covers both halves. Pick an hour when you will not be pulled onto the floor.
 
 ## Before the call
 
 Five minutes of prep, so we spend the call on your business instead of on downloads.
 
-1. **A Claude subscription.** Shop OS runs on Claude. If you do not have an account yet, set one up at **https://claude.ai/onboarding** and have the login handy.
+1. **A Claude subscription.** Blueprint OS runs on Claude. If you do not have an account yet, set one up at **https://claude.ai/onboarding** and have the login handy.
 2. **Your computer login password.** The install asks for it partway through, so developer tools can be installed. If someone else administers the machine, get them on the call with us.
 3. **A decision on where the vault should live.** Your home folder, Documents, or Desktop if you work on one computer. Inside Dropbox, iCloud Drive, or OneDrive if you want it synced across machines. We create the folder for you on the call, so there is nothing to set up ahead of time.
 4. **Thirty uninterrupted minutes** on the computer you actually work on, with the license key above within reach.
@@ -44,15 +44,15 @@ Five minutes of prep, so we spend the call on your business instead of on downlo
 
 ## What we build in the first half
 
-The installer we run together handles Node.js, Claude Code, and Obsidian, picks up your license, and creates your Shop OS Vault in the folder you picked. Then we run `/bp-setup`, a guided interview that builds your Shop Brain from scratch.
+The installer we run together handles Node.js, Claude Code, and Obsidian, picks up your license, and creates your Blueprint OS Vault in the folder you picked. Then we run `/bp-setup`, a guided interview that builds your Shop Brain from scratch.
 
 It covers 9 topics: your shop, what you build and who buys it, how jobs flow from estimate to delivery, how you price your work, where customers come from, why they pick you, how you communicate, what you are focused on right now, and the tools you use. Say **next** to move ahead on any topic, or **done** to wrap up early. By the end, your vault reflects your actual business.
 
-After the call we send a follow-up document called "Your First Week with Shop OS" that walks you through what to do next.
+After the call we send a follow-up document called "Your First Week with Blueprint OS" that walks you through what to do next.
 
-## Letting your team use Shop OS Chat
+## Letting your team use Blueprint OS Chat
 
-Inside your vault folder, alongside `CLAUDE.md` and `Raw/`, the installer also drops a file called `Shop OS Chat.command` (Mac) or `Shop OS Chat.bat` (Windows). This is the read-only chat your team can use to ask questions about anything in the vault. Suppliers, past jobs, customer history, contract terms, all searchable from a simple chat window. We cover it in the training half of the call.
+Inside your vault folder, alongside `CLAUDE.md` and `Raw/`, the installer also drops a file called `Blueprint OS Chat.command` (Mac) or `Blueprint OS Chat.bat` (Windows). This is the read-only chat your team can use to ask questions about anything in the vault. Suppliers, past jobs, customer history, contract terms, all searchable from a simple chat window. We cover it in the training half of the call.
 
 ### How it works
 

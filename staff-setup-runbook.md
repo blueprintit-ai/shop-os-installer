@@ -5,9 +5,9 @@ audience: blueprintit-staff
 tags: [shop-os, onboarding, install, runbook]
 ---
 
-# Shop OS Setup Runbook (staff)
+# Blueprint OS Setup Runbook (staff)
 
-Install Shop OS Foundation on a customer's machine during the one-hour onboarding call. Keep in sync with `scripts/` when the install flow changes. Published copy (with copy buttons): see the "Shop OS Setup Runbook" artifact.
+Install Blueprint OS Foundation on a customer's machine during the one-hour onboarding call. Keep in sync with `scripts/` when the install flow changes. Published copy (with copy buttons): see the "Blueprint OS Setup Runbook" artifact.
 
 ## Before the call
 
@@ -63,8 +63,8 @@ Both are safe to re-run.
 | Windows UAC | Yes. |
 | License key | Paste. Case/spaces don't matter. 3 attempts. |
 | Folder picker | Pick the PARENT location. Vault folder is created inside it. |
-| Vault name [Shop OS Vault] | Enter for default. |
-| Installer output | 7 steps, ends "Shop OS installation complete!". Every plugin line should be a checkmark, including superpowers. |
+| Vault name [Blueprint OS Vault] | Enter for default. |
+| Installer output | 7 steps, ends "Blueprint OS installation complete!". Every plugin line should be a checkmark, including superpowers. |
 
 ## 4. First launch
 
@@ -74,11 +74,11 @@ Script opens Claude Code in the vault twice on purpose (plugins load in the back
 2. `/exit`. Script relaunches.
 3. Launch 2: `/bp-setup`. Run it with the customer.
 
-Later: `cd ~/"Shop OS Vault" && claude` (Mac) / `cd "$env:USERPROFILE\Shop OS Vault"; claude` (Windows).
+Later: `cd ~/"Blueprint OS Vault" && claude` (Mac) / `cd "$env:USERPROFILE\Blueprint OS Vault"; claude` (Windows).
 
 ## 5. Verify
 
-- Vault has `CLAUDE.md`, `Raw/`, `.claude/settings.json`, `Shop OS Chat.command` or `.bat`, `Open Shop OS Chat - HELP.txt`.
+- Vault has `CLAUDE.md`, `Raw/`, `.claude/settings.json`, `Blueprint OS Chat.command` or `.bat`, `Open Blueprint OS Chat - HELP.txt`.
 - `/bp` shows bp-setup, bp-digest, bp-operator, bp-optimizer.
 - Superpowers skills present (e.g. `/brainstorming`).
 - Chat launcher opens localhost:7777 (Mac: right-click > Open first time. Windows: More info > Run anyway).
@@ -94,7 +94,7 @@ claude plugin install superpowers@claude-plugins-official --scope project
 
 The welcome email includes an optional personal install page:
 `https://shop-os-license-server.glenn-15d.workers.dev/install?key=SHOP-...`
-It serves `Install Shop OS.bat` (Windows) / `Install Shop OS.zip` (Mac; unzips to `Install Shop OS.command` with its execute bit intact) with the customer's key baked in (SHOPOS_LICENSE_KEY): download, double-click, one security prompt, done. Booking stays recommended; a self-install does not consume the setup/training hour. If a customer calls stuck mid-self-install, the state is identical to our scripted path: re-running is safe, and install logs show where it stopped.
+It serves `Install Blueprint OS.bat` (Windows) / `Install Blueprint OS.zip` (Mac; unzips to `Install Blueprint OS.command` with its execute bit intact) with the customer's key baked in (SHOPOS_LICENSE_KEY): download, double-click, one security prompt, done. Booking stays recommended; a self-install does not consume the setup/training hour. If a customer calls stuck mid-self-install, the state is identical to our scripted path: re-running is safe, and install logs show where it stopped.
 
 ## Manual path (script can't run)
 
@@ -120,15 +120,15 @@ No prompts:
 
 ```sh
 # Mac
-npx -y @blueprintitai/shop-os-install@latest --license SHOP-XXXX-XXXX-XXXX --vault "$HOME/Shop OS Vault" --yes
+npx -y @blueprintitai/shop-os-install@latest --license SHOP-XXXX-XXXX-XXXX --vault "$HOME/Blueprint OS Vault" --yes
 ```
 
 ```powershell
 # Windows
-npx -y @blueprintitai/shop-os-install@latest --license SHOP-XXXX-XXXX-XXXX --vault "$env:USERPROFILE\Shop OS Vault" --yes
+npx -y @blueprintitai/shop-os-install@latest --license SHOP-XXXX-XXXX-XXXX --vault "$env:USERPROFILE\Blueprint OS Vault" --yes
 ```
 
-`--existing` adds Shop OS to a vault they already have. Then do steps 4 and 5 by hand.
+`--existing` adds Blueprint OS to a vault they already have. Then do steps 4 and 5 by hand.
 
 Update skills later: `npx -y --package=@blueprintitai/shop-os-install shop-os-update`
 
@@ -152,9 +152,9 @@ Update skills later: `npx -y --package=@blueprintitai/shop-os-install shop-os-up
 - Win msiexec 1603: another Node is installed. Uninstall Node.js in Add or Remove Programs, reopen PowerShell as admin, re-run.
 - Win "npx not found after Node.js installation": PATH not refreshed. New PowerShell as admin, re-run.
 - Win Python failed: install from python.org with Add to PATH, new PowerShell, re-run.
-- Win SmartScreen on Shop OS Chat.bat: More info > Run anyway.
+- Win SmartScreen on Blueprint OS Chat.bat: More info > Run anyway.
 - Mac "not in the sudoers file": account isn't admin. Get an admin login.
-- Mac "unidentified developer" on Shop OS Chat.command: right-click > Open > Open.
+- Mac "unidentified developer" on Blueprint OS Chat.command: right-click > Open > Open.
 - Mac paste blocked in Terminal: use download-then-run form.
 - Both "Can't reach GitHub": network blocks github.com / *.workers.dev. Hotspot. Re-running is safe.
 - Both "License rejected": check the key in admin. Typos are normalized; "not found" is a wrong key.
@@ -168,7 +168,7 @@ Install logs for every run: admin dashboard > Install logs. Since 2026-08-30 the
 
 - Admin: https://shop-os-license-server.glenn-15d.workers.dev/admin
 - Booking: https://calendly.com/blueprintit/shop-os-foundation-setup
-- Product page: https://blueprintit.ai/shop-ossi
+- Product page: https://blueprintit.ai/blueprint-os
 - Skills marketplace: https://github.com/blueprintit-ai/blueprint-skills
 - Chat app: https://github.com/blueprintit-ai/shop-os-chat
 - On the customer machine: `~/.shopos/license.json`, `~/.claude/plugins/`, `<vault>/.claude/settings.json`

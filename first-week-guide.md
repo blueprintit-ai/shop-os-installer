@@ -2,15 +2,15 @@
 type: customer-guide
 project: shop-os
 status: ready-to-use
-audience: Shop OS Foundation customer (non-technical)
+audience: Blueprint OS Foundation customer (non-technical)
 tags: [shop-os, customer-onboarding, first-week]
 ---
 
-# Shop OS: Your First Week
+# Blueprint OS: Your First Week
 
 You finished the install and the onboarding interview. The vault is in Obsidian. Now what?
 
-This guide covers the five things you need to know to start running your shop on Shop OS:
+This guide covers the five things you need to know to start running your shop on Blueprint OS:
 
 1. **How to use Obsidian to browse your vault.** 10 minutes. Read this first.
 2. **How to feed your shop's existing materials into the vault.** Seeding. About an hour the first week.
@@ -24,22 +24,22 @@ You can skip around, but section 1 is worth reading first if you've never used O
 
 ## 1. How to use Obsidian to browse your vault
 
-Obsidian is the app you use to **read, browse, and edit** your Shop OS vault. Think of it like Finder + Notes + a wiki rolled into one window. Claude Code does the AI work; Obsidian is where you actually look at the results.
+Obsidian is the app you use to **read, browse, and edit** your Blueprint OS vault. Think of it like Finder + Notes + a wiki rolled into one window. Claude Code does the AI work; Obsidian is where you actually look at the results.
 
 You don't need to learn most of Obsidian's features. The basics get you 95% of the way there.
 
 ### The window layout
 
-When you first open your Shop OS vault in Obsidian, you'll see three areas:
+When you first open your Blueprint OS vault in Obsidian, you'll see three areas:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  Left sidebar          │  Main pane                     │
 │  (file explorer)       │  (whatever note you're reading)│
 │                        │                                │
-│  ├ CLAUDE.md           │  # Shop OS Vault               │
+│  ├ CLAUDE.md           │  # Blueprint OS Vault               │
 │  ├ Context/            │                                │
-│  │  └ organization.md  │  Welcome to your Shop OS       │
+│  │  └ organization.md  │  Welcome to your Blueprint OS       │
 │  ├ Projects/           │  vault. This is the operating  │
 │  │  ├ Acme Cabinets/   │  system Blueprint IT installed │
 │  │  └ Henderson/       │  for [your shop]...            │
@@ -83,7 +83,7 @@ But honestly, the better workflow is: tell Claude Code what you want to add, and
 
 Two things:
 
-1. **Don't install any community plugins.** Shop OS doesn't need them and they can complicate things. The default Obsidian install has everything you need.
+1. **Don't install any community plugins.** Blueprint OS doesn't need them and they can complicate things. The default Obsidian install has everything you need.
 2. **Don't sign up for Obsidian Sync.** Your vault lives on your computer (and in Dropbox if you put it there). Obsidian Sync is a paid subscription you don't need.
 
 Obsidian is just a viewer. You can always edit the same files in TextEdit, Notepad, VSCode, or any other text editor if Obsidian ever feels like too much. The vault is just a folder of plain markdown files.
@@ -104,10 +104,10 @@ You don't need to manually copy and paste any of this. You drop the source files
 
 ### Where to put materials: one folder, flat, no decisions
 
-Open Finder (Mac) or File Explorer (Windows) and navigate to your Shop OS Vault folder. You'll see a folder called `Raw/` that the installer created for you. **That's your inbox.** Drop any file there. Claude Code reads it, decides where it belongs, files it correctly, and moves the original to `Raw/processed/` so the inbox stays clean.
+Open Finder (Mac) or File Explorer (Windows) and navigate to your Blueprint OS Vault folder. You'll see a folder called `Raw/` that the installer created for you. **That's your inbox.** Drop any file there. Claude Code reads it, decides where it belongs, files it correctly, and moves the original to `Raw/processed/` so the inbox stays clean.
 
 ```
-Shop OS Vault/
+Blueprint OS Vault/
 ├── Raw/                  ← drop everything here, flat. No subfolders to make.
 │   ├── README.md
 │   └── processed/        ← Claude moves digested originals here automatically
@@ -179,7 +179,7 @@ That gives Claude Code enough context to be useful for daily questions. You can 
 
 ## 3. Set up your daily morning briefing with `/bp-operator`
 
-The operator is the autonomous part of Shop OS. You set it up once. After that, it runs on a schedule and writes a fresh briefing to your `Daily/` folder every morning before you walk into the shop.
+The operator is the autonomous part of Blueprint OS. You set it up once. After that, it runs on a schedule and writes a fresh briefing to your `Daily/` folder every morning before you walk into the shop.
 
 A typical morning briefing for a cabinet shop:
 
@@ -272,7 +272,7 @@ The optimizer scans every note in your vault against seven quality frameworks:
 
 ## 5. Keep your skills current
 
-Blueprint IT ships improvements to the Shop OS skills regularly. Your skills do not update automatically. Run this command in Terminal a couple of times a year (or any time Blueprint IT tells you there is an update):
+Blueprint IT ships improvements to the Blueprint OS skills regularly. Your skills do not update automatically. Run this command in Terminal a couple of times a year (or any time Blueprint IT tells you there is an update):
 
 ```
 npx -y --package=@blueprintitai/shop-os-install shop-os-update
@@ -282,15 +282,15 @@ You can run it from anywhere. It takes under a minute and does not touch your va
 
 ---
 
-## 6. Let your team use the vault through Shop OS Chat
+## 6. Let your team use the vault through Blueprint OS Chat
 
-By now, the vault knows a lot about your shop. The next step is letting your team get to that knowledge without pinging you every time. That's what **Shop OS Chat** is for: a simple chat window that anyone in the shop can use to ask vault questions, on the shop computer, without touching Claude Code.
+By now, the vault knows a lot about your shop. The next step is letting your team get to that knowledge without pinging you every time. That's what **Blueprint OS Chat** is for: a simple chat window that anyone in the shop can use to ask vault questions, on the shop computer, without touching Claude Code.
 
 ### Two ways to talk to the vault
 
-Shop OS gives you two interfaces, each pointed at a different audience:
+Blueprint OS gives you two interfaces, each pointed at a different audience:
 
-- **Shop OS Chat** is the read-only browser chat. It's for **employees**, anyone in the shop who needs an answer from the vault but should not be editing files, scheduling routines, or running maintenance skills. They double-click the launcher, ask in plain language, and get answers grounded in your business data. Nothing they do can change the vault.
+- **Blueprint OS Chat** is the read-only browser chat. It's for **employees**, anyone in the shop who needs an answer from the vault but should not be editing files, scheduling routines, or running maintenance skills. They double-click the launcher, ask in plain language, and get answers grounded in your business data. Nothing they do can change the vault.
 - **Claude Code** is the full-access terminal interface. It's for **you and any designated operators**, the people who run digests, schedule the morning briefing, optimize the vault, edit `Context/`, and trigger the write-side skills (`/bp-digest`, `/bp-operator`, `/bp-optimizer`). Full read, write, and execute against the vault.
 
 Same vault, same context, two doors. The team gets the safe door. You and your trusted operators get the master key.
@@ -299,21 +299,21 @@ Same vault, same context, two doors. The team gets the safe door. You and your t
 
 Inside your vault folder, next to `CLAUDE.md` and `Raw/`, the installer dropped two launcher files:
 
-- `Shop OS Chat.command` (Mac)
-- `Shop OS Chat.bat` (Windows)
+- `Blueprint OS Chat.command` (Mac)
+- `Blueprint OS Chat.bat` (Windows)
 
 Either one starts the chat. Anyone on the shop computer can double-click it.
 
 ### How to launch it (first time)
 
-1. Double-click `Shop OS Chat.command` or `Shop OS Chat.bat`.
+1. Double-click `Blueprint OS Chat.command` or `Blueprint OS Chat.bat`.
 2. A small terminal window opens. That's normal. It's the chat server running locally on the shop computer.
 3. The default browser opens to a `localhost` URL with the chat page.
 4. The page asks for the person's name. They type it once; the browser remembers from then on and skips straight to the chat.
 
 The very first launch takes 20 to 30 seconds while the chat downloads. Every launch after that is instant.
 
-**Tip:** drag `Shop OS Chat.command` (or `.bat`) to the shop computer's desktop so anyone can hit it without digging through folders.
+**Tip:** drag `Blueprint OS Chat.command` (or `.bat`) to the shop computer's desktop so anyone can hit it without digging through folders.
 
 ### How the team uses it
 
@@ -359,13 +359,13 @@ It's the cheapest customer-research / team-training feedback loop you'll ever ha
 
 ## What you now have
 
-After the first week, your Shop OS vault should have:
+After the first week, your Blueprint OS vault should have:
 
 - ✅ Your shop's foundational info (Context/, set up by onboarding)
 - ✅ A pile of seeded materials in their proper folders (Resources/, Projects/, Team/)
 - ✅ A daily briefing arriving at 7am each morning (operator scheduled)
 - ✅ A clean weekly cadence for vault health (optimizer reminder set)
-- ✅ Your team self-serving vault questions through Shop OS Chat
+- ✅ Your team self-serving vault questions through Blueprint OS Chat
 - ✅ The update command saved somewhere you can find it (`npx -y --package=@blueprintitai/shop-os-install shop-os-update`)
 
 From here, the more you use it, the smarter it gets. Drop your customer call notes into the vault as they happen. Drop new supplier docs in `Raw/` as they arrive. Ask Claude Code questions about your shop's history and it will have real answers.

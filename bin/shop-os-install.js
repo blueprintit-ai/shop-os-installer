@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Shop OS Foundation installer.
+ * Blueprint OS Foundation installer.
  *
  * Single command flow for a paying customer:
  *   1. Welcome + pre-flight (Node version, Claude Code present)
@@ -159,7 +159,7 @@ function banner() {
     "",
     bold("  ╔════════════════════════════════════════════════════════════╗"),
     bold("  ║                                                            ║"),
-    bold("  ║          ") + cyan("Shop OS Foundation Installer") + bold("                      ║"),
+    bold("  ║          ") + cyan("Blueprint OS Foundation Installer") + bold("                 ║"),
     bold("  ║          ") + dim("AI Operating System for Small Businesses") + bold("          ║"),
     bold("  ║                                                            ║"),
     bold("  ╚════════════════════════════════════════════════════════════╝"),
@@ -223,13 +223,13 @@ async function checkConnectivity() {
   currentStep = "connectivity_check";
   const targets = [
     { name: "GitHub (github.com)", url: "https://github.com" },
-    { name: "Shop OS license server", url: LICENSE_SERVER },
+    { name: "Blueprint OS license server", url: LICENSE_SERVER },
   ];
   for (const t of targets) {
     if (!(await isReachable(t.url))) {
       fail(
         `Can't reach ${t.name}.\n\n` +
-          `  Shop OS needs internet access to ${t.url}\n\n` +
+          `  Blueprint OS needs internet access to ${t.url}\n\n` +
           `  Check your Wi-Fi/connection. If you're on a work or guest network,\n` +
           `  it may block GitHub — try a home/phone hotspot, or ask IT to allow\n` +
           `  github.com and *.workers.dev. Then re-run the installer.`,
@@ -276,7 +276,7 @@ function checkClaudeCode() {
     if (npmInstall.status !== 0) {
       fail(
         "Claude Code auto-install failed.\n\n" +
-          "  Shop OS runs on top of Claude Code. Install it manually at:\n" +
+          "  Blueprint OS runs on top of Claude Code. Install it manually at:\n" +
           "    https://claude.ai/code\n\n" +
           "  Then re-run this installer.",
       );
@@ -309,7 +309,7 @@ function checkClaudeCode() {
 
 // ---------- license validation ----------
 
-// A Shop OS key is SHOP-XXXX-XXXX-XXXX (Crockford Base32). Normalize common paste
+// A Blueprint OS key is SHOP-XXXX-XXXX-XXXX (Crockford Base32). Normalize common paste
 // artifacts (lowercase, stray spaces, surrounding whitespace) so a perfectly valid
 // key isn't rejected over formatting, and shape-check for instant feedback on an
 // obvious typo. The license server stays authoritative — a shape miss never
@@ -420,7 +420,7 @@ async function ensureMarketplaces(claudeRoot) {
   if (failed.length > 0) {
     const names = failed.map((m) => m.source.repo).join(", ");
     fail(
-      `Could not download the Shop OS skills from GitHub (${names}).\n\n` +
+      `Could not download the Blueprint OS skills from GitHub (${names}).\n\n` +
         `  The repository failed to clone after retries — usually a dropped\n` +
         `  connection, or a network that blocks github.com.\n\n` +
         `  Check your connection (a work/guest network may block GitHub — try a\n` +
@@ -537,7 +537,7 @@ function verifyInstall(claudeRoot) {
 }
 
 function ensurePluginsInstalled(claudeRoot, vaultPath) {
-  // Always reset and directly install the Shop OS-required plugins from the
+  // Always reset and directly install the Blueprint OS-required plugins from the
   // (just-refreshed) marketplace clones. Previous versions wrote a
   // "version: pending / installPath: null" stub and assumed Claude Code would
   // sync the files on next launch — but Claude Code does not resolve pending
@@ -618,7 +618,7 @@ function ensurePluginsInstalled(claudeRoot, vaultPath) {
           // User scope, not project scope: project-scoped plugins only load when
           // the session's working directory is exactly the vault, which breaks
           // IDE extensions (VS Code, Antigravity, Cursor) and any terminal that
-          // wasn't cd'd into the vault first. Shop OS machines are single-purpose
+          // wasn't cd'd into the vault first. Blueprint OS machines are single-purpose
           // enough that machine-wide availability is the right default.
           existing.plugins[id] = [
             {
@@ -668,10 +668,10 @@ function ensurePluginsInstalled(claudeRoot, vaultPath) {
   return { queued, installedViaCli, pending: stillPending, total: PLUGINS_TO_ENABLE.length };
 }
 
-// Vault-scoped permission allowlist. Non-technical Shop OS customers were hitting
+// Vault-scoped permission allowlist. Non-technical Blueprint OS customers were hitting
 // constant tool-permission prompts during /bp-setup (~50+ Read/Write/Bash dialogs
 // per onboarding run). These patterns pre-approve the tool surface bp-setup and
-// the daily Shop OS flow actually use, scoped to this vault's project settings —
+// the daily Blueprint OS flow actually use, scoped to this vault's project settings —
 // not the user's global settings. Risk model: customer's own paid Claude
 // subscription, own machine, own data; we trade some inbound-injection surface
 // for a workable UX. Writes/edits are intentionally bounded to the vault path.
@@ -711,7 +711,7 @@ function buildPermissionAllowList(vaultPath) {
   ];
 }
 
-// Enable the Shop OS plugins in the user-level settings so every Claude Code
+// Enable the Blueprint OS plugins in the user-level settings so every Claude Code
 // session on the machine gets the /bp commands: terminal in any directory, and
 // IDE extensions (VS Code, Antigravity, Cursor) whose sessions don't start in
 // the vault. Merges; never removes anything already enabled.
@@ -795,9 +795,9 @@ license-product: ${license.product}
 installed-at: ${new Date().toISOString()}
 ---
 
-# Shop OS Vault
+# Blueprint OS Vault
 
-Welcome to your Shop OS vault. This is the operating system Blueprint IT installed for ${license.customer}.
+Welcome to your Blueprint OS vault. This is the operating system Blueprint IT installed for ${license.customer}.
 
 To finish onboarding, run the following slash command inside Claude Code:
 
@@ -835,7 +835,7 @@ tags: [shop-os, inbox, raw]
 
 # Raw / Inbox
 
-Drop any raw materials here that you want Shop OS to read and route into your vault.
+Drop any raw materials here that you want Blueprint OS to read and route into your vault.
 PDFs, photos, transcripts, contracts, price lists, spreadsheets, scans, anything.
 
 You do NOT need to organize them into subfolders. Just drop them flat. Claude Code
@@ -872,35 +872,35 @@ The more you drop, the more your vault knows about your shop.
 
 function writeChatLauncher(vaultPath) {
   const isWindows = process.platform === "win32";
-  const filename = isWindows ? "Shop OS Chat.bat" : "Shop OS Chat.command";
+  const filename = isWindows ? "Blueprint OS Chat.bat" : "Blueprint OS Chat.command";
   const filePath = join(vaultPath, filename);
 
   let body;
   if (isWindows) {
     body = `@echo off
-:: Shop OS Chat launcher. Double-click to start.
+:: Blueprint OS Chat launcher. Double-click to start.
 :: First time, Windows may show "Windows protected your PC" (SmartScreen).
 :: That's expected for a new script. Click "More info" then "Run anyway".
 setlocal
 set "VAULT_PATH=%~dp0"
 :: Strip trailing backslash
 if "%VAULT_PATH:~-1%"=="\\" set "VAULT_PATH=%VAULT_PATH:~0,-1%"
-echo Starting Shop OS Chat for "%VAULT_PATH%" ...
+echo Starting Blueprint OS Chat for "%VAULT_PATH%" ...
 npx -y --package=github:blueprintit-ai/shop-os-chat shop-os-chat "%VAULT_PATH%"
 pause
 `;
   } else {
     body = `#!/bin/bash
-# Shop OS Chat launcher. Double-click to start.
+# Blueprint OS Chat launcher. Double-click to start.
 # First time, macOS may say it "cannot be opened because it is from an
 # unidentified developer". That's expected. To allow it: right-click (or
 # Control-click) this file, choose Open, then click Open in the dialog. You
 # only need to do this once.
 VAULT_PATH="$(cd "$(dirname "$0")" && pwd)"
-echo "Starting Shop OS Chat for: $VAULT_PATH"
+echo "Starting Blueprint OS Chat for: $VAULT_PATH"
 npx -y --package=github:blueprintit-ai/shop-os-chat shop-os-chat "$VAULT_PATH"
 echo ""
-echo "Shop OS Chat stopped. You can close this window."
+echo "Blueprint OS Chat stopped. You can close this window."
 read -n 1 -s -r -p ""
 `;
   }
@@ -925,7 +925,7 @@ read -n 1 -s -r -p ""
 }
 
 function writeLauncherHelpNote(vaultPath, isWindows, launcherName) {
-  const notePath = join(vaultPath, "Open Shop OS Chat - HELP.txt");
+  const notePath = join(vaultPath, "Open Blueprint OS Chat - HELP.txt");
   const macSteps = `The first time you open "${launcherName}", macOS may say it
 "cannot be opened because it is from an unidentified developer".
 This is normal and safe. To open it:
@@ -943,10 +943,10 @@ This is normal and safe. To open it:
   2. Click "Run anyway"
 
 You only have to do this once.`;
-  const content = `HOW TO OPEN SHOP OS CHAT
+  const content = `HOW TO OPEN BLUEPRINT OS CHAT
 ========================
 
-Shop OS Chat lets your team chat with this vault (read-only).
+Blueprint OS Chat lets your team chat with this vault (read-only).
 Double-click "${launcherName}" in this folder to start it.
 
 ${isWindows ? winSteps : macSteps}
@@ -954,7 +954,7 @@ ${isWindows ? winSteps : macSteps}
 The first launch downloads the chat app (about 20 seconds). After that it
 starts quickly. To stop it, close the window.
 
-Need help? Reply to your Shop OS welcome email.
+Need help? Reply to your Blueprint OS welcome email.
 `;
   try {
     writeFileSync(notePath, content, "utf8");
@@ -972,8 +972,8 @@ function expandTilde(p) {
 
 // Clean a path that came from drag-and-drop or "Copy as path" / "Copy as Pathname".
 // Mac Terminal drag: backslash-escaped spaces and special chars: /Users/foo/Shop\ OS\ Vault
-// Windows "Copy as path": wraps in double quotes: "C:\Users\foo\Shop OS Vault"
-// Mac "Copy as Pathname": no escaping: /Users/foo/Shop OS Vault
+// Windows "Copy as path": wraps in double quotes: "C:\Users\foo\Blueprint OS Vault"
+// Mac "Copy as Pathname": no escaping: /Users/foo/Blueprint OS Vault
 function unwrapShellPath(p) {
   if (!p) return p;
   let s = p.trim();
@@ -1004,7 +1004,7 @@ function printVaultLocationGuide() {
   print("");
   print("  Open Finder (Mac) or File Explorer (Windows).");
   print("  Right-click in the location where you want your vault, choose");
-  print("  " + bold("New Folder") + ", and name it " + cyan("Shop OS Vault") + ".");
+  print("  " + bold("New Folder") + ", and name it " + cyan("Blueprint OS Vault") + ".");
   print("");
   print("  " + bold("Where to put it:"));
   print("    " + cyan("Single computer") + "  -> your home folder or Desktop");
@@ -1075,7 +1075,7 @@ function printHelp() {
   print(bold("Options:"));
   print(`  --license <KEY>   License key (skips interactive prompt)`);
   print(`  --vault <PATH>    Vault location (skips interactive prompt)`);
-  print(`  --existing, -e    Add Shop OS to an existing vault (skips vault creation)`);
+  print(`  --existing, -e    Add Blueprint OS to an existing vault (skips vault creation)`);
   print(`  --yes, -y         Skip the install-here confirmation`);
   print(`  --help, -h        Show this message`);
   print("");
@@ -1116,7 +1116,7 @@ async function main() {
     // on a typo. Interactive only — an automated --license run still defers to
     // the server so a future format change can't break it.
     if (!args.license && !looksLikeLicenseKey(key)) {
-      warn(`That doesn't look like a Shop OS key. The format is ${bold("SHOP-XXXX-XXXX-XXXX")}.`);
+      warn(`That doesn't look like a Blueprint OS key. The format is ${bold("SHOP-XXXX-XXXX-XXXX")}.`);
       if (attempt < maxAttempts) {
         print("  " + dim("Check your welcome email for the exact key, then try again."));
         continue;
@@ -1151,8 +1151,8 @@ async function main() {
   if (!isExisting && !args.vault) {
     print(bold("Vault mode"));
     print("");
-    print("  " + bold("new") + "       Create a fresh Shop OS vault in a new folder");
-    print("  " + bold("existing") + "  Add Shop OS to a vault you already have");
+    print("  " + bold("new") + "       Create a fresh Blueprint OS vault in a new folder");
+    print("  " + bold("existing") + "  Add Blueprint OS to a vault you already have");
     print("");
     const modeAns = await ask(rl, "New vault or add to existing?", { default: "new" });
     isExisting = modeAns.toLowerCase().startsWith("e");
@@ -1171,7 +1171,7 @@ async function main() {
     } else {
       printVaultLocationGuide();
       for (let attempt = 1; attempt <= 3; attempt++) {
-        const ans = await ask(rl, "Drag your Shop OS Vault folder here, then press Enter");
+        const ans = await ask(rl, "Drag your Blueprint OS Vault folder here, then press Enter");
         if (ans) { vaultPath = ans; break; }
         warn("No path entered. Drag the folder from Finder / File Explorer into this window, or paste the copied path.");
       }
@@ -1202,8 +1202,8 @@ async function main() {
   }
 
   const confirmMsg = isExisting
-    ? `Add Shop OS to existing vault at ${cyan(vaultPath)}?`
-    : `Install Shop OS into ${cyan(vaultPath)}?`;
+    ? `Add Blueprint OS to existing vault at ${cyan(vaultPath)}?`
+    : `Install Blueprint OS into ${cyan(vaultPath)}?`;
   const proceed = args.yes
     ? true
     : await confirm(rl, confirmMsg, { default: true });
@@ -1218,7 +1218,7 @@ async function main() {
   print("");
 
   // Step-by-step install
-  print(bold("Installing Shop OS"));
+  print(bold("Installing Blueprint OS"));
 
   // The vault directory has to exist before the plugin step: `claude plugin
   // install --scope project` runs inside it. Step [3/7] reports on it below.
@@ -1244,7 +1244,7 @@ async function main() {
     for (const p of problems) warn(`${p.id}: ${p.reason}`);
     if (problems.some((p) => p.fatal)) {
       fail(
-        "Required Shop OS skills are missing from the downloaded marketplaces.\n\n" +
+        "Required Blueprint OS skills are missing from the downloaded marketplaces.\n\n" +
           "  The download landed but does not contain the plugin behind /bp-setup,\n" +
           "  usually a partial or interrupted clone. Re-run the installer — nothing\n" +
           "  was finalized, so re-running is safe.",
@@ -1294,7 +1294,7 @@ async function main() {
   ok(`Wrote ${settingsPath.replace(homedir(), "~")}`);
   info("Pre-approved Read/Write/Edit/Bash patterns so /bp-setup runs without permission prompts");
   const userSettingsPath = enableForUser(claudeRoot);
-  ok(`Enabled Shop OS plugins machine-wide in ${userSettingsPath.replace(homedir(), "~")}`);
+  ok(`Enabled Blueprint OS plugins machine-wide in ${userSettingsPath.replace(homedir(), "~")}`);
   info("/bp commands work in any folder and in IDE extensions, not just the vault");
 
   currentStep = "seed_defaults";
@@ -1313,14 +1313,14 @@ async function main() {
   ok(`License saved to ${licensePath.replace(homedir(), "~")} (chmod 600)`);
 
   currentStep = "launcher";
-  print(dim("  [7/7] Installing Shop OS Chat launcher"));
+  print(dim("  [7/7] Installing Blueprint OS Chat launcher"));
   const launcherPath = writeChatLauncher(vaultPath);
   ok(`Wrote ${launcherPath.replace(homedir(), "~")}`);
 
   currentStep = "complete";
 
   print("");
-  print(green(bold("✓ Shop OS installation complete!")));
+  print(green(bold("✓ Blueprint OS installation complete!")));
   print("");
   print(bold("Next steps:"));
   print(`  1. Open the ${cyan("Claude Code")} app you installed (Applications / Start menu)`);
@@ -1330,10 +1330,10 @@ async function main() {
   print(`  4. Walk through the onboarding interview`);
   print("");
   print(`  5. To let your team chat with the vault (read-only),`);
-  print(`     double-click ${cyan("Shop OS Chat.command")} (Mac) or ${cyan("Shop OS Chat.bat")} (Windows)`);
+  print(`     double-click ${cyan("Blueprint OS Chat.command")} (Mac) or ${cyan("Blueprint OS Chat.bat")} (Windows)`);
   print(`     in your vault folder. First launch downloads the chat (~20 seconds).`);
   print(`     ${dim("On first open your OS may show a security prompt (Mac: right-click >")}`);
-  print(`     ${dim('Open; Windows: More info > Run anyway). See "Open Shop OS Chat - HELP.txt".')}`);
+  print(`     ${dim('Open; Windows: More info > Run anyway). See "Open Blueprint OS Chat - HELP.txt".')}`);
   print("");
   print(dim(`Support: ${SUPPORT_URL}`));
   print("");

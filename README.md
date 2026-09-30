@@ -1,6 +1,6 @@
 # @blueprintitai/shop-os-install
 
-One-command installer for **Shop OS**: Blueprint IT's AI Operating System for small businesses.
+One-command installer for **Blueprint OS**: Blueprint IT's AI Operating System for small businesses.
 
 ## Setup scripts (run on the onboarding call)
 
@@ -20,7 +20,7 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
 .\setup.ps1
 ```
 
-This installs Node.js, Claude Code, Obsidian, and Shop OS in one go. You'll be prompted for your license key and vault location.
+This installs Node.js, Claude Code, Obsidian, and Blueprint OS in one go. You'll be prompted for your license key and vault location.
 
 > **Known issue**: this exact command trips Windows Defender's `Trojan:Win32/Commando.A!ml` ML classifier on customer machines. See [notes/windows-defender-false-positive.md](notes/windows-defender-false-positive.md) before running this on a customer's onboarding call.
 
@@ -40,7 +40,7 @@ The installer (run directly or via the setup scripts above):
 2. **License validation**: prompts for the license key, validates against `https://shop-os-license-server.glenn-15d.workers.dev/validate`
 3. **Marketplaces**: registers `blueprintit-ai/blueprint-skills` and `anthropics/claude-plugins-official` in `~/.claude/plugins/known_marketplaces.json`
 4. **Plugins**: queues `obsidian@blueprint-skills` and `superpowers@claude-plugins-official` in `~/.claude/plugins/installed_plugins.json` (Claude Code does the actual fetch on next launch)
-5. **Vault**: creates a Shop OS vault folder (default `~/Shop OS Vault`) with a starter `CLAUDE.md`
+5. **Vault**: creates a Blueprint OS vault folder (default `~/Blueprint OS Vault`) with a starter `CLAUDE.md`
 6. **Per-vault config**: writes `<vault>/.claude/settings.json` with `enabledPlugins` set for obsidian + superpowers
 7. **License record**: saves `~/.shopos/license.json` (chmod 600) for downstream skill validation
 8. **Next steps**: prints `cd` command and the `/bp-setup` slash command to run
@@ -49,7 +49,7 @@ Zero npm dependencies. Uses only Node 18+ built-ins (`fetch`, `readline`, `fs`).
 
 ## How customers get installed
 
-Shop OS Foundation is set up **with** the customer on a one-hour screen-share
+Blueprint OS Foundation is set up **with** the customer on a one-hour screen-share
 (30 min setup + 30 min training), booked from the welcome email. The welcome
 email deliberately contains **no install commands**: Blueprint IT runs the
 setup script above on the call and enters the license key. See
@@ -152,7 +152,7 @@ We never modify:
 |---|---|
 | `--vault <path>` flag | Skip the prompt for scripted installs |
 | `--license <key>` flag | Same, for testing or scripted reinstalls |
-| Update detection | Tell the customer if a newer Shop OS version is available |
+| Update detection | Tell the customer if a newer Blueprint OS version is available |
 | Telemetry opt-in | Phone home install success/failure counts (anonymous) for product analytics |
 | Uninstall command | `npx @blueprintit/shop-os-uninstall` |
-| Multi-vault mode | Add Shop OS to an existing vault rather than creating a new one |
+| Multi-vault mode | Add Blueprint OS to an existing vault rather than creating a new one |

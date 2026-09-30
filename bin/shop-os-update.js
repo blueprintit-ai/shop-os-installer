@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Shop OS skills updater.
+ * Blueprint OS skills updater.
  *
  * Pulls the latest skills from GitHub without re-running the full installer.
  * Safe to run at any time — does not touch your vault or license.
@@ -62,7 +62,7 @@ function banner() {
     "",
     bold("  ╔════════════════════════════════════════════════════════════╗"),
     bold("  ║                                                            ║"),
-    bold("  ║          ") + cyan("Shop OS Skills Updater") + bold("                            ║"),
+    bold("  ║          ") + cyan("Blueprint OS Skills Updater") + bold("                       ║"),
     bold("  ║          ") + dim("Pull the latest skills from Blueprint IT") + bold("          ║"),
     bold("  ║                                                            ║"),
     bold("  ╚════════════════════════════════════════════════════════════╝"),
@@ -221,7 +221,7 @@ function reinstallPlugin(claudeRoot) {
 }
 
 banner();
-print(dim("  Updating Shop OS skills. Your vault and license are not affected.\n"));
+print(dim("  Updating Blueprint OS skills. Your vault and license are not affected.\n"));
 
 print(dim("  [1/3] Refreshing skill files from GitHub"));
 const claudeRoot = preflight();
