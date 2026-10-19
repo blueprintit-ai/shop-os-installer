@@ -711,6 +711,25 @@ function buildPermissionAllowList(vaultPath) {
   ];
 }
 
+// Always prompt for these, even though the allow list covers them: Claude Code
+// evaluates ask before allow. Hooks and settings in the vault's .claude/ run
+// commands on later sessions, so a prompt-injected note or web page must not
+// be able to plant one silently. Path rules use Edit (Claude Code ignores
+// Write(...) path rules; Edit covers every file-writing tool). find actions
+// that run or delete are listed for older Claude Code versions that did not
+// already prompt for them.
+function buildPermissionAskList() {
+  return [
+    "Edit(/.claude/settings.json)",
+    "Edit(/.claude/settings.local.json)",
+    "Edit(/.claude/hooks/**)",
+    "Bash(find * -exec *)",
+    "Bash(find * -execdir *)",
+    "Bash(find * -ok *)",
+    "Bash(find * -delete*)",
+  ];
+}
+
 // Enable the Blueprint OS plugins in the user-level settings so every Claude Code
 // session on the machine gets the /bp commands: terminal in any directory, and
 // IDE extensions (VS Code, Antigravity, Cursor) whose sessions don't start in
@@ -741,6 +760,8 @@ function enableForVault(vaultPath) {
     : [];
   const ours = buildPermissionAllowList(vaultPath);
   settings.permissions.allow = Array.from(new Set([...existing, ...ours]));
+  const existingAsk = Array.isArray(settings.permissions.ask) ? settings.permissions.ask : [];
+  settings.permissions.ask = Array.from(new Set([...existingAsk, ...buildPermissionAskList()]));
   writeJSON(settingsPath, settings);
   return settingsPath;
 }
